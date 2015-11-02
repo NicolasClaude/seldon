@@ -93,7 +93,7 @@ namespace Seldon
     typename Matrix<T1, Prop1, Storage1, Allocator1>::pointer
       data = A.GetData();
 
-    for (int i = 0; i < A.GetDataSize(); i++)
+    for (size_t i = 0; i < A.GetDataSize(); i++)
       data[i] *= alpha;
   }
 
@@ -218,17 +218,17 @@ namespace Seldon
                       " NewAlloc allocator");
 #endif
     
-    int h, i, k, l, col;
-    int Nnonzero, Nnonzero_row, Nnonzero_row_max;
-    Vector<int> column_index;
+    size_t h, i, k, l, col;
+    size_t Nnonzero, Nnonzero_row, Nnonzero_row_max;
+    Vector<size_t> column_index;
     
-    typedef typename SeldonDefaultAllocator<VectFull, int>::allocator AllocInt;
+    typedef typename SeldonDefaultAllocator<VectFull, size_t>::allocator AllocInt;
     Vector<T2, VectFull, Allocator2> row_value;
     T1 value;
-    int m = A.GetM();
+    size_t m = A.GetM();
 
-    int* c_ptr = NULL;
-    int* c_ind = NULL;
+    size_t* c_ptr = NULL;
+    size_t* c_ind = NULL;
     T2* c_data = NULL;
     C.Clear();
 
@@ -307,7 +307,7 @@ namespace Seldon
                 // Reallocates 'c_ind' and 'c_data' in order to append the
                 // elements of the i-th row of C.
                 c_ind =
-		  reinterpret_cast<int*>(AllocInt::
+		  reinterpret_cast<size_t*>(AllocInt::
 					 reallocate(c_ind, Nnonzero + Nnonzero_row));
 		
                 c_data = 
@@ -459,21 +459,21 @@ namespace Seldon
                       " NewAlloc allocator");
 #endif
 
-    int h, i, k, col;
-    int ib, kb;
-    int Nnonzero_row;
-    int Nnonzero;
+    size_t h, i, k, col;
+    size_t ib, kb;
+    size_t Nnonzero_row;
+    size_t Nnonzero;
 
-    Vector<int> column_index;
-    typedef typename SeldonDefaultAllocator<VectFull, int>::allocator AllocInt;
+    Vector<size_t> column_index;
+    typedef typename SeldonDefaultAllocator<VectFull, size_t>::allocator AllocInt;
     Vector<T2, VectFull, Allocator2> row_value;
     T2 value;
 
-    int m = A.GetM();
-    int n = B.GetM();
+    size_t m = A.GetM();
+    size_t n = B.GetM();
 
-    int* c_ptr = NULL;
-    int* c_ind = NULL;
+    size_t* c_ptr = NULL;
+    size_t* c_ind = NULL;
     T2* c_data = NULL;
 
 #ifdef SELDON_CHECK_MEMORY
@@ -544,7 +544,7 @@ namespace Seldon
                 // Reallocates 'c_ind' and 'c_data' in order to append the
                 // elements of the i-th row of C.
                 c_ind = 
-		  reinterpret_cast<int*>(AllocInt::
+		  reinterpret_cast<size_t*>(AllocInt::
 					 reallocate(c_ind, Nnonzero + Nnonzero_row));
 		
                 c_data = 
@@ -1827,7 +1827,7 @@ namespace Seldon
            class T2, class Prop2, class Storage, class Allocator2>
   void Add_csr(const T0& alpha,
                const Matrix<T1, Prop1, Storage, Allocator1>& A,
-               Matrix<T2, Prop2, Storage, Allocator2>& B, int p)
+               Matrix<T2, Prop2, Storage, Allocator2>& B, size_t p)
   {
 #ifdef SELDON_CHECK_BOUNDS
     if (A.GetM() != B.GetM() || A.GetN() != B.GetN())
@@ -1839,9 +1839,9 @@ namespace Seldon
                      + " matrix.");
 #endif
 
-    int i = 0;
-    int j = 0;
-    int k;
+    size_t i = 0;
+    size_t j = 0;
+    size_t k;
 
     if (A.GetNonZeros() == B.GetNonZeros())
       // A and B might have the same structure.
@@ -1874,11 +1874,11 @@ namespace Seldon
         B.GetData()[k] -= alpha * A.GetData()[k];
 
     // Number of non zero entries currently found.
-    int Nnonzero = A.GetPtr()[i];
+    size_t Nnonzero = A.GetPtr()[i];
     
     // counting the number of non-zero entries
-    int kb, jb(0), ka, ja(0);
-    for (int i2 = i; i2 < p; i2++)
+    size_t kb, jb(0), ka, ja(0);
+    for (size_t i2 = i; i2 < p; i2++)
       {
         kb = B.GetPtr()[i2];
         
@@ -1907,10 +1907,10 @@ namespace Seldon
     // A and B do not have the same structure. An intermediate matrix will be
     // needed. The first i rows have already been added. These computations
     // are preserved in arrays Ptr, Ind Val.
-    Vector<int> Ptr(p+1), Ind(Nnonzero);
+    Vector<size_t> Ptr(p+1), Ind(Nnonzero);
     Vector<T2, VectFull, Allocator2> Val(Nnonzero);
     
-    for (int i2 = 0; i2 <= i; i2++)
+    for (size_t i2 = 0; i2 <= i; i2++)
       Ptr(i2) = B.GetPtr()[i2];
     
     for (j = 0; j < B.GetPtr()[i]; j++)
@@ -2784,11 +2784,11 @@ namespace Seldon
                  Matrix<T, General, RowSparse, Allocator>& B)
   {
     B.Clear();
-    int m = A.GetM();
-    int n = A.GetN();
-    int nnz = A.GetDataSize();
-    Vector<int> ptr_T(n+1), ptr;
-    Vector<int> ind_T(nnz), ind;
+    size_t m = A.GetM();
+    size_t n = A.GetN();
+    size_t nnz = A.GetDataSize();
+    Vector<size_t> ptr_T(n+1), ptr;
+    Vector<size_t> ind_T(nnz), ind;
     Vector<T, VectFull, Allocator> data_T(nnz), data;
 
     ptr.SetData(m+1, A.GetPtr());
@@ -2801,27 +2801,27 @@ namespace Seldon
 
     // For each column j, computes number of its non-zeroes and stores it in
     // ptr_T[j].
-    for (int i = 0; i < nnz; i++)
+    for (size_t i = 0; i < nnz; i++)
       ptr_T(ind(i) + 1)++;
 
     // Computes the required number of non-zeroes ptr_T(j).
-    for (int j = 1; j < n + 1; j++)
+    for (size_t j = 1; j < n + 1; j++)
       ptr_T(j) += ptr_T(j - 1);
 
-    Vector<int> row_ind(n+1);
+    Vector<size_t> row_ind(n+1);
     row_ind.Zero();
-    for (int i = 0; i < m; i++)
-      for (int jp = ptr(i); jp < ptr(i+1); jp++)
+    for (size_t i = 0; i < m; i++)
+      for (size_t jp = ptr(i); jp < ptr(i+1); jp++)
     	{
-	  int j = ind(jp);
-	  int k = ptr_T(j) + row_ind(j);
+	  size_t j = ind(jp);
+	  size_t k = ptr_T(j) + row_ind(j);
 	  ++row_ind(j);
 	  data_T(k) = data(jp);
 	  ind_T(k) = i;
     	}
 
     // sorting numbers
-    for (int i = 0; i < n; i++)
+    for (size_t i = 0; i < n; i++)
       Sort(ptr_T(i), ptr_T(i+1)-1, ind_T, data_T);
     
     B.SetData(n, m, data_T, ptr_T, ind_T);

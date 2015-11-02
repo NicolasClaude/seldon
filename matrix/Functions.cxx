@@ -78,24 +78,24 @@ namespace Seldon
   */
   template <class T0, class Allocator0, class T1, class Allocator1>
   void GetRow(const Matrix<T0, General, RowSparse, Allocator0>& M,
-	      int i, Vector<T1, VectSparse, Allocator1>& X)
+	      size_t i, Vector<T1, VectSparse, Allocator1>& X)
   {
 #ifdef SELDON_CHECK_BOUNDS
-    int m = M.GetM();
-    if (i < 0 || i >= m)
+    size_t m = M.GetM();
+    if (i >= m)
       throw WrongIndex("GetRow()",
                        string("Index should be in [0, ") + to_str(m - 1)
                        + "], but is equal to " + to_str(i) + ".");
 #endif
 
-    int* ptr = M.GetPtr();
-    int* ind = M.GetInd();
+    size_t* ptr = M.GetPtr();
+    size_t* ind = M.GetInd();
     T0* data = M.GetData();
-    int size_row = ptr[i+1] - ptr[i];
+    size_t size_row = ptr[i+1] - ptr[i];
 
     X.Reallocate(size_row);
-    int shift = ptr[i];
-    for (int j = 0; j < size_row; j++)
+    size_t shift = ptr[i];
+    for (size_t j = 0; j < size_row; j++)
       {
 	X.Index(j) = ind[shift + j];
 	X.Value(j) = data[shift + j];
@@ -137,36 +137,35 @@ namespace Seldon
 
 template <class T0, class Allocator0, class T1, class Allocator1>
   void GetRow(const Matrix<T0, General, ColSparse, Allocator0>& M,
-	      int i, Vector<T1, VectSparse, Allocator1>& X)
+        size_t i, Vector<T1, VectSparse, Allocator1>& X)
   {
 #ifdef SELDON_CHECK_BOUNDS
-    int m = M.GetM();
-    if (i < 0 || i >= m)
+    size_t m = M.GetM();
+    if (i >= m)
       throw WrongIndex("GetRow()",
                        string("Index should be in [0, ") + to_str(m - 1)
                        + "], but is equal to " + to_str(i) + ".");
 #endif
 
-    int* ptr = M.GetPtr();
-    int* ind = M.GetInd();
+    size_t* ptr = M.GetPtr();
+    size_t* ind = M.GetInd();
     T0* data = M.GetData();
-    list<pair<int, T0> > vec;
-    for (int j = 0; j < M.GetN(); j++)
-      for (int k = ptr[j]; k < ptr[j+1]; k++)
-	if (ind[k] == i)
-	  vec.push_back(make_pair(j, data[k]));
+    list<pair<size_t, T0> > vec;
+    for (size_t j = 0; j < M.GetN(); j++)
+      for (size_t k = ptr[j]; k < ptr[j+1]; k++)
+  if (ind[k] == i)
+    vec.push_back(make_pair(j, data[k]));
     
-    typename list<pair<int, T0> >::iterator it;
+    typename list<pair<size_t, T0> >::iterator it;
     X.Reallocate(vec.size());
-    int j = 0;
+    size_t j = 0;
     for (it = vec.begin(); it != vec.end(); it++)
       {
-	X.Index(j) = it->first;
-	X.Value(j) = it->second;
-	j++;
+  X.Index(j) = it->first;
+  X.Value(j) = it->second;
+  j++;
       }
   }
-
   
   //! Extracts a row from a sparse matrix
   /*!
@@ -177,31 +176,31 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template <class T0, class Allocator0, class T1, class Allocator1>
   void GetRow(const Matrix<T0, Symmetric, RowSymSparse, Allocator0>& M,
-	      int i, Vector<T1, VectSparse, Allocator1>& X)
+	      size_t i, Vector<T1, VectSparse, Allocator1>& X)
   {
 #ifdef SELDON_CHECK_BOUNDS
-    int m = M.GetM();
-    if (i < 0 || i >= m)
+    size_t m = M.GetM();
+    if (i >= m)
       throw WrongIndex("GetRow()",
                        string("Index should be in [0, ") + to_str(m - 1)
                        + "], but is equal to " + to_str(i) + ".");
 #endif
 
-    int* ptr = M.GetPtr();
-    int* ind = M.GetInd();
+    size_t* ptr = M.GetPtr();
+    size_t* ind = M.GetInd();
     T0* data = M.GetData();
-    list<pair<int, T0> > vec;
-    for (int j = 0; j < i; j++)
-      for (int k = ptr[j]; k < ptr[j+1]; k++)
+    list<pair<size_t, T0> > vec;
+    for (size_t j = 0; j < i; j++)
+      for (size_t k = ptr[j]; k < ptr[j+1]; k++)
 	if (ind[k] == i)
 	  vec.push_back(make_pair(j, data[k]));
     
-    for (int k = ptr[i]; k < ptr[i+1]; k++)
+    for (size_t k = ptr[i]; k < ptr[i+1]; k++)
       vec.push_back(make_pair(ind[k], data[k]));
     
-    typename list<pair<int, T0> >::iterator it;
+    typename list<pair<size_t, T0> >::iterator it;
     X.Reallocate(vec.size());
-    int j = 0;
+    size_t j = 0;
     for (it = vec.begin(); it != vec.end(); it++)
       {
 	X.Index(j) = it->first;
@@ -220,31 +219,31 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template <class T0, class Allocator0, class T1, class Allocator1>
   void GetRow(const Matrix<T0, Symmetric, ColSymSparse, Allocator0>& M,
-	      int i, Vector<T1, VectSparse, Allocator1>& X)
+	      size_t i, Vector<T1, VectSparse, Allocator1>& X)
   {
 #ifdef SELDON_CHECK_BOUNDS
-    int m = M.GetM();
-    if (i < 0 || i >= m)
+    size_t m = M.GetM();
+    if (i >= m)
       throw WrongIndex("GetRow()",
                        string("Index should be in [0, ") + to_str(m - 1)
                        + "], but is equal to " + to_str(i) + ".");
 #endif
 
-    int* ptr = M.GetPtr();
-    int* ind = M.GetInd();
+    size_t* ptr = M.GetPtr();
+    size_t* ind = M.GetInd();
     T0* data = M.GetData();
-    list<pair<int, T0> > vec;
-    for (int k = ptr[i]; k < ptr[i+1]; k++)
+    list<pair<size_t, T0> > vec;
+    for (size_t k = ptr[i]; k < ptr[i+1]; k++)
       vec.push_back(make_pair(ind[k], data[k]));
     
-    for (int j = i+1; j < M.GetM(); j++)
-      for (int k = ptr[j]; k < ptr[j+1]; k++)
+    for (size_t j = i+1; j < M.GetM(); j++)
+      for (size_t k = ptr[j]; k < ptr[j+1]; k++)
 	if (ind[k] == i)
 	  vec.push_back(make_pair(j, data[k]));
     
-    typename list<pair<int, T0> >::iterator it;
+    typename list<pair<size_t, T0> >::iterator it;
     X.Reallocate(vec.size());
-    int j = 0;
+    size_t j = 0;
     for (it = vec.begin(); it != vec.end(); it++)
       {
 	X.Index(j) = it->first;
@@ -264,13 +263,13 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   template <class T0, class Prop0, class Storage0, class Allocator0,
 	    class T1, class Storage1, class Allocator1>
   void GetRow(const Matrix<T0, Prop0, Storage0, Allocator0>& M,
-	      int i, Vector<T1, Storage1, Allocator1>& X)
+	      size_t i, Vector<T1, Storage1, Allocator1>& X)
   {
     if (Storage0::Sparse)
       throw WrongArgument("GetRow", "Function intended to dense matrices");
     
     X.Reallocate(M.GetN());
-    for (int j = 0; j < M.GetN(); j++)
+    for (size_t j = 0; j < M.GetN(); j++)
       X(j) = M(i, j);
   }
 
@@ -284,24 +283,24 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template <class T0, class Allocator0, class T1, class Allocator1>
   void GetCol(const Matrix<T0, General, ColSparse, Allocator0>& M,
-	      int j, Vector<T1, VectSparse, Allocator1>& X)
+	      size_t j, Vector<T1, VectSparse, Allocator1>& X)
   {
 #ifdef SELDON_CHECK_BOUNDS
-    int n = M.GetN();
-    if (j < 0 || j >= n)
+    size_t n = M.GetN();
+    if (j >= n)
       throw WrongIndex("GetCol()",
                        string("Index should be in [0, ") + to_str(n - 1)
                        + "], but is equal to " + to_str(j) + ".");
 #endif
 
-    int* ptr = M.GetPtr();
-    int* ind = M.GetInd();
+    size_t* ptr = M.GetPtr();
+    size_t* ind = M.GetInd();
     T0* data = M.GetData();
-    int size_col = ptr[j+1] - ptr[j];
+    size_t size_col = ptr[j+1] - ptr[j];
 
     X.Reallocate(size_col);
-    int shift = ptr[j];
-    for (int i = 0; i < size_col; i++)
+    size_t shift = ptr[j];
+    for (size_t i = 0; i < size_col; i++)
       {
 	X.Index(i) = ind[shift + i];
 	X.Value(i) = data[shift + i];
@@ -318,30 +317,30 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template <class T0, class Allocator0, class T1, class Allocator1>
   void GetCol(const Matrix<T0, General, RowSparse, Allocator0>& M,
-	      int j, Vector<T1, VectSparse, Allocator1>& X)
+	      size_t j, Vector<T1, VectSparse, Allocator1>& X)
   {
 #ifdef SELDON_CHECK_BOUNDS
-    int n = M.GetN();
-    if (j < 0 || j >= n)
+    size_t n = M.GetN();
+    if (j >= n)
       throw WrongIndex("GetCol()",
                        string("Index should be in [0, ") + to_str(n - 1)
                        + "], but is equal to " + to_str(j) + ".");
 #endif
 
-    int* ptr = M.GetPtr();
-    int* ind = M.GetInd();
+    size_t* ptr = M.GetPtr();
+    size_t* ind = M.GetInd();
     T0* data = M.GetData();
-    int m = M.GetM();
+    size_t m = M.GetM();
 
-    list<pair<int, T0> > vec;
-    for (int i = 0; i < m; i++)
-      for (int k = ptr[i]; k < ptr[i+1]; k++)
+    list<pair<size_t, T0> > vec;
+    for (size_t i = 0; i < m; i++)
+      for (size_t k = ptr[i]; k < ptr[i+1]; k++)
 	if (ind[k] == j)
 	  vec.push_back(make_pair(i, data[k]));
     
-    typename list<pair<int, T0> >::iterator it;
+    typename list<pair<size_t, T0> >::iterator it;
     X.Reallocate(vec.size());
-    int i = 0;
+    size_t i = 0;
     for (it = vec.begin(); it != vec.end(); it++)
       {
 	X.Index(i) = it->first;
@@ -395,7 +394,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template <class T0, class Allocator0, class T1, class Allocator1>
   void GetCol(const Matrix<T0, Symmetric, ColSymSparse, Allocator0>& M,
-	      int j, Vector<T1, VectSparse, Allocator1>& X)
+	      size_t j, Vector<T1, VectSparse, Allocator1>& X)
   {
     // symmetric matrix row = col
     GetRow(M, j, X);
@@ -411,7 +410,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template <class T0, class Allocator0, class T1, class Allocator1>
   void GetCol(const Matrix<T0, Symmetric, RowSymSparse, Allocator0>& M,
-	      int j, Vector<T1, VectSparse, Allocator1>& X)
+	      size_t j, Vector<T1, VectSparse, Allocator1>& X)
   {
     // symmetric matrix row = col
     GetRow(M, j, X);
@@ -466,13 +465,13 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   template <class T0, class Prop0, class Storage0, class Allocator0,
 	    class T1, class Storage1, class Allocator1>
   void GetCol(const Matrix<T0, Prop0, Storage0, Allocator0>& M,
-	      int j, Vector<T1, Storage1, Allocator1>& X)
+	      size_t j, Vector<T1, Storage1, Allocator1>& X)
   {
     if (Storage0::Sparse)
       throw WrongArgument("GetCol", "Function intended to dense matrices");
     
     X.Reallocate(M.GetM());
-    for (int i = 0; i < M.GetM(); i++)
+    for (size_t i = 0; i < M.GetM(); i++)
       X(i) = M(i, j);
   }
 
@@ -488,12 +487,12 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   template <class T0, class Prop0, class Storage0, class Allocator0,
 	    class T1, class Prop1, class Storage1, class Allocator1>
   void GetCol(const Matrix<T0, Prop0, Storage0, Allocator0>& M_in,
-	      int begin, int end,
+	      size_t begin, size_t end,
               Matrix<T1, Prop1, Storage1, Allocator1>& M_out)
   {
     M_out.Reallocate(M_in.GetM(), end - begin);
-    for (int i = 0; i < M_in.GetM(); i++)
-      for (int j = begin, k = 0; j < end; j++, k++)
+    for (size_t i = 0; i < M_in.GetM(); i++)
+      for (size_t j = begin, k = 0; j < end; j++, k++)
         M_out(i, k) = M_in(i, j);
   }
 
@@ -508,12 +507,12 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   template <class T0, class Prop0, class Storage0, class Allocator0,
 	    class T1, class Storage1, class Allocator1>
   void SetRow(const Vector<T1, Storage1, Allocator1>& X,
-	      int i, Matrix<T0, Prop0, Storage0, Allocator0>& M)
+	      size_t i, Matrix<T0, Prop0, Storage0, Allocator0>& M)
   {
     if (Storage0::Sparse)
       throw WrongArgument("SetRow", "Function intended to dense matrices");
     
-    for (int j = 0; j < M.GetN(); j++)
+    for (size_t j = 0; j < M.GetN(); j++)
       M.Set(i, j, X(j));
   }
   
@@ -561,55 +560,55 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template <class T0, class Allocator0, class T1, class Allocator1>
   void SetRow(const Vector<T1, VectSparse, Allocator1>& X,
-	      int i, Matrix<T0, General, RowSparse, Allocator0>& M)
+	      size_t i, Matrix<T0, General, RowSparse, Allocator0>& M)
   {
-    int m = M.GetM();
-    int n = M.GetN();
-    int nnz = M.GetDataSize();
-    int Nx = X.GetSize();
+    size_t m = M.GetM();
+    size_t n = M.GetN();
+    size_t nnz = M.GetDataSize();
+    size_t Nx = X.GetSize();
 
 #ifdef SELDON_CHECK_BOUNDS
-    if (i < 0 || i >= m)
+    if (i >= m)
       throw WrongIndex("SetRow(Vector, int, Matrix<RowSparse>)",
                        string("Index should be in [0, ") + to_str(m - 1)
                        + "], but is equal to " + to_str(i) + ".");
 #endif
 
-    int *ptr_vector =  M.GetPtr();
-    int ptr_i0 =  ptr_vector[i], ptr_i1 = ptr_vector[i + 1];
-    int row_size_difference = Nx - ptr_i1 + ptr_i0;
+    size_t *ptr_vector =  M.GetPtr();
+    size_t ptr_i0 =  ptr_vector[i], ptr_i1 = ptr_vector[i + 1];
+    size_t row_size_difference = Nx - ptr_i1 + ptr_i0;
 
     if (row_size_difference == 0)
       {
-	for (int k = 0; k < Nx; k++)
+	for (size_t k = 0; k < Nx; k++)
 	  M.GetInd()[k + ptr_i0] = X.Index(k);
-	for (int k = 0; k < Nx; k++)
+	for (size_t k = 0; k < Nx; k++)
 	  M.GetData()[k + ptr_i0] = X.Value(k);
 	return;
       }
 
-    Vector<int>
+    Vector<size_t>
       new_ind_vector(nnz + row_size_difference);
-    for (int k = 0; k <  ptr_i0; k++)
+    for (size_t k = 0; k <  ptr_i0; k++)
       new_ind_vector(k) = M.GetInd()[k];
-    for (int k = 0; k < Nx; k++)
+    for (size_t k = 0; k < Nx; k++)
       new_ind_vector(k + ptr_i0) = X.Index(k);
-    for (int k = 0; k < nnz - ptr_i1; k++)
+    for (size_t k = 0; k < nnz - ptr_i1; k++)
       new_ind_vector(k + ptr_i0 + Nx) =  M.GetInd()[k + ptr_i1];
 
     Vector<T1, VectFull, Allocator0 >
       new_data_vector(nnz + row_size_difference);
-    for (int k = 0; k <  ptr_i0; k++)
+    for (size_t k = 0; k <  ptr_i0; k++)
       new_data_vector(k) = M.GetData()[k];
-    for (int k = 0; k < Nx; k++)
+    for (size_t k = 0; k < Nx; k++)
       new_data_vector(k + ptr_i0) = X.Value(k);
-    for (int k = 0; k < nnz - ptr_i1; k++)
+    for (size_t k = 0; k < nnz - ptr_i1; k++)
       new_data_vector(k + ptr_i0 + Nx) =  M.GetData()[k + ptr_i1];
 
-    Vector<int> new_ptr_vector(m + 1);
-    for (int j = 0; j < i + 1; j++)
+    Vector<size_t> new_ptr_vector(m + 1);
+    for (size_t j = 0; j < i + 1; j++)
       new_ptr_vector(j) = ptr_vector[j];
-    for (int j = i + 1; j < m+1; j++)
+    for (size_t j = i + 1; j < m+1; j++)
       new_ptr_vector(j) =  ptr_vector[j] + row_size_difference;
 
     M.SetData(m, n, new_data_vector, new_ptr_vector, new_ind_vector);
@@ -625,18 +624,18 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template <class T0, class Allocator0, class T1, class Allocator1>
   void SetRow(const Vector<T1, VectSparse, Allocator1>& X,
-	      int i, Matrix<T0, General, ColSparse, Allocator0>& M)
+	      size_t i, Matrix<T0, General, ColSparse, Allocator0>& M)
   {
-    int m = M.GetM();
-    int n = M.GetN();
-    int nnz = M.GetDataSize();
+    size_t m = M.GetM();
+    size_t n = M.GetN();
+    size_t nnz = M.GetDataSize();
     
-    int* ptr = M.GetPtr();
-    int* ind = M.GetInd();
+    size_t* ptr = M.GetPtr();
+    size_t* ind = M.GetInd();
     T0* data = M.GetData();
     
 #ifdef SELDON_CHECK_BOUNDS
-    if (i < 0 || i >= m)
+    if (i >= m)
       throw WrongIndex("SetRow(Vector, int, Matrix<ColSparse>)",
                        string("Index should be in [0, ") + to_str(m - 1)
                        + "], but is equal to " + to_str(i) + ".");
@@ -647,14 +646,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
     GetRow(M, i, row);
     
     // counting the new number of new elements
-    int new_nnz = nnz + X.GetM() - row.GetM();
+    size_t new_nnz = nnz + X.GetM() - row.GetM();
     
     // if we have the same pattern for old and new row
     // we change only the values
     bool same_pattern = true;
     if (X.GetM() == row.GetM())
       {
-	for (int k = 0; k < X.GetM(); k++)
+	for (size_t k = 0; k < X.GetM(); k++)
 	  if (X.Index(k) != row.Index(k))
 	    same_pattern = false;
       }
@@ -663,10 +662,10 @@ template <class T0, class Allocator0, class T1, class Allocator1>
     
     if (same_pattern)
       {
-	for (int k = 0; k < X.GetM(); k++)
+	for (size_t k = 0; k < X.GetM(); k++)
 	  {
-	    int j = X.Index(k);
-	    for (int k2 = ptr[j]; k2 < ptr[j+1]; k2++)
+	    size_t j = X.Index(k);
+	    for (size_t k2 = ptr[j]; k2 < ptr[j+1]; k2++)
 	      if (ind[k2] == i)
 		data[k2] = X.Value(k);
 	  }
@@ -674,14 +673,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
     else
       {
 	// the pattern has to be modified, reallocating a new matrix
-	Vector<int> Ptr(n+1), Ind(new_nnz);
+	Vector<size_t> Ptr(n+1), Ind(new_nnz);
 	Vector<T0, VectFull, Allocator0> Val(new_nnz);
 	
 	// loop on first rows
-	int kx = 0, kr = 0;
-	int nb = 0;
+	size_t kx = 0, kr = 0;
+	size_t nb = 0;
 	Ptr(0) = 0;
-	for (int j = 0; j < n; j++)
+	for (size_t j = 0; j < n; j++)
 	  {
 	    // trying to find the corresponding index for X and row
 	    bool valX = false, val_row = false;
@@ -698,7 +697,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	      val_row = true;
 	    
 	    // filling matrix until index i
-	    int k = ptr[j];
+	    size_t k = ptr[j];
 	    while ((k < ptr[j+1]) && (ind[k] < i))
 	      {
 		Ind(nb) = ind[k];
@@ -747,13 +746,13 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template <class T0, class Allocator0, class T1, class Allocator1>
   void SetRow(const Vector<T1, VectSparse, Allocator1>& X,
-	      int i, Matrix<T0, Symmetric, RowSymSparse, Allocator0>& M)
+	      size_t i, Matrix<T0, Symmetric, RowSymSparse, Allocator0>& M)
   {
-    int n = M.GetN();
-    int nnz = M.GetDataSize();
+    size_t n = M.GetN();
+    size_t nnz = M.GetDataSize();
     
-    int* ptr = M.GetPtr();
-    int* ind = M.GetInd();
+    size_t* ptr = M.GetPtr();
+    size_t* ind = M.GetInd();
     T0* data = M.GetData();
     
 #ifdef SELDON_CHECK_BOUNDS
@@ -768,14 +767,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
     GetRow(M, i, row);
     
     // counting the new number of new elements
-    int new_nnz = nnz + X.GetM() - row.GetM();
+    size_t new_nnz = nnz + X.GetM() - row.GetM();
     
     // if we have the same pattern for old and new row
     // we change only the values
     bool same_pattern = true;
     if (X.GetM() == row.GetM())
       {
-	for (int k = 0; k < X.GetM(); k++)
+	for (size_t k = 0; k < X.GetM(); k++)
 	  if (X.Index(k) != row.Index(k))
 	    same_pattern = false;
       }
@@ -784,13 +783,13 @@ template <class T0, class Allocator0, class T1, class Allocator1>
     
     if (same_pattern)
       {
-	int kdiag = 0;
-	for (int k = 0; k < X.GetM(); k++)
+	size_t kdiag = 0;
+	for (size_t k = 0; k < X.GetM(); k++)
 	  {
-	    int j = X.Index(k);
+	    size_t j = X.Index(k);
 	    if (j < i)
 	      {
-		for (int k2 = ptr[j]; k2 < ptr[j+1]; k2++)
+		for (size_t k2 = ptr[j]; k2 < ptr[j+1]; k2++)
 		  if (ind[k2] == i)
 		    data[k2] = X.Value(k);
 		
@@ -798,7 +797,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	      }
 	    else
 	      {
-		int k2 = ptr[i] + k - kdiag;
+		size_t k2 = ptr[i] + k - kdiag;
 		data[k2] = X.Value(k);
 	      }
 	  }
@@ -806,14 +805,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
     else
       {
 	// the pattern has to be modified, reallocating a new matrix
-	Vector<int> Ptr(n+1), Ind(new_nnz);
+	Vector<size_t> Ptr(n+1), Ind(new_nnz);
 	Vector<T0, VectFull, Allocator0> Val(new_nnz);
 	
 	// loop on first rows
-	int kx = 0, kr = 0;
-	int nb = 0;
+	size_t kx = 0, kr = 0;
+	size_t nb = 0;
 	Ptr(0) = 0;
-	for (int j = 0; j < i; j++)
+	for (size_t j = 0; j < i; j++)
 	  {
 	    // trying to find the corresponding index for X and row
 	    bool valX = false, val_row = false;
@@ -830,7 +829,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	      val_row = true;
 	    
 	    // filling matrix until index i
-	    int k = ptr[j];
+	    size_t k = ptr[j];
 	    while ((k < ptr[j+1]) && (ind[k] < i))
 	      {
 		Ind(nb) = ind[k];
@@ -877,9 +876,9 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	Ptr(i+1) = nb;
 	
 	// then last rows of M
-	for (int j = i+1; j < n; j++)
+	for (size_t j = i+1; j < n; j++)
 	  {
-	    for (int k = ptr[j]; k < ptr[j+1]; k++)
+	    for (size_t k = ptr[j]; k < ptr[j+1]; k++)
 	      {
 		Ind(nb) = ind[k];
 		Val(nb) = data[k];
@@ -903,17 +902,17 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template <class T0, class Allocator0, class T1, class Allocator1>
   void SetRow(const Vector<T1, VectSparse, Allocator1>& X,
-	      int i, Matrix<T0, Symmetric, ColSymSparse, Allocator0>& M)
+	      size_t i, Matrix<T0, Symmetric, ColSymSparse, Allocator0>& M)
   {
-    int n = M.GetN();
-    int nnz = M.GetDataSize();
+    size_t n = M.GetN();
+    size_t nnz = M.GetDataSize();
     
-    int* ptr = M.GetPtr();
-    int* ind = M.GetInd();
+    size_t* ptr = M.GetPtr();
+    size_t* ind = M.GetInd();
     T0* data = M.GetData();
     
 #ifdef SELDON_CHECK_BOUNDS
-    if (i < 0 || i >= n)
+    if (i >= n)
       throw WrongIndex("SetRow(Vector, int, Matrix<RowSymSparse>)",
                        string("Index should be in [0, ") + to_str(n - 1)
                        + "], but is equal to " + to_str(i) + ".");
@@ -924,14 +923,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
     GetRow(M, i, row);
     
     // counting the new number of new elements
-    int new_nnz = nnz + X.GetM() - row.GetM();
+    size_t new_nnz = nnz + X.GetM() - row.GetM();
     
     // if we have the same pattern for old and new row
     // we change only the values
     bool same_pattern = true;
     if (X.GetM() == row.GetM())
       {
-	for (int k = 0; k < X.GetM(); k++)
+	for (size_t k = 0; k < X.GetM(); k++)
 	  if (X.Index(k) != row.Index(k))
 	    same_pattern = false;
       }
@@ -940,17 +939,17 @@ template <class T0, class Allocator0, class T1, class Allocator1>
     
     if (same_pattern)
       {
-	for (int k = 0; k < X.GetM(); k++)
+	for (size_t k = 0; k < X.GetM(); k++)
 	  {
-	    int j = X.Index(k);
+	    size_t j = X.Index(k);
 	    if (j <= i)
 	      {
-		int k2 = ptr[i] + k;
+		size_t k2 = ptr[i] + k;
 		data[k2] = X.Value(k);
 	      }
 	    else
 	      {
-		for (int k2 = ptr[j]; k2 < ptr[j+1]; k2++)
+		for (size_t k2 = ptr[j]; k2 < ptr[j+1]; k2++)
 		  if (ind[k2] == i)
 		    data[k2] = X.Value(k);
 	      }
@@ -959,15 +958,15 @@ template <class T0, class Allocator0, class T1, class Allocator1>
     else
       {
 	// the pattern has to be modified, reallocating a new matrix
-	Vector<int> Ptr(n+1), Ind(new_nnz);
+	Vector<size_t> Ptr(n+1), Ind(new_nnz);
 	Vector<T0, VectFull, Allocator0> Val(new_nnz);
 	
 	// first columns of M
 	Ptr(0) = 0;
-	int nb = 0;
-	for (int j = 0; j < i; j++)
+	size_t nb = 0;
+	for (size_t j = 0; j < i; j++)
 	  {
-	    for (int k = ptr[j]; k < ptr[j+1]; k++)
+	    for (size_t k = ptr[j]; k < ptr[j+1]; k++)
 	      {
 		Ind(nb) = ind[k];
 		Val(nb) = data[k];
@@ -978,7 +977,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	  }
 	
 	// then changing column i
-	int kx = 0;
+	size_t kx = 0;
 	while ( (kx < X.GetM()) && (X.Index(kx) <= i) )
 	  {
 	    Ind(nb) = X.Index(kx);
@@ -990,7 +989,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	Ptr(i+1) = nb;
 	
 	// loop on last columns
-	for (int j = i+1; j < n; j++)
+	for (size_t j = i+1; j < n; j++)
 	  {
 	    // trying to find the corresponding index for X
 	    bool valX = false;
@@ -1001,7 +1000,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	      valX = true;
 	    
 	    // filling matrix until index i
-	    int k = ptr[j];
+	    size_t k = ptr[j];
 	    while ((k < ptr[j+1]) && (ind[k] < i))
 	      {
 		Ind(nb) = ind[k];
@@ -1051,9 +1050,9 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   template <class T0, class Prop0, class Allocator0,
 	    class T1, class Storage1, class Allocator1>
   void SetRow(const Vector<T1, Storage1, Allocator1>& X,
-	      int i, Matrix<T0, Prop0, RowLoTriang, Allocator0>& M)
+	      size_t i, Matrix<T0, Prop0, RowLoTriang, Allocator0>& M)
   {
-    for (int j = 0; j <= i; j++)
+    for (size_t j = 0; j <= i; j++)
       M.Set(i, j, X(j));
   }
 
@@ -1068,9 +1067,9 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   template <class T0, class Prop0, class Allocator0,
 	    class T1, class Storage1, class Allocator1>
   void SetRow(const Vector<T1, Storage1, Allocator1>& X,
-	      int i, Matrix<T0, Prop0, RowLoTriangPacked, Allocator0>& M)
+	      size_t i, Matrix<T0, Prop0, RowLoTriangPacked, Allocator0>& M)
   {
-    for (int j = 0; j <= i; j++)
+    for (size_t j = 0; j <= i; j++)
       M.Set(i, j, X(j));
   }
 
@@ -1085,9 +1084,9 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   template <class T0, class Prop0, class Allocator0,
 	    class T1, class Storage1, class Allocator1>
   void SetRow(const Vector<T1, Storage1, Allocator1>& X,
-	      int i, Matrix<T0, Prop0, ColLoTriang, Allocator0>& M)
+	      size_t i, Matrix<T0, Prop0, ColLoTriang, Allocator0>& M)
   {
-    for (int j = 0; j <= i; j++)
+    for (size_t j = 0; j <= i; j++)
       M.Set(i, j, X(j));
   }
 
@@ -1102,9 +1101,9 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   template <class T0, class Prop0, class Allocator0,
 	    class T1, class Storage1, class Allocator1>
   void SetRow(const Vector<T1, Storage1, Allocator1>& X,
-	      int i, Matrix<T0, Prop0, ColLoTriangPacked, Allocator0>& M)
+	      size_t i, Matrix<T0, Prop0, ColLoTriangPacked, Allocator0>& M)
   {
-    for (int j = 0; j <= i; j++)
+    for (size_t j = 0; j <= i; j++)
       M.Set(i, j, X(j));
   }
 
@@ -1136,9 +1135,9 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   template <class T0, class Prop0, class Allocator0,
 	    class T1, class Storage1, class Allocator1>
   void SetRow(const Vector<T1, Storage1, Allocator1>& X,
-	      int i, Matrix<T0, Prop0, RowUpTriangPacked, Allocator0>& M)
+	      size_t i, Matrix<T0, Prop0, RowUpTriangPacked, Allocator0>& M)
   {
-    for (int j = i; j < M.GetN(); j++)
+    for (size_t j = i; j < M.GetN(); j++)
       M.Set(i, j, X(j));
   }
 
@@ -1153,9 +1152,9 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   template <class T0, class Prop0, class Allocator0,
 	    class T1, class Storage1, class Allocator1>
   void SetRow(const Vector<T1, Storage1, Allocator1>& X,
-	      int i, Matrix<T0, Prop0, ColUpTriang, Allocator0>& M)
+	      size_t i, Matrix<T0, Prop0, ColUpTriang, Allocator0>& M)
   {
-    for (int j = i; j < M.GetN(); j++)
+    for (size_t j = i; j < M.GetN(); j++)
       M.Set(i, j, X(j));
   }
 
@@ -1170,9 +1169,9 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   template <class T0, class Prop0, class Allocator0,
 	    class T1, class Storage1, class Allocator1>
   void SetRow(const Vector<T1, Storage1, Allocator1>& X,
-	      int i, Matrix<T0, Prop0, ColUpTriangPacked, Allocator0>& M)
+	      size_t i, Matrix<T0, Prop0, ColUpTriangPacked, Allocator0>& M)
   {
-    for (int j = i; j < M.GetN(); j++)
+    for (size_t j = i; j < M.GetN(); j++)
       M.Set(i, j, X(j));
   }
 
@@ -1187,12 +1186,12 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   template <class T0, class Prop0, class Storage0, class Allocator0,
 	    class T1, class Storage1, class Allocator1>
   void SetCol(const Vector<T1, Storage1, Allocator1>& X,
-	      int j, Matrix<T0, Prop0, Storage0, Allocator0>& M)
+	      size_t j, Matrix<T0, Prop0, Storage0, Allocator0>& M)
   {
     if (Storage0::Sparse)
       throw WrongArgument("SetCol", "Function intended to dense matrices");
     
-    for (int i = 0; i < M.GetM(); i++)
+    for (size_t i = 0; i < M.GetM(); i++)
       M.Set(i, j, X(i));
   }
 
@@ -1245,10 +1244,10 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   template <class T0, class Allocator0,
 	    class T1, class Allocator1>
   void SetCol(const Vector<T1, VectFull, Allocator1>& X,
-	      int j, Matrix<T0, General, RowSparse, Allocator0>& M)
+	      size_t j, Matrix<T0, General, RowSparse, Allocator0>& M)
   {
     Vector<T1, VectSparse, Allocator1> X_sparse;
-    for (int k = 0; k < X.GetLength(); k++)
+    for (size_t k = 0; k < X.GetLength(); k++)
       {
         T1 value = X(k);
         if (value != T1(0.))
@@ -1268,12 +1267,12 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template <class T0, class Allocator0, class T1, class Allocator1>
   void SetCol(const Vector<T1, VectSparse, Allocator1>& X,
-	      int j, Matrix<T0, General, RowSparse, Allocator0>& M)
+	      size_t j, Matrix<T0, General, RowSparse, Allocator0>& M)
   {
-    int m = M.GetM();
-    int n = M.GetN();
-    int nnz = M.GetDataSize();
-    int Nx = X.GetSize();
+    size_t m = M.GetM();
+    size_t n = M.GetN();
+    size_t nnz = M.GetDataSize();
+    size_t Nx = X.GetSize();
 
 #ifdef SELDON_CHECK_BOUNDS
     if (j < 0 || j >= n)
@@ -1285,23 +1284,23 @@ template <class T0, class Allocator0, class T1, class Allocator1>
     // The column to be changed.
     Vector<T1, VectSparse, Allocator1> column_j;
     GetCol(M, j, column_j);
-    int Ncolumn_j = column_j.GetSize();
-    int column_size_difference = Nx - Ncolumn_j;
+    size_t Ncolumn_j = column_j.GetSize();
+    size_t column_size_difference = Nx - Ncolumn_j;
 
     // Built a vector indexed with the rows of column_j and X.
-    Vector<int, VectSparse> column_j_mask;
-    Vector<int> index_j(Ncolumn_j);
-    Vector<int> value_j(Ncolumn_j);
-    for (int p = 0; p < Ncolumn_j; p++)
+    Vector<size_t, VectSparse> column_j_mask;
+    Vector<size_t> index_j(Ncolumn_j);
+    Vector<size_t> value_j(Ncolumn_j);
+    for (size_t p = 0; p < Ncolumn_j; p++)
       index_j(p) = column_j.Index(p);
     value_j.Fill(-1);
     column_j_mask.SetData(value_j, index_j);
     value_j.Nullify();
     index_j.Nullify();
-    Vector<int, VectSparse> X_mask;
-    Vector<int> index_x(Nx);
-    Vector<int> value_x(Nx);
-    for (int p = 0; p < Nx; p++)
+    Vector<size_t, VectSparse> X_mask;
+    Vector<size_t> index_x(Nx);
+    Vector<size_t> value_x(Nx);
+    for (size_t p = 0; p < Nx; p++)
       index_x(p) = X.Index(p);
     value_x.Fill(1);
     X_mask.SetData(value_x, index_x);
@@ -1312,38 +1311,38 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 			     column_j_mask.GetData(), true);
 
     // Built the new pointer vector.
-    Vector<int> ptr_vector;
+    Vector<size_t> ptr_vector;
     ptr_vector.SetData(m + 1, M.GetPtr());
-    Vector<int> new_ptr_vector(m + 1);
+    Vector<size_t> new_ptr_vector(m + 1);
     new_ptr_vector.Zero();
-    for (int p = 0; p < X_mask.GetSize(); p++)
+    for (size_t p = 0; p < X_mask.GetSize(); p++)
       new_ptr_vector(X_mask.Index(p) + 1) = X_mask.Value(p);
-    for (int p = 0; p < m; p++)
+    for (size_t p = 0; p < m; p++)
       new_ptr_vector(p + 1) += new_ptr_vector(p);
 
-    Add(1, ptr_vector, new_ptr_vector);
+    Add((size_t)1, ptr_vector, new_ptr_vector);
 
     // Built the new index and the new data vectors row by row.
-    Vector<int>
+    Vector<size_t>
       new_ind_vector(nnz + column_size_difference);
     Vector<T0, VectFull, Allocator0>
       new_data_vector(nnz + column_size_difference);
 
     Vector<T0, VectSparse, Allocator0> working_vector;
-    int Nworking_vector;
+    size_t Nworking_vector;
 
-    int line = 0;
-    for (int interaction = 0; interaction < X_mask.GetSize(); interaction++)
+    size_t line = 0;
+    for (size_t interaction = 0; interaction < X_mask.GetSize(); interaction++)
       {
-	int ind_x =  X_mask.Index(interaction);
-	for (int k = 0; k < ptr_vector(ind_x) -  ptr_vector(line); k++)
+	size_t ind_x =  X_mask.Index(interaction);
+	for (size_t k = 0; k < ptr_vector(ind_x) -  ptr_vector(line); k++)
 	  new_ind_vector.GetData()[k + new_ptr_vector(line)] =
 	    M.GetInd()[k + ptr_vector(line)];
-	for (int k = 0; k < ptr_vector(ind_x) -  ptr_vector(line); k++)
+	for (size_t k = 0; k < ptr_vector(ind_x) -  ptr_vector(line); k++)
 	  new_data_vector.GetData()[k + new_ptr_vector(line)] =
 	    M.GetData()[k + ptr_vector(line)];
 
-	int ind_j;
+	size_t ind_j;
 	Nworking_vector = ptr_vector(ind_x + 1) - ptr_vector(ind_x);
 	working_vector.SetData(Nworking_vector,
 			       M.GetData() + ptr_vector(ind_x),
@@ -1353,10 +1352,10 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	    // Collision.
 	  case 0:
 	    working_vector.Get(j) = X(ind_x);
-	    for (int k = 0; k < Nworking_vector; k++)
+	    for (size_t k = 0; k < Nworking_vector; k++)
 	      new_ind_vector.GetData()[k + new_ptr_vector(ind_x)] =
 		working_vector.GetIndex()[k];
-	    for (int k = 0; k < Nworking_vector; k++)
+	    for (size_t k = 0; k < Nworking_vector; k++)
 	      new_data_vector.GetData()[k + new_ptr_vector(ind_x)] =
 		working_vector.GetData()[k];
 	    break;
@@ -1368,17 +1367,17 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 		   working_vector.Index(ind_j) != j)
 	      ind_j++;
 
-	    for (int k = 0; k < ind_j; k++)
+	    for (size_t k = 0; k < ind_j; k++)
 	      new_ind_vector.GetData()[k + new_ptr_vector(ind_x)] =
 		working_vector.GetIndex()[k];
-	    for (int k = 0; k < Nworking_vector - ind_j - 1; k++)
+	    for (size_t k = 0; k < Nworking_vector - ind_j - 1; k++)
 	      new_ind_vector.GetData()[k + new_ptr_vector(ind_x) + ind_j] =
 		working_vector.GetIndex()[k + ind_j + 1];
 
-	    for (int k = 0; k < ind_j; k++)
+	    for (size_t k = 0; k < ind_j; k++)
 	      new_data_vector.GetData()[k + new_ptr_vector(ind_x)] =
 		working_vector.GetData()[k];
-	    for (int k = 0; k < Nworking_vector - ind_j - 1; k++)
+	    for (size_t k = 0; k < Nworking_vector - ind_j - 1; k++)
 	      new_data_vector.GetData()[k + new_ptr_vector(ind_x) + ind_j] =
 		working_vector.GetData()[k + ind_j + 1];
 	    break;
@@ -1389,20 +1388,20 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	    while (ind_j < Nworking_vector &&
 		   working_vector.Index(ind_j) < j)
 	      ind_j++;
-	    for (int k = 0; k < ind_j; k++)
+	    for (size_t k = 0; k < ind_j; k++)
 	      new_ind_vector.GetData()[k + new_ptr_vector(ind_x)] =
 		working_vector.GetIndex()[k];
 	    new_ind_vector.GetData()[new_ptr_vector(ind_x) + ind_j] = j;
-	    for (int k = 0; k < Nworking_vector - ind_j; k++)
+	    for (size_t k = 0; k < Nworking_vector - ind_j; k++)
 	      new_ind_vector.GetData()[k + new_ptr_vector(ind_x) + ind_j + 1]
 		= working_vector.GetIndex()[k + ind_j];
 
-	    for (int k = 0; k < ind_j; k++)
+	    for (size_t k = 0; k < ind_j; k++)
 	      new_data_vector.GetData()[k + new_ptr_vector(ind_x)] =
 		working_vector.GetData()[k];
 	    new_data_vector.GetData()[new_ptr_vector(ind_x)  + ind_j]
 	      = X(ind_x);
-	    for (int k = 0; k < Nworking_vector - ind_j; k++)
+	    for (size_t k = 0; k < Nworking_vector - ind_j; k++)
 	      new_data_vector.GetData()[k + new_ptr_vector(ind_x) + ind_j + 1]
 		= working_vector.GetData()[k + ind_j];
 	  }
@@ -1410,10 +1409,10 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	line = ind_x + 1;
 	working_vector.Nullify();
       }
-    for (int k = 0; k < ptr_vector(m) -  ptr_vector(line); k++)
+    for (size_t k = 0; k < ptr_vector(m) -  ptr_vector(line); k++)
       new_ind_vector.GetData()[k + new_ptr_vector(line)] =
 	M.GetInd()[k + ptr_vector(line)];
-    for (int k = 0; k < ptr_vector(m) -  ptr_vector(line); k++)
+    for (size_t k = 0; k < ptr_vector(m) -  ptr_vector(line); k++)
       new_data_vector.GetData()[k + new_ptr_vector(line)] =
 	M.GetData()[k + ptr_vector(line)];
 
@@ -1434,29 +1433,29 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template <class T0, class Allocator0, class T1, class Allocator1>
   void SetCol(const Vector<T1, VectSparse, Allocator1>& X,
-	      int j, Matrix<T0, General, ColSparse, Allocator0>& M)
+	      size_t j, Matrix<T0, General, ColSparse, Allocator0>& M)
   {
-    int m = M.GetM();
-    int n = M.GetN();
-    int nnz = M.GetDataSize();
+    size_t m = M.GetM();
+    size_t n = M.GetN();
+    size_t nnz = M.GetDataSize();
     
-    int* ptr = M.GetPtr();
-    int* ind = M.GetInd();
+    size_t* ptr = M.GetPtr();
+    size_t* ind = M.GetInd();
     T0* data = M.GetData();
 
 #ifdef SELDON_CHECK_BOUNDS
-    if (j < 0 || j >= n)
+    if (j >= n)
       throw WrongIndex("SetCol(Vector, int, Matrix<ColSparse>)",
                        string("Index should be in [0, ") + to_str(n - 1)
                        + "], but is equal to " + to_str(j) + ".");
 #endif
     
-    int size_col = ptr[j+1] - ptr[j];
+    size_t size_col = ptr[j+1] - ptr[j];
     if (size_col == X.GetM())
       {
 	// no need of reallocating matrix M
 	// changing indexes and values
-	for (int k = 0; k < X.GetM(); k++)
+	for (size_t k = 0; k < X.GetM(); k++)
 	  {
 	    ind[ptr[j] + k] = X.Index(k);
 	    data[ptr[j] + k] = X.Value(k);
@@ -1464,14 +1463,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       }
     else
       {
-	int new_nnz = nnz + X.GetM() - size_col;
+	size_t new_nnz = nnz + X.GetM() - size_col;
 	// new matrix
-	Vector<int> Ptr(n+1), Ind(new_nnz);
+	Vector<size_t> Ptr(n+1), Ind(new_nnz);
 	Vector<T0, VectFull, Allocator0> Val(new_nnz);
 	Ptr(0) = 0;
-	for (int i = 0; i < j; i++)
+	for (size_t i = 0; i < j; i++)
 	  {
-	    for (int k = ptr[i]; k < ptr[i+1]; k++)
+	    for (size_t k = ptr[i]; k < ptr[i+1]; k++)
 	      {
 		Ind(k) = ind[k];
 		Val(k) = data[k];
@@ -1480,7 +1479,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	  }
 	
 	new_nnz = Ptr(j);
-	for (int k = 0; k < X.GetM(); k++)
+	for (size_t k = 0; k < X.GetM(); k++)
 	  {
 	    Ind(new_nnz) = X.Index(k);
 	    Val(new_nnz) = X.Value(k);
@@ -1488,9 +1487,9 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	  }
 	
 	Ptr(j+1) = new_nnz;
-	for (int i = j+1; i < n; i++)
+	for (size_t i = j+1; i < n; i++)
 	  {
-	    for (int k = ptr[i]; k < ptr[i+1]; k++)
+	    for (size_t k = ptr[i]; k < ptr[i+1]; k++)
 	      {
 		Ind(new_nnz) = ind[k];
 		Val(new_nnz) = data[k];
@@ -1513,7 +1512,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template <class T0, class Allocator0, class T1, class Allocator1>
   void SetCol(const Vector<T1, VectSparse, Allocator1>& X,
-	      int j, Matrix<T0, Symmetric, RowSymSparse, Allocator0>& M)
+	      size_t j, Matrix<T0, Symmetric, RowSymSparse, Allocator0>& M)
   {
     // symmetric matrix, row = col
     SetRow(X, j, M);
@@ -1529,7 +1528,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template <class T0, class Allocator0, class T1, class Allocator1>
   void SetCol(const Vector<T1, VectSparse, Allocator1>& X,
-	      int j, Matrix<T0, Symmetric, ColSymSparse, Allocator0>& M)
+	      size_t j, Matrix<T0, Symmetric, ColSymSparse, Allocator0>& M)
   {
     // symmetric matrix, row = col
     SetRow(X, j, M);
@@ -1548,7 +1547,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   void SetCol(const Vector<T1, Storage1, Allocator1>& X,
 	      int j, Matrix<T0, Prop0, RowLoTriang, Allocator0>& M)
   {
-    for (int i = j; i < M.GetM(); i++)
+    for (size_t i = j; i < M.GetM(); i++)
       M.Set(i, j, X(i));
   }
 
@@ -1563,9 +1562,9 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   template <class T0, class Prop0, class Allocator0,
 	    class T1, class Storage1, class Allocator1>
   void SetCol(const Vector<T1, Storage1, Allocator1>& X,
-	      int j, Matrix<T0, Prop0, RowLoTriangPacked, Allocator0>& M)
+	      size_t j, Matrix<T0, Prop0, RowLoTriangPacked, Allocator0>& M)
   {
-    for (int i = j; i < M.GetM(); i++)
+    for (size_t i = j; i < M.GetM(); i++)
       M.Set(i, j, X(i));
   }
 
@@ -1580,9 +1579,9 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   template <class T0, class Prop0, class Allocator0,
 	    class T1, class Storage1, class Allocator1>
   void SetCol(const Vector<T1, Storage1, Allocator1>& X,
-	      int j, Matrix<T0, Prop0, ColLoTriang, Allocator0>& M)
+	      size_t j, Matrix<T0, Prop0, ColLoTriang, Allocator0>& M)
   {
-    for (int i = j; i < M.GetM(); i++)
+    for (size_t i = j; i < M.GetM(); i++)
       M.Set(i, j, X(i));
   }
 
@@ -1597,9 +1596,9 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   template <class T0, class Prop0, class Allocator0,
 	    class T1, class Storage1, class Allocator1>
   void SetCol(const Vector<T1, Storage1, Allocator1>& X,
-	      int j, Matrix<T0, Prop0, ColLoTriangPacked, Allocator0>& M)
+	      size_t j, Matrix<T0, Prop0, ColLoTriangPacked, Allocator0>& M)
   {
-    for (int i = j; i < M.GetM(); i++)
+    for (size_t i = j; i < M.GetM(); i++)
       M.Set(i, j, X(i));
   }
 
@@ -1614,9 +1613,9 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   template <class T0, class Prop0, class Allocator0,
 	    class T1, class Storage1, class Allocator1>
   void SetCol(const Vector<T1, Storage1, Allocator1>& X,
-	      int j, Matrix<T0, Prop0, RowUpTriang, Allocator0>& M)
+	      size_t j, Matrix<T0, Prop0, RowUpTriang, Allocator0>& M)
   {
-    for (int i = 0; i <= j; i++)
+    for (size_t i = 0; i <= j; i++)
       M.Set(i, j, X(i));
   }
 
@@ -1631,9 +1630,9 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   template <class T0, class Prop0, class Allocator0,
 	    class T1, class Storage1, class Allocator1>
   void SetCol(const Vector<T1, Storage1, Allocator1>& X,
-	      int j, Matrix<T0, Prop0, RowUpTriangPacked, Allocator0>& M)
+	      size_t j, Matrix<T0, Prop0, RowUpTriangPacked, Allocator0>& M)
   {
-    for (int i = 0; i <= j; i++)
+    for (size_t i = 0; i <= j; i++)
       M.Set(i, j, X(i));
   }
 
@@ -1648,9 +1647,9 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   template <class T0, class Prop0, class Allocator0,
 	    class T1, class Storage1, class Allocator1>
   void SetCol(const Vector<T1, Storage1, Allocator1>& X,
-	      int j, Matrix<T0, Prop0, ColUpTriang, Allocator0>& M)
+	      size_t j, Matrix<T0, Prop0, ColUpTriang, Allocator0>& M)
   {
-    for (int i = 0; i <= j; i++)
+    for (size_t i = 0; i <= j; i++)
       M.Set(i, j, X(i));
   }
 
@@ -1665,9 +1664,9 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   template <class T0, class Prop0, class Allocator0,
 	    class T1, class Storage1, class Allocator1>
   void SetCol(const Vector<T1, Storage1, Allocator1>& X,
-	      int j, Matrix<T0, Prop0, ColUpTriangPacked, Allocator0>& M)
+	      size_t j, Matrix<T0, Prop0, ColUpTriangPacked, Allocator0>& M)
   {
-    for (int i = 0; i <= j; i++)
+    for (size_t i = 0; i <= j; i++)
       M.Set(i, j, X(i));
   }
 
@@ -1697,14 +1696,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template<class T, class Prop, class Allocator>
   void ApplyPermutation(Matrix<T, Prop, ColMajor, Allocator>& A,
-                        const Vector<int>& row_perm,
-                        const Vector<int>& col_perm,
-                        int starting_index)
+                        const Vector<size_t>& row_perm,
+                        const Vector<size_t>& col_perm,
+                        size_t starting_index)
   {
     Matrix<T, Prop, ColMajor, Allocator> A_copy = A;
 
-    for (int j = 0; j < A.GetN(); j++)
-      for (int i = 0; i < A.GetM(); i++)
+    for (size_t j = 0; j < A.GetN(); j++)
+      for (size_t i = 0; i < A.GetM(); i++)
         A(i, j) = A_copy(row_perm(i) - starting_index,
                          col_perm(j) - starting_index);
   }
@@ -1716,14 +1715,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template<class T, class Prop, class Allocator>
   void ApplyPermutation(Matrix<T, Prop, RowSymPacked, Allocator>& A,
-                        const Vector<int>& row_perm,
-                        const Vector<int>& col_perm,
-                        int starting_index)
+                        const Vector<size_t>& row_perm,
+                        const Vector<size_t>& col_perm,
+                        size_t starting_index)
   {
     Matrix<T, Prop, RowSymPacked, Allocator> A_copy = A;
 
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A(i, j) = A_copy(row_perm(i) - starting_index,
                          row_perm(j) - starting_index);
   }
@@ -1735,14 +1734,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template<class T, class Prop, class Allocator>
   void ApplyPermutation(Matrix<T, Prop, ColSymPacked, Allocator>& A,
-                        const Vector<int>& row_perm,
-                        const Vector<int>& col_perm,
-                        int starting_index)
+                        const Vector<size_t>& row_perm,
+                        const Vector<size_t>& col_perm,
+                        size_t starting_index)
   {
     Matrix<T, Prop, ColSymPacked, Allocator> A_copy = A;
 
-    for (int j = 0; j < A.GetN(); j++)
-      for (int i = 0; i <= j; i++)
+    for (size_t j = 0; j < A.GetN(); j++)
+      for (size_t i = 0; i <= j; i++)
         A(i, j) = A_copy(row_perm(i) - starting_index,
                          row_perm(j) - starting_index);
   }
@@ -1754,14 +1753,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template<class T, class Prop, class Allocator>
   void ApplyPermutation(Matrix<T, Prop, RowSym, Allocator>& A,
-                        const Vector<int>& row_perm,
-                        const Vector<int>& col_perm,
-                        int starting_index)
+                        const Vector<size_t>& row_perm,
+                        const Vector<size_t>& col_perm,
+                        size_t starting_index)
   {
     Matrix<T, Prop, RowSym, Allocator> A_copy = A;
 
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A.Val(i, j) = A_copy(row_perm(i) - starting_index,
                              row_perm(j) - starting_index);
   }
@@ -1773,14 +1772,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template<class T, class Prop, class Allocator>
   void ApplyPermutation(Matrix<T, Prop, ColSym, Allocator>& A,
-                        const Vector<int>& row_perm,
-                        const Vector<int>& col_perm,
-                        int starting_index)
+                        const Vector<size_t>& row_perm,
+                        const Vector<size_t>& col_perm,
+                        size_t starting_index)
   {
     Matrix<T, Prop, ColSym, Allocator> A_copy = A;
 
-    for (int j = 0; j < A.GetN(); j++)
-      for (int i = 0; i <= j; i++)
+    for (size_t j = 0; j < A.GetN(); j++)
+      for (size_t i = 0; i <= j; i++)
         A.Val(i, j) = A_copy(row_perm(i) - starting_index,
                              row_perm(j) - starting_index);
   }
@@ -1792,14 +1791,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template<class T, class Prop, class Allocator>
   void ApplyPermutation(Matrix<T, Prop, RowHermPacked, Allocator>& A,
-                        const Vector<int>& row_perm,
-                        const Vector<int>& col_perm,
-                        int starting_index)
+                        const Vector<size_t>& row_perm,
+                        const Vector<size_t>& col_perm,
+                        size_t starting_index)
   {
     Matrix<T, Prop, RowHermPacked, Allocator> A_copy = A;
 
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A.Val(i, j) = A_copy(row_perm(i) - starting_index,
                              row_perm(j) - starting_index);
   }
@@ -1811,14 +1810,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template<class T, class Prop, class Allocator>
   void ApplyPermutation(Matrix<T, Prop, ColHermPacked, Allocator>& A,
-                        const Vector<int>& row_perm,
-                        const Vector<int>& col_perm,
+                        const Vector<size_t>& row_perm,
+                        const Vector<size_t>& col_perm,
                         int starting_index)
   {
     Matrix<T, Prop, ColHermPacked, Allocator> A_copy = A;
 
-    for (int j = 0; j < A.GetN(); j++)
-      for (int i = 0; i <= j; i++)
+    for (size_t j = 0; j < A.GetN(); j++)
+      for (size_t i = 0; i <= j; i++)
         A.Val(i, j) = A_copy(row_perm(i) - starting_index,
                              row_perm(j) - starting_index);
   }
@@ -1830,14 +1829,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template<class T, class Prop, class Allocator>
   void ApplyPermutation(Matrix<T, Prop, RowHerm, Allocator>& A,
-                        const Vector<int>& row_perm,
-                        const Vector<int>& col_perm,
-                        int starting_index)
+                        const Vector<size_t>& row_perm,
+                        const Vector<size_t>& col_perm,
+                        size_t starting_index)
   {
     Matrix<T, Prop, RowHerm, Allocator> A_copy = A;
 
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A.Val(i, j) = A_copy(row_perm(i) - starting_index,
                              row_perm(j) - starting_index);
   }
@@ -1849,14 +1848,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template<class T, class Prop, class Allocator>
   void ApplyPermutation(Matrix<T, Prop, ColHerm, Allocator>& A,
-                        const Vector<int>& row_perm,
-                        const Vector<int>& col_perm,
-                        int starting_index)
+                        const Vector<size_t>& row_perm,
+                        const Vector<size_t>& col_perm,
+                        size_t starting_index)
   {
     Matrix<T, Prop, ColHerm, Allocator> A_copy = A;
 
-    for (int j = 0; j < A.GetN(); j++)
-      for (int i = 0; i <= j; i++)
+    for (size_t j = 0; j < A.GetN(); j++)
+      for (size_t i = 0; i <= j; i++)
         A.Val(i, j) = A_copy(row_perm(i) - starting_index,
                              row_perm(j) - starting_index);
   }
@@ -1870,14 +1869,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template<class T, class Prop, class Allocator>
   void ApplyInversePermutation(Matrix<T, Prop, RowMajor, Allocator>& A,
-                               const Vector<int>& row_perm,
-                               const Vector<int>& col_perm,
-                               int starting_index)
+                               const Vector<size_t>& row_perm,
+                               const Vector<size_t>& col_perm,
+                               size_t starting_index)
   {
     Matrix<T, Prop, RowMajor, Allocator> A_copy = A;
 
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = 0; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = 0; j < A.GetN(); j++)
         A(row_perm(i) - starting_index, col_perm(j) - starting_index)
           = A_copy(i, j);
   }
@@ -1891,14 +1890,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template<class T, class Prop, class Allocator>
   void ApplyInversePermutation(Matrix<T, Prop, ColMajor, Allocator>& A,
-                               const Vector<int>& row_perm,
-                               const Vector<int>& col_perm,
-                               int starting_index)
+                               const Vector<size_t>& row_perm,
+                               const Vector<size_t>& col_perm,
+                               size_t starting_index)
   {
     Matrix<T, Prop, ColMajor, Allocator> A_copy = A;
 
-    for (int j = 0; j < A.GetN(); j++)
-      for (int i = 0; i < A.GetM(); i++)
+    for (size_t j = 0; j < A.GetN(); j++)
+      for (size_t i = 0; i < A.GetM(); i++)
         A(row_perm(i) - starting_index, col_perm(j) - starting_index)
           = A_copy(i, j);
   }
@@ -1912,14 +1911,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template<class T, class Prop, class Allocator>
   void ApplyInversePermutation(Matrix<T, Prop, RowSymPacked, Allocator>& A,
-                               const Vector<int>& row_perm,
-                               const Vector<int>& col_perm,
-                               int starting_index)
+                               const Vector<size_t>& row_perm,
+                               const Vector<size_t>& col_perm,
+                               size_t starting_index)
   {
     Matrix<T, Prop, RowSymPacked, Allocator> A_copy = A;
 
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A.Set(row_perm(i) - starting_index, row_perm(j) - starting_index,
               A_copy(i, j));
   }
@@ -1933,14 +1932,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template<class T, class Prop, class Allocator>
   void ApplyInversePermutation(Matrix<T, Prop, ColSymPacked, Allocator>& A,
-                               const Vector<int>& row_perm,
-                               const Vector<int>& col_perm,
-                               int starting_index)
+                               const Vector<size_t>& row_perm,
+                               const Vector<size_t>& col_perm,
+                               size_t starting_index)
   {
     Matrix<T, Prop, ColSymPacked, Allocator> A_copy = A;
 
-    for (int j = 0; j < A.GetN(); j++)
-      for (int i = 0; i <= j; i++)
+    for (size_t j = 0; j < A.GetN(); j++)
+      for (size_t i = 0; i <= j; i++)
         A.Set(row_perm(i) - starting_index, row_perm(j) - starting_index,
               A_copy(i, j));
   }
@@ -1954,14 +1953,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template<class T, class Prop, class Allocator>
   void ApplyInversePermutation(Matrix<T, Prop, RowSym, Allocator>& A,
-                               const Vector<int>& row_perm,
-                               const Vector<int>& col_perm,
-                               int starting_index)
+                               const Vector<size_t>& row_perm,
+                               const Vector<size_t>& col_perm,
+                               size_t starting_index)
   {
     Matrix<T, Prop, RowSym, Allocator> A_copy = A;
 
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A.Set(row_perm(i) - starting_index, row_perm(j) - starting_index,
               A_copy(i, j));
   }
@@ -1975,14 +1974,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template<class T, class Prop, class Allocator>
   void ApplyInversePermutation(Matrix<T, Prop, ColSym, Allocator>& A,
-                               const Vector<int>& row_perm,
-                               const Vector<int>& col_perm,
-                               int starting_index)
+                               const Vector<size_t>& row_perm,
+                               const Vector<size_t>& col_perm,
+                               size_t starting_index)
   {
     Matrix<T, Prop, ColSym, Allocator> A_copy = A;
 
-    for (int j = 0; j < A.GetN(); j++)
-      for (int i = 0; i <= j; i++)
+    for (size_t j = 0; j < A.GetN(); j++)
+      for (size_t i = 0; i <= j; i++)
         A.Set(row_perm(i) - starting_index, row_perm(j) - starting_index,
               A_copy(i, j));
   }
@@ -1996,14 +1995,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template<class T, class Prop, class Allocator>
   void ApplyInversePermutation(Matrix<T, Prop, RowHermPacked, Allocator>& A,
-                               const Vector<int>& row_perm,
-                               const Vector<int>& col_perm,
-                               int starting_index)
+                               const Vector<size_t>& row_perm,
+                               const Vector<size_t>& col_perm,
+                               size_t starting_index)
   {
     Matrix<T, Prop, RowHermPacked, Allocator> A_copy = A;
 
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A.Set(row_perm(i) - starting_index, row_perm(j) - starting_index,
               A_copy(i, j));
   }
@@ -2017,14 +2016,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template<class T, class Prop, class Allocator>
   void ApplyInversePermutation(Matrix<T, Prop, ColHermPacked, Allocator>& A,
-                               const Vector<int>& row_perm,
-                               const Vector<int>& col_perm,
-                               int starting_index)
+                               const Vector<size_t>& row_perm,
+                               const Vector<size_t>& col_perm,
+                               size_t starting_index)
   {
     Matrix<T, Prop, ColHermPacked, Allocator> A_copy = A;
 
-    for (int j = 0; j < A.GetN(); j++)
-      for (int i = 0; i <= j; i++)
+    for (size_t j = 0; j < A.GetN(); j++)
+      for (size_t i = 0; i <= j; i++)
         A.Set(row_perm(i) - starting_index, row_perm(j) - starting_index,
               A_copy(i, j));
   }
@@ -2038,14 +2037,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template<class T, class Prop, class Allocator>
   void ApplyInversePermutation(Matrix<T, Prop, RowHerm, Allocator>& A,
-                               const Vector<int>& row_perm,
-                               const Vector<int>& col_perm,
-                               int starting_index)
+                               const Vector<size_t>& row_perm,
+                               const Vector<size_t>& col_perm,
+                               size_t starting_index)
   {
     Matrix<T, Prop, RowHerm, Allocator> A_copy = A;
 
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A.Set(row_perm(i) - starting_index, row_perm(j) - starting_index,
               A_copy(i, j));
   }
@@ -2059,14 +2058,14 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   */
   template<class T, class Prop, class Allocator>
   void ApplyInversePermutation(Matrix<T, Prop, ColHerm, Allocator>& A,
-                               const Vector<int>& row_perm,
-                               const Vector<int>& col_perm,
-                               int starting_index)
+                               const Vector<size_t>& row_perm,
+                               const Vector<size_t>& col_perm,
+                               size_t starting_index)
   {
     Matrix<T, Prop, ColHerm, Allocator> A_copy = A;
 
-    for (int j = 0; j < A.GetN(); j++)
-      for (int i = 0; i <= j; i++)
+    for (size_t j = 0; j < A.GetN(); j++)
+      for (size_t i = 0; i <= j; i++)
         A.Set(row_perm(i) - starting_index, row_perm(j) - starting_index,
               A_copy(i, j));
   }
@@ -2084,8 +2083,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                    const Vector<T1, VectFull, Allocator1>& Drow,
                    const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = 0; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = 0; j < A.GetN(); j++)
         A(i, j) *= Drow(i)*Dcol(j);
   }
 
@@ -2102,8 +2101,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                    const Vector<T1, VectFull, Allocator1>& Drow,
                    const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int j = 0; j < A.GetN(); j++)
-      for (int i = 0; i < A.GetM(); i++)
+    for (size_t j = 0; j < A.GetN(); j++)
+      for (size_t i = 0; i < A.GetM(); i++)
         A(i, j) *= Drow(i)*Dcol(j);
   }
   
@@ -2120,8 +2119,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                    const Vector<T1, VectFull, Allocator1>& Drow,
                    const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A(i, j) *= Drow(i)*Drow(j);
   }
 
@@ -2138,8 +2137,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                    const Vector<T1, VectFull, Allocator1>& Drow,
                    const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int j = 0; j < A.GetN(); j++)
-      for (int i = 0; i <= j; i++)
+    for (size_t j = 0; j < A.GetN(); j++)
+      for (size_t i = 0; i <= j; i++)
         A(i, j) *= Drow(i)*Drow(j);
   }
   
@@ -2156,8 +2155,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                    const Vector<T1, VectFull, Allocator1>& Drow,
                    const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A.Val(i, j) *= Drow(i)*Drow(j);
   }
 
@@ -2174,8 +2173,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                    const Vector<T1, VectFull, Allocator1>& Drow,
                    const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int j = 0; j < A.GetN(); j++)
-      for (int i = 0; i <= j; i++)
+    for (size_t j = 0; j < A.GetN(); j++)
+      for (size_t i = 0; i <= j; i++)
         A.Val(i, j) *= Drow(i)*Drow(j);
   }
   
@@ -2192,8 +2191,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                    const Vector<T1, VectFull, Allocator1>& Drow,
                    const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A.Val(i, j) *= Drow(i)*Drow(j);
   }
 
@@ -2210,8 +2209,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                    const Vector<T1, VectFull, Allocator1>& Drow,
                    const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int j = 0; j < A.GetN(); j++)
-      for (int i = 0; i <= j; i++)
+    for (size_t j = 0; j < A.GetN(); j++)
+      for (size_t i = 0; i <= j; i++)
         A.Val(i, j) *= Drow(i)*Drow(j);
   }
 
@@ -2228,8 +2227,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                    const Vector<T1, VectFull, Allocator1>& Drow,
                    const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A.Val(i, j) *= Drow(i)*Drow(j);
   }
 
@@ -2246,8 +2245,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                    const Vector<T1, VectFull, Allocator1>& Drow,
                    const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int j = 0; j < A.GetN(); j++)
-      for (int i = 0; i <= j; i++)
+    for (size_t j = 0; j < A.GetN(); j++)
+      for (size_t i = 0; i <= j; i++)
         A.Val(i, j) *= Drow(i)*Drow(j);
   }
 
@@ -2264,8 +2263,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                    const Vector<T1, VectFull, Allocator1>& Drow,
                    const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = 0; j <= i; j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = 0; j <= i; j++)
         A.Val(i, j) *= Drow(i)*Dcol(j);
   }
 
@@ -2282,8 +2281,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                    const Vector<T1, VectFull, Allocator1>& Drow,
                    const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = 0; j <= i; j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = 0; j <= i; j++)
         A.Val(i, j) *= Drow(i)*Dcol(j);
   }
 
@@ -2300,8 +2299,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                    const Vector<T1, VectFull, Allocator1>& Drow,
                    const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = 0; j <= i; j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = 0; j <= i; j++)
         A.Val(i, j) *= Drow(i)*Dcol(j);
   }
 
@@ -2318,8 +2317,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                    const Vector<T1, VectFull, Allocator1>& Drow,
                    const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = 0; j <= i; j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = 0; j <= i; j++)
         A.Val(i, j) *= Drow(i)*Dcol(j);
   }
 
@@ -2336,8 +2335,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                    const Vector<T1, VectFull, Allocator1>& Drow,
                    const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetM(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetM(); j++)
         A.Val(i, j) *= Drow(i)*Dcol(j);
   }
 
@@ -2354,8 +2353,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                    const Vector<T1, VectFull, Allocator1>& Drow,
                    const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A.Val(i, j) *= Drow(i)*Dcol(j);
   }
 
@@ -2372,8 +2371,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                    const Vector<T1, VectFull, Allocator1>& Drow,
                    const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetM(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetM(); j++)
         A.Val(i, j) *= Drow(i)*Dcol(j);
   }
 
@@ -2390,8 +2389,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                    const Vector<T1, VectFull, Allocator1>& Drow,
                    const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A.Val(i, j) *= Drow(i)*Dcol(j);
   }
 
@@ -2406,8 +2405,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   void ScaleLeftMatrix(Matrix<T, Prop, RowMajor, Allocator>& A,
                        const Vector<T1, VectFull, Allocator1>& Drow)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = 0; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = 0; j < A.GetN(); j++)
         A(i, j) *= Drow(i);
   }
     
@@ -2422,8 +2421,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   void ScaleLeftMatrix(Matrix<T, Prop, ColMajor, Allocator>& A,
                        const Vector<T1, VectFull, Allocator1>& Drow)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = 0; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = 0; j < A.GetN(); j++)
         A(i, j) *= Drow(i);
   }
 
@@ -2438,8 +2437,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   void ScaleLeftMatrix(Matrix<T, Prop, RowLoTriangPacked, Allocator>& A,
                        const Vector<T1, VectFull, Allocator1>& Drow)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = 0; j <= i; j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = 0; j <= i; j++)
         A.Val(i, j) *= Drow(i);
   }
 
@@ -2454,8 +2453,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   void ScaleLeftMatrix(Matrix<T, Prop, RowLoTriang, Allocator>& A,
                        const Vector<T1, VectFull, Allocator1>& Drow)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = 0; j <= i; j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = 0; j <= i; j++)
         A.Val(i, j) *= Drow(i);
   }
 
@@ -2470,8 +2469,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   void ScaleLeftMatrix(Matrix<T, Prop, ColLoTriangPacked, Allocator>& A,
                        const Vector<T1, VectFull, Allocator1>& Drow)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = 0; j <= i; j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = 0; j <= i; j++)
         A.Val(i, j) *= Drow(i);
   }
 
@@ -2486,8 +2485,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   void ScaleLeftMatrix(Matrix<T, Prop, ColLoTriang, Allocator>& A,
                        const Vector<T1, VectFull, Allocator1>& Drow)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = 0; j <= i; j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = 0; j <= i; j++)
         A.Val(i, j) *= Drow(i);
   }
   
@@ -2502,8 +2501,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   void ScaleLeftMatrix(Matrix<T, Prop, RowUpTriangPacked, Allocator>& A,
                        const Vector<T1, VectFull, Allocator1>& Drow)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A.Val(i, j) *= Drow(i);
   }
 
@@ -2518,8 +2517,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   void ScaleLeftMatrix(Matrix<T, Prop, RowUpTriang, Allocator>& A,
                        const Vector<T1, VectFull, Allocator1>& Drow)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A.Val(i, j) *= Drow(i);
   }
   
@@ -2534,8 +2533,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   void ScaleLeftMatrix(Matrix<T, Prop, ColUpTriangPacked, Allocator>& A,
                        const Vector<T1, VectFull, Allocator1>& Drow)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A.Val(i, j) *= Drow(i);
   }
 
@@ -2550,8 +2549,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   void ScaleLeftMatrix(Matrix<T, Prop, ColUpTriang, Allocator>& A,
                        const Vector<T1, VectFull, Allocator1>& Drow)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A.Val(i, j) *= Drow(i);
   }
   
@@ -2566,8 +2565,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   void ScaleRightMatrix(Matrix<T, Prop, RowMajor, Allocator>& A,
                         const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = 0; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = 0; j < A.GetN(); j++)
         A(i, j) *= Dcol(j);
   }
 
@@ -2582,8 +2581,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   void ScaleRightMatrix(Matrix<T, Prop, ColMajor, Allocator>& A,
                         const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = 0; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = 0; j < A.GetN(); j++)
         A(i, j) *= Dcol(j);
   }
   
@@ -2598,8 +2597,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   void ScaleRightMatrix(Matrix<T, Prop, RowLoTriangPacked, Allocator>& A,
                         const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = 0; j <= i; j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = 0; j <= i; j++)
         A.Val(i, j) *= Dcol(j);
   }
 
@@ -2614,8 +2613,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   void ScaleRightMatrix(Matrix<T, Prop, RowLoTriang, Allocator>& A,
                         const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = 0; j <= i; j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = 0; j <= i; j++)
         A.Val(i, j) *= Dcol(j);
   }
 
@@ -2630,8 +2629,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   void ScaleRightMatrix(Matrix<T, Prop, ColLoTriangPacked, Allocator>& A,
                         const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = 0; j <= i; j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = 0; j <= i; j++)
         A.Val(i, j) *= Dcol(j);
   }
 
@@ -2646,8 +2645,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   void ScaleRightMatrix(Matrix<T, Prop, ColLoTriang, Allocator>& A,
                         const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = 0; j <= i; j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = 0; j <= i; j++)
         A.Val(i, j) *= Dcol(j);
   }
 
@@ -2662,8 +2661,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   void ScaleRightMatrix(Matrix<T, Prop, RowUpTriangPacked, Allocator>& A,
                         const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A.Val(i, j) *= Dcol(j);
   }
 
@@ -2678,8 +2677,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   void ScaleRightMatrix(Matrix<T, Prop, RowUpTriang, Allocator>& A,
                         const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A.Val(i, j) *= Dcol(j);
   }
 
@@ -2694,8 +2693,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   void ScaleRightMatrix(Matrix<T, Prop, ColUpTriangPacked, Allocator>& A,
                         const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A.Val(i, j) *= Dcol(j);
   }
 
@@ -2710,8 +2709,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   void ScaleRightMatrix(Matrix<T, Prop, ColUpTriang, Allocator>& A,
                         const Vector<T2, VectFull, Allocator2>& Dcol)
   {
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = i; j < A.GetN(); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = i; j < A.GetN(); j++)
         A.Val(i, j) *= Dcol(j);
   }
 

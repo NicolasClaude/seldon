@@ -66,8 +66,8 @@ namespace Seldon
     \param j number of columns.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline Matrix_Sparse<T, Prop, Storage, Allocator>::Matrix_Sparse(int i,
-								   int j):
+  inline Matrix_Sparse<T, Prop, Storage, Allocator>::Matrix_Sparse(size_t i,
+								   size_t j):
     Matrix_Base<T, Allocator>()
   {
     nz_ = 0;
@@ -88,7 +88,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline Matrix_Sparse<T, Prop, Storage, Allocator>::
-  Matrix_Sparse(int i, int j, int nz):
+  Matrix_Sparse(size_t i, size_t j, size_t nz):
     Matrix_Base<T, Allocator>()
   {
     this->nz_ = 0;
@@ -122,7 +122,7 @@ namespace Seldon
     \return The number of non-zero elements.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline int Matrix_Sparse<T, Prop, Storage, Allocator>::GetNonZeros() const
+  inline size_t Matrix_Sparse<T, Prop, Storage, Allocator>::GetNonZeros() const
   {
     return nz_;
   }
@@ -135,7 +135,7 @@ namespace Seldon
     \return The number of elements stored in memory.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline int Matrix_Sparse<T, Prop, Storage, Allocator>::GetDataSize() const
+  inline size_t Matrix_Sparse<T, Prop, Storage, Allocator>::GetDataSize() const
   {
     return nz_;
   }
@@ -147,7 +147,7 @@ namespace Seldon
     \return The array of start indices.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline int* Matrix_Sparse<T, Prop, Storage, Allocator>::GetPtr() const
+  inline size_t* Matrix_Sparse<T, Prop, Storage, Allocator>::GetPtr() const
   {
     return ptr_;
   }
@@ -162,7 +162,7 @@ namespace Seldon
     non-zero entries.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline int* Matrix_Sparse<T, Prop, Storage, Allocator>::GetInd() const
+  inline size_t* Matrix_Sparse<T, Prop, Storage, Allocator>::GetInd() const
   {
     return ind_;
   }
@@ -173,7 +173,7 @@ namespace Seldon
     \return The length of the array of start indices.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline int Matrix_Sparse<T, Prop, Storage, Allocator>::GetPtrSize() const
+  inline size_t Matrix_Sparse<T, Prop, Storage, Allocator>::GetPtrSize() const
   {
     return (Storage::GetFirst(this->m_, this->n_) + 1);
   }
@@ -189,7 +189,7 @@ namespace Seldon
     number of non-zero entries.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline int Matrix_Sparse<T, Prop, Storage, Allocator>::GetIndSize() const
+  inline size_t Matrix_Sparse<T, Prop, Storage, Allocator>::GetIndSize() const
   {
     return nz_;
   }
@@ -203,7 +203,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline const typename Matrix_Sparse<T, Prop, Storage, Allocator>::value_type&
-  Matrix_Sparse<T, Prop, Storage, Allocator>::Get(int i, int j) const
+  Matrix_Sparse<T, Prop, Storage, Allocator>::Get(size_t i, size_t j) const
   {
     return Val(i, j);
   }
@@ -219,7 +219,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Sparse<T, Prop, Storage, Allocator>
-  ::AddInteraction(int i, int j, const T& val)
+  ::AddInteraction(size_t i, size_t j, const T& val)
   {
     Get(i, j) += val;
   }
@@ -228,7 +228,7 @@ namespace Seldon
   //! Adds values to several non-zero entries on a given row
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Sparse<T, Prop, Storage, Allocator>
-  ::AddInteractionRow(int i, int nb, const Vector<int>& col,
+  ::AddInteractionRow(size_t i, size_t nb, const Vector<size_t>& col,
 		      const Vector<T>& val)
   {
     throw Undefined("AddInteractionRow", "Not implemented");
@@ -243,7 +243,7 @@ namespace Seldon
   */  
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Sparse<T, Prop, Storage, Allocator>
-  ::Set(int i, int j, const T& val)
+  ::Set(size_t i, size_t j, const T& val)
   {
     Get(i, j) = val;
   }
@@ -397,7 +397,7 @@ namespace Seldon
     \param j number of columns.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, ColSparse, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, ColSparse, Allocator>::Matrix(size_t i, size_t j):
     Matrix_Sparse<T, Prop, ColSparse, Allocator>(i, j, 0)
   {
   }
@@ -411,7 +411,7 @@ namespace Seldon
     \note Matrix values are not initialized.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, ColSparse, Allocator>::Matrix(int i, int j, int nz):
+  inline Matrix<T, Prop, ColSparse, Allocator>::Matrix(size_t i, size_t j, size_t nz):
     Matrix_Sparse<T, Prop, ColSparse, Allocator>(i, j, nz)
   {
   }
@@ -434,10 +434,10 @@ namespace Seldon
 	    class Storage1, class Allocator1,
 	    class Storage2, class Allocator2>
   inline Matrix<T, Prop, ColSparse, Allocator>::
-  Matrix(int i, int j,
+  Matrix(size_t i, size_t j,
 	 Vector<T, Storage0, Allocator0>& values,
-	 Vector<int, Storage1, Allocator1>& ptr,
-	 Vector<int, Storage2, Allocator2>& ind):
+	 Vector<size_t, Storage1, Allocator1>& ptr,
+	 Vector<size_t, Storage2, Allocator2>& ind):
     Matrix_Sparse<T, Prop, ColSparse, Allocator>(i, j, values, ptr, ind)
   {
   }
@@ -470,7 +470,7 @@ namespace Seldon
     \param j number of columns.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, RowSparse, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, RowSparse, Allocator>::Matrix(size_t i, size_t j):
     Matrix_Sparse<T, Prop, RowSparse, Allocator>(i, j, 0)
   {
   }
@@ -484,7 +484,7 @@ namespace Seldon
     \note Matrix values are not initialized.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, RowSparse, Allocator>::Matrix(int i, int j, int nz):
+  inline Matrix<T, Prop, RowSparse, Allocator>::Matrix(size_t i, size_t j, size_t nz):
     Matrix_Sparse<T, Prop, RowSparse, Allocator>(i, j, nz)
   {
   }
@@ -507,10 +507,10 @@ namespace Seldon
 	    class Storage1, class Allocator1,
 	    class Storage2, class Allocator2>
   inline Matrix<T, Prop, RowSparse, Allocator>::
-  Matrix(int i, int j,
+  Matrix(size_t i, size_t j,
 	 Vector<T, Storage0, Allocator0>& values,
-	 Vector<int, Storage1, Allocator1>& ptr,
-	 Vector<int, Storage2, Allocator2>& ind):
+	 Vector<size_t, Storage1, Allocator1>& ptr,
+	 Vector<size_t, Storage2, Allocator2>& ind):
     Matrix_Sparse<T, Prop, RowSparse, Allocator>(i, j, values, ptr, ind)
   {
   }

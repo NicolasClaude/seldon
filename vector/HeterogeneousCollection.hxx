@@ -173,8 +173,8 @@ namespace Seldon
     void Print() const;
 
     // Input/output functions.
-    void Write(string FileName, bool with_size) const;
-    void Write(ostream& FileStream, bool with_size) const;
+    void Write(string FileName, bool with_size = false) const;
+    void Write(ostream& FileStream, bool with_size = false) const;
     void WriteText(string FileName) const;
     void WriteText(ostream& FileStream) const;
 
@@ -192,6 +192,7 @@ namespace Seldon
 
 } // namespace Seldon.
 
+#include "HeterogeneousCollectionInline.cxx"
 
 #define SELDON_FILE_VECTOR_HETEROGENEOUSCOLLECTION_HXX
 #endif

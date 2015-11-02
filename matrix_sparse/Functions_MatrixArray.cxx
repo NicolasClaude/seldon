@@ -2076,29 +2076,29 @@ namespace Seldon
   {
     B.Clear();
     
-    int m = A.GetM();
-    int n = A.GetN();
-    Vector<int> ptr_T(n);
+    size_t m = A.GetM();
+    size_t n = A.GetN();
+    Vector<size_t> ptr_T(n);
     
     B.Reallocate(n, m);
 
     // For each column j, computes number of its non-zeroes and stores it in
     // ptr_T[j].
     ptr_T.Zero();
-    for (int i = 0; i < m; i++)
-      for (int j = 0; j < A.GetRowSize(i); j++)
+    for (size_t i = 0; i < m; i++)
+      for (size_t j = 0; j < A.GetRowSize(i); j++)
         ptr_T(A.Index(i, j))++;
     
-    for (int i = 0; i < n; i++)
+    for (size_t i = 0; i < n; i++)
       B.ReallocateRow(i, ptr_T(i));
     
     // filling matrix B
     ptr_T.Zero();
-    for (int i = 0; i < m; i++)
-      for (int jp = 0; jp < A.GetRowSize(i); jp++)
+    for (size_t i = 0; i < m; i++)
+      for (size_t jp = 0; jp < A.GetRowSize(i); jp++)
     	{
-	  int j = A.Index(i, jp);
-	  int k = ptr_T(j);
+	  size_t j = A.Index(i, jp);
+	  size_t k = ptr_T(j);
 	  ++ptr_T(j);
           B.Value(j, k) = A.Value(i, jp);
           B.Index(j, k) = i;

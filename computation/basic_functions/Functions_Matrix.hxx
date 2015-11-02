@@ -374,7 +374,7 @@ namespace Seldon
            class T2, class Prop2, class Storage, class Allocator2>
   void Add_csr(const T0& alpha,
                const Matrix<T1, Prop1, Storage, Allocator1>& A,
-               Matrix<T2, Prop2, Storage, Allocator2>& B, int p);
+               Matrix<T2, Prop2, Storage, Allocator2>& B, size_t p);
   
   template<class T0, class T1, class Prop1, class Allocator1,
            class T2, class Prop2, class Allocator2>

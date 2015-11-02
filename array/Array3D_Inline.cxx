@@ -48,7 +48,7 @@ namespace Seldon
     \return The length in dimension #1.
   */
   template <class T, class Allocator>
-  inline int Array3D<T, Allocator>::GetLength1() const
+  inline size_t Array3D<T, Allocator>::GetLength1() const
   {
     return length1_;
   }
@@ -59,7 +59,7 @@ namespace Seldon
     \return The length in dimension #2.
   */
   template <class T, class Allocator>
-  inline int Array3D<T, Allocator>::GetLength2() const
+  inline size_t Array3D<T, Allocator>::GetLength2() const
   {
     return length2_;
   }
@@ -70,7 +70,7 @@ namespace Seldon
     \return The length in dimension #3.
   */
   template <class T, class Allocator>
-  inline int Array3D<T, Allocator>::GetLength3() const
+  inline size_t Array3D<T, Allocator>::GetLength3() const
   {
     return length3_;
   }
@@ -83,7 +83,7 @@ namespace Seldon
     \return The number of elements in the 3D array.
   */
   template <class T, class Allocator>
-  inline int Array3D<T, Allocator>::GetSize() const
+  inline size_t Array3D<T, Allocator>::GetSize() const
   {
     return length1_ * length23_;
   }
@@ -97,7 +97,7 @@ namespace Seldon
     \return The number of elements stored in the array.
   */
   template <class T, class Allocator>
-  inline int Array3D<T, Allocator>::GetDataSize() const
+  inline size_t Array3D<T, Allocator>::GetDataSize() const
   {
     return length1_ * length23_;
   }

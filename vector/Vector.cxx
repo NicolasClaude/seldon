@@ -31,7 +31,7 @@ namespace Seldon
     \param n new length of the vector.
   */
   template <class T, class Allocator>
-  void Vector<T, VectFull, Allocator>::Resize(int n)
+  void Vector<T, VectFull, Allocator>::Resize(size_t n)
   {
     ResizeVector(n);
   }
@@ -43,7 +43,7 @@ namespace Seldon
     \param n new length of the vector.
   */
   template <class T, class Allocator>
-  void Vector<T, VectFull, Allocator>::ResizeVector(int n)
+  void Vector<T, VectFull, Allocator>::ResizeVector(size_t n)
   {
     // function implemented in the aim that explicit specialization
     // of Resize can call ResizeVector
@@ -51,7 +51,7 @@ namespace Seldon
       return;
 
     Vector<T, VectFull, Allocator> X_new(n);
-    for (int i = 0; i < min(this->m_, n); i++)
+    for (size_t i = 0; i < min(this->m_, n); i++)
       X_new(i) = this->data_[i];
 
     SetData(n, X_new.GetData());
@@ -73,7 +73,7 @@ namespace Seldon
   Vector<T, VectFull, Allocator>::GetNormInf() const
   {
     typename ClassComplexType<T>::Treal res(0);
-    for (int i = 0; i < this->GetLength(); i++)
+    for (size_t i = 0; i < this->GetLength(); i++)
       res = max(res, ComplexAbs(this->data_[i]));
     
     return res;
@@ -85,7 +85,7 @@ namespace Seldon
     \return The index of the element that has the highest absolute value.
   */
   template <class T, class Allocator>
-  int Vector<T, VectFull, Allocator>::GetNormInfIndex() const
+  size_t Vector<T, VectFull, Allocator>::GetNormInfIndex() const
   {
 
 #ifdef SELDON_CHECK_DIMENSIONS
@@ -95,8 +95,8 @@ namespace Seldon
 #endif
 
     typename ClassComplexType<T>::Treal res(0), temp;
-    int j = 0;
-    for (int i = 0; i < this->GetLength(); i++)
+    size_t j = 0;
+    for (size_t i = 0; i < this->GetLength(); i++)
       {
 	temp = res;
 	res = max(res, ComplexAbs(this->data_[i]));
@@ -161,8 +161,8 @@ namespace Seldon
 #endif
 
     if (with_size)
-      FileStream.write(reinterpret_cast<char*>(const_cast<int*>(&this->m_)),
-		       sizeof(int));
+      FileStream.write(reinterpret_cast<char*>(const_cast<size_t*>(&this->m_)),
+		       sizeof(size_t));
 
     FileStream.write(reinterpret_cast<char*>(this->data_),
 		     this->m_ * sizeof(value_type));
@@ -228,7 +228,7 @@ namespace Seldon
     if (this->GetLength() != 0)
       FileStream << (*this)(0);
 
-    for (int i = 1; i < this->GetLength(); i++)
+    for (size_t i = 1; i < this->GetLength(); i++)
       FileStream << "\t" << (*this)(i);
 
 #ifdef SELDON_CHECK_IO
@@ -380,8 +380,8 @@ namespace Seldon
 
     if (with_size)
       {
-        int new_size;
-        FileStream.read(reinterpret_cast<char*>(&new_size), sizeof(int));
+        size_t new_size;
+        FileStream.read(reinterpret_cast<char*>(&new_size), sizeof(size_t));
         this->Reallocate(new_size);
       }
 
@@ -444,7 +444,7 @@ namespace Seldon
 #endif
 
     T entry;
-    int number_element = 0;
+    size_t number_element = 0;
     while (!FileStream.eof())
       {
 	// Reads a new entry.
@@ -482,11 +482,12 @@ namespace Seldon
   ostream& operator << (ostream& out,
 			const Vector<T, Storage, Allocator>& V)
   {
-    for (int i = 0; i < V.GetLength() - 1; i++)
+    if (V.GetLength() == 0)
+      return out;
+    for (size_t i = 0; i < V.GetLength() - 1; i++)
       out << V(i) << '\t';
     if (V.GetLength() != 0)
       out << V(V.GetLength() - 1);
-
     return out;
   }
 

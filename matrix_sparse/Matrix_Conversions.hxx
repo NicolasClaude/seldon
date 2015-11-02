@@ -75,7 +75,7 @@ namespace Seldon
 			       Vector<Tint, VectFull, Allocator2>& IndRow,
 			       Vector<Tint, VectFull, Allocator3>& IndCol,
 			       Vector<T, VectFull, Allocator4>& Val,
-			       int index = 0, bool sym = false);
+			       size_t index = 0, bool sym = false);
 
 
   template<class T, class Prop, class Allocator1, class Allocator2,
@@ -124,7 +124,7 @@ namespace Seldon
 			       Vector<Tint, VectFull, Allocator2>& IndRow,
 			       Vector<Tint, VectFull, Allocator3>& IndCol,
 			       Vector<T, VectFull, Allocator4>& Val,
-			       int index = 0, bool sym = false);
+			       size_t index = 0, bool sym = false);
 
 
   template<class T, class Prop, class Allocator1, class Allocator2,
@@ -168,8 +168,8 @@ namespace Seldon
   template<class T, class Prop, class Allocator1,
 	   class Allocator2, class Allocator3>
   void
-  ConvertMatrix_from_Coordinates(Vector<int, VectFull, Allocator1>& IndRow_,
-				 Vector<int, VectFull, Allocator2>& IndCol_,
+  ConvertMatrix_from_Coordinates(Vector<size_t, VectFull, Allocator1>& IndRow_,
+				 Vector<size_t, VectFull, Allocator2>& IndCol_,
 				 Vector<T, VectFull, Allocator3>& Val,
 				 Matrix<T, Prop, RowSparse, Allocator3>& A,
 				 int index = 0);

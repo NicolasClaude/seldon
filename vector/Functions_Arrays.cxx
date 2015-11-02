@@ -501,16 +501,16 @@ namespace Seldon
   */
   template<class Storage1, class Allocator1,
 	   class T2, class Storage2, class Allocator2 >
-  void Assemble(int& n, Vector<int, Storage1, Allocator1>& Node,
+  void Assemble(size_t& n, Vector<size_t, Storage1, Allocator1>& Node,
 		Vector<T2, Storage2, Allocator2>& Vect)
   {
     if (n <= 1)
       return;
 
     Sort(n, Node, Vect);
-    int prec = Node(0);
-    int nb = 0;
-    for (int i = 1; i < n; i++)
+    size_t prec = Node(0);
+    size_t nb = 0;
+    for (size_t i = 1; i < n; i++)
       if (Node(i) == prec)
 	{
 	  Vect(nb) += Vect(i);
@@ -534,15 +534,15 @@ namespace Seldon
     \warning The vector \a Node is not resized.
   */
   template<class T, class Storage1, class Allocator1>
-  void Assemble(int& n, Vector<T, Storage1, Allocator1>& Node)
+  void Assemble(size_t& n, Vector<T, Storage1, Allocator1>& Node)
   {
     if (n <= 1)
       return;
 
     Sort(n, Node);
     T prec = Node(0);
-    int nb = 1;
-    for (int i = 1; i < n; i++)
+    size_t nb = 1;
+    for (size_t i = 1; i < n; i++)
       if (Node(i) != prec)
 	{
 	  Node(nb) = Node(i);

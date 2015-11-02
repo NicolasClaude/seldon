@@ -145,7 +145,9 @@ if cpp_compiler is not None:
 # In case of GNU compilers, a few options may be added.
 if len(env["CXX"]) >= 3 and env["CXX"][:3] == "g++" \
        and ARGUMENTS["mode_cpp"] == "strict":
-    compilation_option += " -Wall -ansi -pedantic -Wno-parentheses"
+    compilation_option += " -Wall -ansi -pedantic -Wno-parentheses" \
+          + " -Wno-sizeof-pointer-memaccess"
+
 if len(env["CXX"]) >= 3 and env["CXX"][:3] == "g++" \
         and ARGUMENTS["lib"] == "yes":
     # In order to use the compiled library, the compiler must be aware of
@@ -161,8 +163,8 @@ conf = Configure(env)
 link_flag_list = ""
 for library in ["blas", "atlas", "lapack", "g2c", "gslcblas", "dmumps",
                 "zmumps", "pord", "mpi", "gfortran", "pthread", "metis",
-                "umfpack", "amd", "scalapack", "blacs", "superlu", "cppunit",
-                "petsc", "X11"]:
+                "umfpack", "amd", "scalapack", "blacs", "superlu",
+                "petsc", "X11","gtest"]:
     if conf.CheckLib(library):
         link_flag_list += " -l" + library
         env.Replace(LINKFLAGS = link_flag_list)
@@ -186,11 +188,7 @@ for filename in target_list[:]:
     if filename in exclude_target or filename[:-4] in exclude_target:
         target_list.remove(filename)
 for filename in target_list:
-    if ARGUMENTS["lib"] == "yes":
-        env.Program(filename[:-4],
-                    [filename,
-                     os.path.join(seldon_path, "lib/libseldon.a")])
-    else:
+    if ARGUMENTS["lib"] != "yes":
         env.Program(filename[:-4], filename)
 
 

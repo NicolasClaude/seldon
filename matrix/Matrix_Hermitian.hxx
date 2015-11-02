@@ -68,7 +68,7 @@ namespace Seldon
     int64_t GetMemorySize() const;
     
     // Memory management.
-    void Reallocate(int i, int j);
+    void Reallocate(size_t i, size_t j);
     void SetData(int i, int j, pointer data);
     void Nullify();
     void Resize(int i, int j);

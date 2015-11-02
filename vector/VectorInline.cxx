@@ -54,7 +54,7 @@ namespace Seldon
     \warning Nothing is allocated.
   */
   template <class T, class Allocator>
-  inline Vector_Base<T, Allocator>::Vector_Base(int i)
+  inline Vector_Base<T, Allocator>::Vector_Base(size_t i)
   {
     m_ = i;
     data_ = NULL;
@@ -127,7 +127,7 @@ namespace Seldon
     \return The length of the vector.
   */
   template <class T, class Allocator>
-  inline int Vector_Base<T, Allocator>::GetM() const
+  inline size_t Vector_Base<T, Allocator>::GetM() const
   {
     return m_;
   }
@@ -138,7 +138,7 @@ namespace Seldon
     \return The length of the vector.
   */
   template <class T, class Allocator>
-  inline int Vector_Base<T, Allocator>::GetLength() const
+  inline size_t Vector_Base<T, Allocator>::GetLength() const
   {
     return m_;
   }
@@ -149,7 +149,7 @@ namespace Seldon
     \return The length of the vector stored.
   */
   template <class T, class Allocator>
-  inline int Vector_Base<T, Allocator>::GetSize() const
+  inline size_t Vector_Base<T, Allocator>::GetSize() const
   {
     return m_;
   }
@@ -240,7 +240,7 @@ namespace Seldon
     \param i length of the vector.
   */
   template <class T, class Allocator>
-  inline Vector<T, VectFull, Allocator>::Vector(int i):
+  inline Vector<T, VectFull, Allocator>::Vector(size_t i):
     Vector_Base<T, Allocator>(i)
   {
 
@@ -283,7 +283,7 @@ namespace Seldon
   */
   template <class T, class Allocator>
   inline Vector<T, VectFull, Allocator>
-  ::Vector(int i, typename Vector<T, VectFull, Allocator>::pointer data):
+  ::Vector(size_t i, typename Vector<T, VectFull, Allocator>::pointer data):
     Vector_Base<T, Allocator>()
   {
     SetData(i, data);
@@ -365,7 +365,7 @@ namespace Seldon
     be lost.
   */
   template <class T, class Allocator>
-  inline void Vector<T, VectFull, Allocator>::Reallocate(int i)
+  inline void Vector<T, VectFull, Allocator>::Reallocate(size_t i)
   {
     ReallocateVector(i);
   }
@@ -379,7 +379,7 @@ namespace Seldon
     be lost.
   */
   template <class T, class Allocator>
-  inline void Vector<T, VectFull, Allocator>::ReallocateVector(int i)
+  inline void Vector<T, VectFull, Allocator>::ReallocateVector(size_t i)
   {
     // function implemented in the aim that explicit specialization
     // of Reallocate can call ReallocateVector
@@ -433,7 +433,7 @@ namespace Seldon
   */
   template <class T, class Allocator>
   inline void Vector<T, VectFull, Allocator>
-  ::SetData(int i, typename Vector<T, VectFull, Allocator>::pointer data)
+  ::SetData(size_t i, typename Vector<T, VectFull, Allocator>::pointer data)
   {
     this->Clear();
 
@@ -491,9 +491,8 @@ namespace Seldon
   */
   template <class T, class Allocator>
   inline typename Vector<T, VectFull, Allocator>::reference
-  Vector<T, VectFull, Allocator>::operator() (int i)
-  {
-
+  Vector<T, VectFull, Allocator>::operator() (size_t i)
+{
 #ifdef SELDON_CHECK_BOUNDS
     CheckBounds(i, this->m_, "Vector<VectFull>");
 #endif
@@ -509,7 +508,7 @@ namespace Seldon
   */
   template <class T, class Allocator>
   inline typename Vector<T, VectFull, Allocator>::reference
-  Vector<T, VectFull, Allocator>::Get(int i)
+  Vector<T, VectFull, Allocator>::Get(size_t i)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -527,7 +526,7 @@ namespace Seldon
   */
   template <class T, class Allocator>
   inline typename Vector<T, VectFull, Allocator>::const_reference
-  Vector<T, VectFull, Allocator>::operator() (int i) const
+  Vector<T, VectFull, Allocator>::operator() (size_t i) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -545,7 +544,7 @@ namespace Seldon
   */
   template <class T, class Allocator>
   inline typename Vector<T, VectFull, Allocator>::const_reference
-  Vector<T, VectFull, Allocator>::Get(int i) const
+  Vector<T, VectFull, Allocator>::Get(size_t i) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -610,7 +609,7 @@ namespace Seldon
   inline Vector<T, VectFull, Allocator>& Vector<T, VectFull, Allocator>
   ::operator*= (const T0& alpha)
   {
-    for (int i = 0; i < this->m_; i++)
+    for (size_t i = 0; i < this->m_; i++)
       this->data_[i] *= alpha;
 
     return *this;
@@ -632,7 +631,7 @@ namespace Seldon
 		     "Inconsistent vector sizes.");
 #endif
 
-    for (int i = 0; i < this->m_; i++)
+    for (size_t i = 0; i < this->m_; i++)
       this->data_[i] += rhs(i);
 
     return *this;
@@ -648,7 +647,7 @@ namespace Seldon
   template <class T, class Allocator>
   inline void Vector<T, VectFull, Allocator>::Append(const T& x)
   {
-    int i = this->GetLength();
+    size_t i = this->GetLength();
     this->Reallocate(i + 1);
     this->data_[i] = x;
   }
@@ -674,9 +673,9 @@ namespace Seldon
   inline void Vector<T, VectFull, Allocator>
   ::PushBack(const Vector<T, VectFull, Allocator0>& X)
   {
-    int Nold = this->m_;
+    size_t Nold = this->m_;
     Resize(this->m_ + X.GetM());
-    for (int i = 0; i < X.GetM(); i++)
+    for (size_t i = 0; i < X.GetM(); i++)
       this->data_[Nold+i] = X(i);
   }
 
@@ -691,7 +690,7 @@ namespace Seldon
     \return The number of elements stored in memory.
   */
   template <class T, class Allocator>
-  inline int Vector<T, VectFull, Allocator>::GetDataSize()
+  inline size_t Vector<T, VectFull, Allocator>::GetDataSize()
   {
     return this->m_;
   }
@@ -719,7 +718,7 @@ namespace Seldon
   template <class T, class Allocator>
   inline void Vector<T, VectFull, Allocator>::Fill()
   {
-    for (int i = 0; i < this->m_; i++)
+    for (size_t i = 0; i < this->m_; i++)
       SetComplexReal(i, this->data_[i]);
   }
 
@@ -734,7 +733,7 @@ namespace Seldon
   {
     T x_;
     SetComplexReal(x, x_);
-    for (int i = 0; i < this->m_; i++)
+    for (size_t i = 0; i < this->m_; i++)
       this->data_[i] = x_;
   }
 
@@ -764,7 +763,7 @@ namespace Seldon
 #ifndef SELDON_WITHOUT_REINIT_RANDOM
     srand(time(NULL));
 #endif
-    for (int i = 0; i < this->m_; i++)
+    for (size_t i = 0; i < this->m_; i++)
       SetComplexReal(rand(), this->data_[i]);
   }
 
@@ -773,7 +772,7 @@ namespace Seldon
   template <class T, class Allocator>
   inline void Vector<T, VectFull, Allocator>::Print() const
   {
-    for (int i = 0; i < this->GetLength(); i++)
+    for (size_t i = 0; i < this->GetLength(); i++)
       cout << (*this)(i) << "\t";
     cout << endl;
   }

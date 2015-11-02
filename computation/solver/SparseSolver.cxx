@@ -98,7 +98,7 @@ namespace Seldon
 
   //! gives the ordering array to the interface solver
   template<class T> 
-  void VirtualSparseDirectSolver<T>::SetPermutation(const Vector<int>&)
+  void VirtualSparseDirectSolver<T>::SetPermutation(const Vector<size_t>&)
   {
   }
   
@@ -194,7 +194,7 @@ namespace Seldon
       mat.Clear();
     
     // We keep permutation array in memory, and check it.
-    int n = mat_unsym.GetM();
+    size_t n = mat_unsym.GetM();
     if (perm.GetM() != n)
       throw WrongArgument("FactorizeMatrix(IVect&, Matrix&, bool)",
                           "Numbering array is of size "
@@ -207,14 +207,14 @@ namespace Seldon
     permutation_col.Reallocate(n);
     inv_permutation.Reallocate(n);
     inv_permutation.Fill(-1);
-    for (int i = 0; i < n; i++)
+    for (size_t i = 0; i < n; i++)
       {
         permutation_row(i) = i;
         permutation_col(i) = i;
         inv_permutation(perm(i)) = i;
       }
 
-    for (int i = 0; i < n; i++)
+    for (size_t i = 0; i < n; i++)
       if (inv_permutation(i) == -1)
         throw WrongArgument("FactorizeMatrix(IVect&, Matrix&, bool)",
                             "The numbering array is invalid.");
@@ -232,7 +232,7 @@ namespace Seldon
 
     // Combining permutations.
     IVect itmp = permutation_col;
-    for (int i = 0; i < n; i++)
+    for (size_t i = 0; i < n; i++)
       permutation_col(i) = iperm(itmp(i));
 
     permutation_row = perm;
@@ -302,22 +302,22 @@ namespace Seldon
 
     if (symmetric_matrix)
       {
-	for (int i = 0; i < z.GetM(); i++)
+	for (size_t i = 0; i < z.GetM(); i++)
 	  xtmp(permutation_row(i)) = z(i);
 	
 	SolveLU(mat_sym, xtmp);
 	
-	for (int i = 0; i < z.GetM(); i++)
+	for (size_t i = 0; i < z.GetM(); i++)
 	  z(i) = xtmp(permutation_row(i));
       }
     else
       {
-	for (int i = 0; i < z.GetM(); i++)
+	for (size_t i = 0; i < z.GetM(); i++)
 	  xtmp(permutation_row(i)) = z(i);
 	
 	SolveLU(mat_unsym, xtmp);
 	
-	for (int i = 0; i < z.GetM(); i++)
+	for (size_t i = 0; i < z.GetM(); i++)
 	  z(permutation_col(i)) = xtmp(i);
       }
   }
@@ -334,12 +334,12 @@ namespace Seldon
 	Vector<T1> xtmp(z);
 	if (TransA.Trans())
 	  {
-	    for (int i = 0; i < z.GetM(); i++)
+	    for (size_t i = 0; i < z.GetM(); i++)
 	      xtmp(i) = z(permutation_col(i));
 	    
 	    SolveLU(SeldonTrans, mat_unsym, xtmp);
 	    
-	    for (int i = 0; i < z.GetM(); i++)
+	    for (size_t i = 0; i < z.GetM(); i++)
 	      z(i) = xtmp(permutation_row(i));
 	  }
 	else
@@ -374,12 +374,12 @@ namespace Seldon
 	     IVect& iperm, IVect& rperm, 
 	     const Treal& permtol, int print_level)
   {
-    int n = A.GetN();
+    size_t n = A.GetN();
     
     T fact, s, t;
     Treal tnorm, zero = 0.0;
-    int length_lower, length_upper, jpos, jrow, i_row, j_col;
-    int i, j, k, length, size_row, index_lu;
+    size_t length_lower, length_upper, jpos, jrow, i_row, j_col;
+    size_t i, j, k, length, size_row, index_lu;
     
     T czero, cone;
     SetComplexZero(czero);
@@ -651,7 +651,7 @@ namespace Seldon
 		     const Matrix<T1, General, ArrayRowSparse, Allocator1>& A,
 		     Vector<T2, Storage2, Allocator2>& x)
   {
-    int i, k, n, k_;
+    size_t i, k, n, k_;
     T1 inv_diag;
     n = A.GetM();
 
@@ -700,8 +700,9 @@ namespace Seldon
 	  }
 
 	// Backward solve.
-	for (i = n-1; i >= 0; i--)
+	for (size_t i2 = n; i2 > 0; i2--)
 	  {
+      i = i2-1;
 	    k_ = 0;
             k = A.Index(i, k_);
 	    while (k < i)

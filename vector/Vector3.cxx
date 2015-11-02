@@ -54,7 +54,7 @@ namespace Seldon
     \param[in] length the length of the vector of vectors of vectors.
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
-  Vector3<T, Allocator0, Allocator1, Allocator2>::Vector3(int length)
+  Vector3<T, Allocator0, Allocator1, Allocator2>::Vector3(size_t length)
   {
     data_.Reallocate(length);
   }
@@ -69,12 +69,12 @@ namespace Seldon
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   Vector3<T, Allocator0, Allocator1, Allocator2>
-  ::Vector3(Vector<int>& length)
+  ::Vector3(Vector<size_t>& length)
   {
     data_.Clear();
-    int n, m = length.GetSize();
+    size_t n, m = length.GetSize();
     data_.Reallocate(m);
-    for (int i = 0; i < m; i++)
+    for (size_t i = 0; i < m; i++)
       {
 	n = length(i);
 	data_(i).Reallocate(n);
@@ -92,16 +92,16 @@ namespace Seldon
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   template <class Allocator>
   Vector3<T, Allocator0, Allocator1, Allocator2>
-  ::Vector3(Vector<Vector<int>, Vect_Full, Allocator>& length)
+  ::Vector3(Vector<Vector<size_t>, Vect_Full, Allocator>& length)
   {
     data_.Clear();
-    int n, m = length.GetSize();
+    size_t n, m = length.GetSize();
     data_.Reallocate(m);
-    for (int i = 0; i < m; i++)
+    for (size_t i = 0; i < m; i++)
       {
 	n = length(i).GetSize();
 	data_(i).Reallocate(n);
-	for (int j = 0; j < n; j++)
+	for (size_t j = 0; j < n; j++)
 	  data_(i)(j).Reallocate(length(i)(j));
       }
   }
@@ -132,7 +132,7 @@ namespace Seldon
     \return The size along dimension 1.
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
-  int Vector3<T, Allocator0, Allocator1, Allocator2>::GetLength() const
+  size_t Vector3<T, Allocator0, Allocator1, Allocator2>::GetLength() const
   {
     return data_.GetLength();
   }
@@ -143,7 +143,7 @@ namespace Seldon
     \return The size along dimension 1.
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
-  int Vector3<T, Allocator0, Allocator1, Allocator2>::GetSize() const
+  size_t Vector3<T, Allocator0, Allocator1, Allocator2>::GetSize() const
   {
     return data_.GetSize();
   }
@@ -155,7 +155,7 @@ namespace Seldon
     \return The size of the inner vector of vectors #\a i.
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
-  int Vector3<T, Allocator0, Allocator1, Allocator2>::GetLength(int i) const
+  size_t Vector3<T, Allocator0, Allocator1, Allocator2>::GetLength(size_t i) const
   {
     return data_(i).GetLength();
   }
@@ -167,7 +167,7 @@ namespace Seldon
     \return The size of the inner vector of vectors #\a i.
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
-  int Vector3<T, Allocator0, Allocator1, Allocator2>::GetSize(int i) const
+  size_t Vector3<T, Allocator0, Allocator1, Allocator2>::GetSize(size_t i) const
   {
     return data_(i).GetSize();
   }
@@ -180,8 +180,8 @@ namespace Seldon
     \return The  size of the inner vector #\a i #\a j.
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
-  int Vector3<T, Allocator0, Allocator1, Allocator2>
-  ::GetLength(int i, int j) const
+  size_t Vector3<T, Allocator0, Allocator1, Allocator2>
+  ::GetLength(size_t i, size_t j) const
   {
     return data_(i)(j).GetLength();
   }
@@ -194,8 +194,8 @@ namespace Seldon
     \return The  size of the inner vector #\a i #\a j.
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
-  int Vector3<T, Allocator0, Allocator1, Allocator2>
-  ::GetSize(int i, int j) const
+  size_t Vector3<T, Allocator0, Allocator1, Allocator2>
+  ::GetSize(size_t i, size_t j) const
   {
     return data_(i)(j).GetSize();
   }
@@ -210,10 +210,10 @@ namespace Seldon
   int64_t Vector3<T, Allocator0, Allocator1, Allocator2>::GetMemorySize() const
   {
     int64_t total = sizeof(*this) + sizeof(pointer)*GetLength();
-    for (int i = 0; i < GetLength(); i++)
+    for (size_t i = 0; i < GetLength(); i++)
       {
-        total += sizeof(int)+sizeof(pointer)+sizeof(pointer)*GetLength(i);
-        for (int j = 0; j < GetLength(i); j++)
+        total += sizeof(size_t)+sizeof(pointer)+sizeof(pointer)*GetLength(i);
+        for (size_t j = 0; j < GetLength(i); j++)
           total += data_(i)(j).GetMemorySize();
       }
     
@@ -226,11 +226,11 @@ namespace Seldon
     \return The sum of the lengths of the inner vectors.
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
-  int Vector3<T, Allocator0, Allocator1, Allocator2>::GetNelement() const
+  size_t Vector3<T, Allocator0, Allocator1, Allocator2>::GetNelement() const
   {
-    int total = 0;
-    for (int i = 0; i < GetLength(); i++)
-      for (int j = 0; j < GetLength(i); j++ )
+    size_t total = 0;
+    for (size_t i = 0; i < GetLength(); i++)
+      for (size_t j = 0; j < GetLength(i); j++ )
 	total += GetLength(i, j);
     return total;
   }
@@ -245,24 +245,24 @@ namespace Seldon
     index \a beg to \a end-1.
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
-  int Vector3<T, Allocator0, Allocator1, Allocator2>
-  ::GetNelement(int beg, int end) const
+  size_t Vector3<T, Allocator0, Allocator1, Allocator2>
+  ::GetNelement(size_t beg, size_t end) const
   {
     if (beg > end)
-      throw WrongArgument("Vector3::GetNelement(int beg, int end)",
+      throw WrongArgument("Vector3::GetNelement(size_t beg, size_t end)",
                           "The lower bound of the range of inner vectors "
 			  "of vectors, [" + to_str(beg) + ", " + to_str(end)
                           + "[, is strictly greater than its upper bound.");
     if (beg < 0 || end > GetLength())
-      throw WrongArgument("Vector3::GetNelement(int beg, int end)",
+      throw WrongArgument("Vector3::GetNelement(size_t beg, size_t end)",
         		  "The inner-vector of vectors indexes should be in "
 			  "[0," + to_str(GetLength()) + "] but ["
 			  + to_str(beg)
                           + ", " + to_str(end) + "[ was provided.");
 
-    int total = 0;
-    for (int i = beg; i < end; i++)
-      for (int j = 0; j < GetLength(i); j++ )
+    size_t total = 0;
+    for (size_t i = beg; i < end; i++)
+      for (size_t j = 0; j < GetLength(i); j++ )
 	total += GetLength(i, j);
     return total;
   }
@@ -284,41 +284,41 @@ namespace Seldon
     index \a beg to \a end-1.
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
-  int Vector3<T, Allocator0, Allocator1, Allocator2>
-  ::GetNelement(int beg0, int end0, int beg1, int end1) const
+  size_t Vector3<T, Allocator0, Allocator1, Allocator2>
+  ::GetNelement(size_t beg0, size_t end0, size_t beg1, size_t end1) const
   {
     if (beg0 > end0)
-      throw WrongArgument("Vector3:::GetNelement(int beg0, int end0, "
-                          "int beg1, int end1)",
+      throw WrongArgument("Vector3:::GetNelement(size_t beg0, size_t end0, "
+                          "size_t beg1, size_t end1)",
                           "The lower bound of the range of inner vectors "
 			  "of vectors, [" + to_str(beg0) + ", " + to_str(end0)
                           + "[, is strictly greater than its upper bound.");
     if (beg1 > end1)
-      throw WrongArgument("Vector3:::GetNelement(int beg0, int end0, "
-                          "int beg1, int end1)",
+      throw WrongArgument("Vector3:::GetNelement(size_t beg0, size_t end0, "
+                          "size_t beg1, size_t end1)",
                           "The lower bound of the range of "
 			  "of vectors, [" + to_str(beg1) + ", " + to_str(end1)
                           + "[, is strictly greater than its upper bound.");
     if (beg0 < 0 || end0 > GetLength())
-      throw WrongArgument("Vector3:::GetNelement(int beg0, int end0, "
-                          "int beg1, int end1)",
+      throw WrongArgument("Vector3:::GetNelement(size_t beg0, size_t end0, "
+                          "size_t beg1, size_t end1)",
         		  "The inner-vector of vectors indexes should be in "
 			  "[0," + to_str(GetLength()) + "] but ["
 			  + to_str(beg0)
                           + ", " + to_str(end0) + "[ was provided.");
 
-    int total = 0;
-    for (int i = beg0; i < end0; i++)
+    size_t total = 0;
+    for (size_t i = beg0; i < end0; i++)
       {
         if (beg1 < 0 || end1 > GetLength(i))
-          throw WrongArgument("Vector3:::GetNelement(int beg0, int end0, "
-                              "int beg1, int end1)",
+          throw WrongArgument("Vector3:::GetNelement(size_t beg0, size_t end0, "
+                              "size_t beg1, size_t end1)",
                               "For the inner vector of vectors "
                               + to_str(i) + ", the vectors indexes should be "
                               "in [0," + to_str(GetLength(i)) + "] but ["
                               + to_str(beg1)
                               + ", " + to_str(end1) + "[ was provided.");
-        for (int j = beg1; j < end1; j++)
+        for (size_t j = beg1; j < end1; j++)
           total += GetLength(i, j);
       }
     return total;
@@ -332,11 +332,11 @@ namespace Seldon
     vector of vectors.
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
-  Vector<int> Vector3<T, Allocator0, Allocator1, Allocator2>
-  ::GetShape(int i) const
+  Vector<size_t> Vector3<T, Allocator0, Allocator1, Allocator2>
+  ::GetShape(size_t i) const
   {
-    Vector<int> shape(GetLength(i));
-    for (int j = 0; j < GetLength(i); j++)
+    Vector<size_t> shape(GetLength(i));
+    for (size_t j = 0; j < GetLength(i); j++)
       shape(j) = GetLength(i, j);
     return shape;
   }
@@ -350,10 +350,10 @@ namespace Seldon
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   void Vector3<T, Allocator0, Allocator1, Allocator2>
-  ::GetShape(int i, Vector<int>& shape) const
+  ::GetShape(size_t i, Vector<size_t>& shape) const
   {
     shape.Reallocate(GetLength(i));
-    for (int j = 0; j < GetLength(i); j++)
+    for (size_t j = 0; j < GetLength(i); j++)
       shape(j) = GetLength(i, j);
   }
 
@@ -363,7 +363,7 @@ namespace Seldon
     \param[in] N the new size of the vector of vectors of vectors.
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
-  void Vector3<T, Allocator0, Allocator1, Allocator2>::Reallocate(int N)
+  void Vector3<T, Allocator0, Allocator1, Allocator2>::Reallocate(size_t N)
   {
     data_.Reallocate(N);
   }
@@ -376,7 +376,7 @@ namespace Seldon
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   void Vector3<T, Allocator0, Allocator1, Allocator2>
-  ::Reallocate(int i, int N)
+  ::Reallocate(size_t i, size_t N)
   {
     data_(i).Reallocate(N);
   }
@@ -390,7 +390,7 @@ namespace Seldon
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   void Vector3<T, Allocator0, Allocator1, Allocator2>
-  ::Reallocate(int i, int j, int N)
+  ::Reallocate(size_t i, size_t j, size_t N)
   {
     data_(i)(j).Reallocate(N);
   }
@@ -407,7 +407,7 @@ namespace Seldon
   ::Flatten(Vector<Td, VectFull, Allocatord>& data) const
   {
     data.Reallocate(GetNelement());
-    int i, j, k, n(0);
+    size_t i, j, k, n(0);
     for (i = 0; i < GetLength(); i++)
       for (j = 0; j < GetLength(i); j++)
         for (k = 0; k < GetLength(i, j); k++)
@@ -427,22 +427,22 @@ namespace Seldon
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   template <class Td, class Allocatord>
   void Vector3<T, Allocator0, Allocator1, Allocator2>
-  ::Flatten(int beg, int end, Vector<Td, VectFull, Allocatord>& data) const
+  ::Flatten(size_t beg, size_t end, Vector<Td, VectFull, Allocatord>& data) const
   {
     if (beg > end)
-      throw WrongArgument("Vector3:::Flatten(int beg, int end, Vector& data)",
+      throw WrongArgument("Vector3:::Flatten(size_t beg, size_t end, Vector& data)",
                           "The lower bound of the range of inner vectors "
 			  "of vectors, [" + to_str(beg) + ", " + to_str(end)
                           + "[, is strictly greater than its upper bound.");
     if (beg < 0 || end > GetLength())
-      throw WrongArgument("Vector3:::Flatten(int beg, int end, Vector& data)",
+      throw WrongArgument("Vector3:::Flatten(size_t beg, size_t end, Vector& data)",
         		  "The inner-vector of vectors indexes should be in "
 			  "[0," + to_str(GetLength()) + "] but ["
 			  + to_str(beg)
                           + ", " + to_str(end) + "[ was provided.");
 
     data.Reallocate(GetNelement(beg, end));
-    int i, j, k, n(0);
+    size_t i, j, k, n(0);
     for (i = beg; i < end; i++)
       for (j = 0; j < GetLength(i); j++)
         for (k = 0; k < GetLength(i, j); k++)
@@ -470,36 +470,36 @@ namespace Seldon
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   template <class Td, class Allocatord>
   void Vector3<T, Allocator0, Allocator1, Allocator2>
-  ::Flatten(int beg0, int end0, int beg1, int end1,
+  ::Flatten(size_t beg0, size_t end0, size_t beg1, size_t end1,
             Vector<Td, VectFull, Allocatord>& data) const
   {
     if (beg0 > end0)
-      throw WrongArgument("Vector3:::Flatten(int beg0, int end0, int beg1, "
-                          "int end1, Vector& data)",
+      throw WrongArgument("Vector3:::Flatten(size_t beg0, size_t end0, size_t beg1, "
+                          "size_t end1, Vector& data)",
                           "The lower bound of the range of inner vectors "
 			  "of vectors, [" + to_str(beg0) + ", " + to_str(end0)
                           + "[, is strictly greater than its upper bound.");
     if (beg1 > end1)
-      throw WrongArgument("Vector3:::Flatten(int beg0, int end0, int beg1, "
-                          "int end1, Vector& data)",
+      throw WrongArgument("Vector3:::Flatten(size_t beg0, size_t end0, size_t beg1, "
+                          "size_t end1, Vector& data)",
                           "The lower bound of the range of "
 			  "of vectors, [" + to_str(beg1) + ", " + to_str(end1)
                           + "[, is strictly greater than its upper bound.");
     if (beg0 < 0 || end0 > GetLength())
-      throw WrongArgument("Vector3:::Flatten(int beg0, int end0, int beg1, "
-                          "int end1, Vector& data)",
+      throw WrongArgument("Vector3:::Flatten(size_t beg0, size_t end0, size_t beg1, "
+                          "size_t end1, Vector& data)",
         		  "The inner-vector of vectors indexes should be in "
 			  "[0," + to_str(GetLength()) + "] but ["
 			  + to_str(beg0)
                           + ", " + to_str(end0) + "[ was provided.");
 
     data.Reallocate(GetNelement(beg0, end0, beg1, end1));
-    int i, j, k, n(0);
+    size_t i, j, k, n(0);
     for (i = beg0; i < end0; i++)
       {
         if (beg1 < 0 || end1 > GetLength(i))
-          throw WrongArgument("Vector3:::Flatten(int beg0, int end0, int beg1, "
-                              "int end1, Vector& data)",
+          throw WrongArgument("Vector3:::Flatten(size_t beg0, size_t end0, size_t beg1, "
+                              "size_t end1, Vector& data)",
                               "For the inner vector of vectors "
                               + to_str(i) + ", the vectors indexes should be "
                               "in [0," + to_str(GetLength(i)) + "] but ["
@@ -520,7 +520,7 @@ namespace Seldon
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   void Vector3<T, Allocator0,
-	       Allocator1, Allocator2>::PushBack(int i, int j, const T& x)
+	       Allocator1, Allocator2>::PushBack(size_t i, size_t j, const T& x)
   {
     data_(i)(j).PushBack(x);
   }
@@ -533,7 +533,7 @@ namespace Seldon
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   void Vector3<T, Allocator0, Allocator1, Allocator2>::
-  PushBack(int i, const Vector<T, Vect_Full, Allocator0>& X)
+  PushBack(size_t i, const Vector<T, Vect_Full, Allocator0>& X)
   {
     data_(i).PushBack(X);
   }
@@ -562,7 +562,7 @@ namespace Seldon
   ::PushBack(const Vector<Vector<Vector<T, Vect_Full, Allocator0>,
              Vect_Full, Allocator1>, Vect_Full, Allocator2>& X)
   {
-    for (int i = 0; i < X.GetLength(); i++)
+    for (size_t i = 0; i < X.GetLength(); i++)
       data_.PushBack(X(i));
   }
 
@@ -576,7 +576,7 @@ namespace Seldon
   void Vector3<T, Allocator0, Allocator1, Allocator2>
   ::PushBack(const Vector3<T, Allocator0, Allocator1, Allocator2>& X)
   {
-    for (int i = 0; i < X.GetLength(); i++)
+    for (size_t i = 0; i < X.GetLength(); i++)
       data_.PushBack(X.GetVector());
   }
 
@@ -595,7 +595,7 @@ namespace Seldon
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   void Vector3<T, Allocator0,
-	       Allocator1, Allocator2>::Clear(int i)
+	       Allocator1, Allocator2>::Clear(size_t i)
   {
     data_(i).Clear();
   }
@@ -607,7 +607,7 @@ namespace Seldon
     \param[in] j index of the vector to be cleared.
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
-  void Vector3<T, Allocator0, Allocator1, Allocator2>::Clear(int i, int j)
+  void Vector3<T, Allocator0, Allocator1, Allocator2>::Clear(size_t i, size_t j)
   {
     data_(i)(j).Clear();
   }
@@ -620,8 +620,8 @@ namespace Seldon
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   void Vector3<T, Allocator0, Allocator1, Allocator2>::Fill(const T& x)
   {
-    for (int i = 0; i < data_.GetSize(); i++)
-      for (int j = 0; j < data_(i).GetSize(); j++)
+    for (size_t i = 0; i < data_.GetSize(); i++)
+      for (size_t j = 0; j < data_(i).GetSize(); j++)
 	data_(i)(j).Fill(x);
   }
 
@@ -659,7 +659,7 @@ namespace Seldon
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   Vector<Vector<T, Vect_Full, Allocator0>, VectFull, Allocator1>&
-  Vector3<T, Allocator0, Allocator1, Allocator2>::GetVector(int i)
+  Vector3<T, Allocator0, Allocator1, Allocator2>::GetVector(size_t i)
   {
     return data_(i);
   }
@@ -672,7 +672,7 @@ namespace Seldon
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   const Vector<Vector<T, Vect_Full, Allocator0>, VectFull, Allocator1>&
-  Vector3<T, Allocator0, Allocator1, Allocator2>::GetVector(int i) const
+  Vector3<T, Allocator0, Allocator1, Allocator2>::GetVector(size_t i) const
   {
     return data_(i);
   }
@@ -686,7 +686,7 @@ namespace Seldon
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   Vector<T, Vect_Full, Allocator0>&
-  Vector3<T, Allocator0, Allocator1, Allocator2>::GetVector(int i, int j)
+  Vector3<T, Allocator0, Allocator1, Allocator2>::GetVector(size_t i, size_t j)
   {
     return data_(i)(j);
   }
@@ -700,7 +700,7 @@ namespace Seldon
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   const Vector<T, Vect_Full, Allocator0>&
-  Vector3<T, Allocator0, Allocator1, Allocator2>::GetVector(int i, int j)
+  Vector3<T, Allocator0, Allocator1, Allocator2>::GetVector(size_t i, size_t j)
     const
   {
     return data_(i)(j);
@@ -720,7 +720,7 @@ namespace Seldon
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   const Vector<Vector<T, Vect_Full, Allocator0>, VectFull, Allocator1>&
   Vector3<T, Allocator0,
-	  Allocator1, Allocator2>::operator() (int i) const
+	  Allocator1, Allocator2>::operator() (size_t i) const
   {
     return data_(i);
   }
@@ -733,7 +733,7 @@ namespace Seldon
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   Vector<Vector<T, Vect_Full, Allocator0>, VectFull, Allocator1>&
-  Vector3<T, Allocator0, Allocator1, Allocator2>::operator() (int i)
+  Vector3<T, Allocator0, Allocator1, Allocator2>::operator() (size_t i)
   {
     return data_(i);
   }
@@ -748,7 +748,7 @@ namespace Seldon
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   const Vector<T, Vect_Full, Allocator0>&
   Vector3<T, Allocator0,
-	  Allocator1, Allocator2>::operator() (int i, int j) const
+	  Allocator1, Allocator2>::operator() (size_t i, size_t j) const
   {
     return data_(i)(j);
   }
@@ -762,7 +762,7 @@ namespace Seldon
   */
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   Vector<T, Vect_Full, Allocator0>&
-  Vector3<T, Allocator0, Allocator1, Allocator2>::operator() (int i, int j)
+  Vector3<T, Allocator0, Allocator1, Allocator2>::operator() (size_t i, size_t j)
   {
     return data_(i)(j);
   }
@@ -778,7 +778,7 @@ namespace Seldon
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   typename Vector3<T, Allocator0, Allocator1, Allocator2>::const_reference
   Vector3<T, Allocator0,
-          Allocator1, Allocator2>::operator() (int i, int j, int k) const
+          Allocator1, Allocator2>::operator() (size_t i, size_t j, size_t k) const
   {
     return data_(i)(j)(k);
   }
@@ -794,7 +794,7 @@ namespace Seldon
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   typename Vector3<T, Allocator0, Allocator1, Allocator2>::reference
   Vector3<T, Allocator0, Allocator1, Allocator2>::operator()
-    (int i, int j, int k)
+    (size_t i, size_t j, size_t k)
   {
     return data_(i)(j)(k);
   }
@@ -809,8 +809,8 @@ namespace Seldon
   template <class T, class Allocator0, class Allocator1, class Allocator2>
   void Vector3<T, Allocator0, Allocator1, Allocator2>::Print() const
   {
-    for (int i = 0; i < data_.GetSize(); i++)
-      for(int j = 0; j < data_(i).GetSize(); j++)
+    for (size_t i = 0; i < data_.GetSize(); i++)
+      for(size_t j = 0; j < data_(i).GetSize(); j++)
 	{
 	  cout << "Vector " << i << ", " << j << ": ";
 	  data_(i)(j).Print();
@@ -869,20 +869,20 @@ namespace Seldon
 
     if (with_size)
       {
-        int m = GetLength();
-        stream.write(reinterpret_cast<char*>(const_cast<int*>(&m)),
-                     sizeof(int));
+        size_t m = GetLength();
+        stream.write(reinterpret_cast<char*>(const_cast<size_t*>(&m)),
+                     sizeof(size_t));
       }
 
-    for (int i = 0; i < GetLength(); i++)
+    for (size_t i = 0; i < GetLength(); i++)
       {
         if (with_size)
           {
-            int m = GetLength(i);
-            stream.write(reinterpret_cast<char*>(const_cast<int*>(&m)),
-                         sizeof(int));
+            size_t m = GetLength(i);
+            stream.write(reinterpret_cast<char*>(const_cast<size_t*>(&m)),
+                         sizeof(size_t));
           }
-        for (int j = 0; j < GetLength(i); j++)
+        for (size_t j = 0; j < GetLength(i); j++)
           data_(i)(j).Write(stream, with_size);
       }
 
@@ -946,20 +946,20 @@ namespace Seldon
 
     if (with_size)
       {
-        int new_size;
-        stream.read(reinterpret_cast<char*>(&new_size), sizeof(int));
+        size_t new_size;
+        stream.read(reinterpret_cast<char*>(&new_size), sizeof(size_t));
         this->Reallocate(new_size);
       }
 
-    for (int i = 0; i < GetLength(); i++)
+    for (size_t i = 0; i < GetLength(); i++)
       {
         if (with_size)
           {
-            int new_size;
-            stream.read(reinterpret_cast<char*>(&new_size), sizeof(int));
+            size_t new_size;
+            stream.read(reinterpret_cast<char*>(&new_size), sizeof(size_t));
             this->Reallocate(i, new_size);
           }
-        for (int j = 0; j < GetLength(i); j++)
+        for (size_t j = 0; j < GetLength(i); j++)
           data_(i)(j).Read(stream, with_size);
       }
 

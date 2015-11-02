@@ -328,7 +328,7 @@ namespace Seldon
     \return Column/row number of j-th non-zero value of row/column i.
   */
   template <class T, class Prop, class Storage, class Allocator> inline
-  int& Matrix_ArraySparse<T, Prop, Storage, Allocator>::Index(int i, int j)
+  size_t& Matrix_ArraySparse<T, Prop, Storage, Allocator>::Index(size_t i, size_t j)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -596,8 +596,8 @@ namespace Seldon
     \return The number of non-zero entries of the column i.
   */
   template <class T, class Prop, class Allocator>
-  inline int Matrix<T, Prop, ArrayColSparse, Allocator>::
-  GetColumnSize(int i) const
+  inline size_t Matrix<T, Prop, ArrayColSparse, Allocator>::
+  GetColumnSize(size_t i) const
   {
     return this->val_(i).GetSize();
   }
@@ -721,9 +721,9 @@ namespace Seldon
   */
   template <class T, class Prop, class Allocator>
   inline void Matrix<T, Prop, ArrayRowSparse, Allocator>::
-  ReplaceIndexRow(int i, IVect& new_index)
+  ReplaceIndexRow(size_t i, IVect& new_index)
   {
-    for (int j = 0; j < this->val_(i).GetM(); j++)
+    for (size_t j = 0; j < this->val_(i).GetM(); j++)
       this->val_(i).Index(j) = new_index(j);
   }
 
@@ -734,7 +734,7 @@ namespace Seldon
     \return The number of non-zero entries of the row i.
   */
   template <class T, class Prop, class Allocator> inline
-  int Matrix<T, Prop, ArrayRowSparse, Allocator>::GetRowSize(int i) const
+  size_t Matrix<T, Prop, ArrayRowSparse, Allocator>::GetRowSize(size_t i) const
   {
     return this->val_(i).GetSize();
   }

@@ -36,20 +36,20 @@ namespace Seldon
     typedef typename Allocator::const_pointer const_pointer;
     typedef typename Allocator::reference reference;
     typedef typename Allocator::const_reference const_reference;
-    typedef typename SeldonDefaultAllocator<VectFull, int>::allocator AllocatorInt;
+    typedef typename SeldonDefaultAllocator<VectFull, size_t>::allocator AllocatorInt;
     
     typedef VectSparse storage;
 
     // Attributes.
   private:
     //! Indices of the non-zero entries.
-    int* index_;
+    size_t* index_;
     
     // Methods.
   public:
     // Constructor.
     explicit Vector();
-    explicit Vector(int i);
+    explicit Vector(size_t i);
     Vector(const Vector<T, VectSparse, Allocator>& A);
 
     // Destructor.
@@ -57,42 +57,42 @@ namespace Seldon
     void Clear();
 
     // Memory management.
-    void Reallocate(int i);
-    void ReallocateVector(int i);
-    void Resize(int i);
-    void ResizeVector(int i);
-    void SetData(int nz, T* data, int* index);
+    void Reallocate(size_t i);
+    void ReallocateVector(size_t i);
+    void Resize(size_t i);
+    void ResizeVector(size_t i);
+    void SetData(size_t nz, T* data, size_t* index);
     template<class Allocator2>
     void SetData(Vector<T, VectFull, Allocator2>& data,
-		 Vector<int>& index);
+		 Vector<size_t>& index);
     template<class Allocator2>
     void SetData(const Vector<T, VectSparse, Allocator2>& V);
     void Nullify();
 
     // Element access and affectation.
-    reference Value(int i);
+    reference Value(size_t i);
 #ifndef SWIG
-    const_reference Value(int i) const;
+    const_reference Value(size_t i) const;
 #endif
-    int& Index(int i);
+    size_t& Index(size_t i);
 #ifndef SWIG
-    int Index(int i) const;
+    size_t Index(size_t i) const;
 #endif
     
-    value_type operator() (int i);
-    reference Get(int i);
-    reference Val(int i);
+    value_type operator() (size_t i);
+    reference Get(size_t i);
+    reference Val(size_t i);
 #ifndef SWIG
-    value_type operator() (int i) const;
-    const_reference Get(int i) const;
-    const_reference Val(int i) const;
+    value_type operator() (size_t i) const;
+    const_reference Get(size_t i) const;
+    const_reference Val(size_t i) const;
     Vector<T, VectSparse, Allocator>& operator= (const Vector<T, VectSparse,
 						 Allocator>& X);
 #endif
     void Copy(const Vector<T, VectSparse, Allocator>& X);
 
     // Basic functions.
-    int* GetIndex() const;
+    size_t* GetIndex() const;
     int64_t GetMemorySize() const;
     
     // Convenient functions.
@@ -104,15 +104,15 @@ namespace Seldon
     void Assemble();
     template<class T0>
     void RemoveSmallEntry(const T0& epsilon);
-    void AddInteraction(int i, const T& val);
-    void AddInteractionRow(int, int*, T*, bool already_sorted = false);
+    void AddInteraction(size_t i, const T& val);
+    void AddInteractionRow(size_t, size_t*, T*, bool already_sorted = false);
     template<class Allocator0>
-    void AddInteractionRow(int nb, const Vector<int>& col,
+    void AddInteractionRow(size_t nb, const Vector<size_t>& col,
 			   const Vector<T, VectFull, Allocator0>& val,
                            bool already_sorted = false);
     
     typename ClassComplexType<T>::Treal GetNormInf() const;
-    int GetNormInfIndex() const;
+    size_t GetNormInfIndex() const;
     
     // Input/output functions.
     void Write(string FileName) const;

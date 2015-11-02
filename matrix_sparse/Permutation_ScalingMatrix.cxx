@@ -53,21 +53,21 @@ namespace Seldon
   */
   template<class T, class Prop, class Allocator>
   void ApplyInversePermutation(Matrix<T, Prop, RowSparse, Allocator>& A,
-                               const Vector<int>& row_perm,
-                               const Vector<int>& col_perm)
+                               const Vector<size_t>& row_perm,
+                               const Vector<size_t>& col_perm)
   {
-    int i, j, k, l, nnz;
-    int m = A.GetM();
-    int n = A.GetN();
-    int* ind = A.GetInd();
-    int* ptr = A.GetPtr();
+    size_t i, j, k, l, nnz;
+    size_t m = A.GetM();
+    size_t n = A.GetN();
+    size_t* ind = A.GetInd();
+    size_t* ptr = A.GetPtr();
     T* data = A.GetData();
 
     /*** Permutation of the columns ***/
 
     Vector<T, VectFull, Allocator> row_data;
     // Column indexes of a given row.
-    Vector<int> row_index;
+    Vector<size_t> row_index;
     for (i = 0; i < m; i++)
       if ((nnz = ptr[i + 1] - ptr[i]) != 0)
         {
@@ -99,22 +99,22 @@ namespace Seldon
     nnz = ptr[m];
 
     // 'row_perm' is const, so it must be copied.
-    Vector<int> row_permutation(row_perm);
+    Vector<size_t> row_permutation(row_perm);
     // Row indexes in the origin matrix: prev_row_index(i) should be the
     // location of the i-th row (from the permuted matrix) in the matrix
     // before permutation.
-    Vector<int> prev_row_index(m);
+    Vector<size_t> prev_row_index(m);
     prev_row_index.Fill();
 
     Sort(row_permutation, prev_row_index);
     row_permutation.Clear();
 
     // Description of the matrix after permutations.
-    Vector<int> new_ptr(m + 1);
-    Vector<int> new_ind(nnz);
+    Vector<size_t> new_ptr(m + 1);
+    Vector<size_t> new_ind(nnz);
     Vector<T, VectFull, Allocator> new_data(nnz);
 
-    int ptr_count = 0, length;
+    size_t ptr_count = 0, length;
     for (i = 0; i < m; i++)
       {
         length = ptr[prev_row_index(i) + 1] - ptr[prev_row_index(i)];
@@ -139,21 +139,21 @@ namespace Seldon
   */
   template<class T, class Prop, class Allocator>
   void ApplyInversePermutation(Matrix<T, Prop, ColSparse, Allocator>& A,
-                               const Vector<int>& row_perm,
-                               const Vector<int>& col_perm)
+                               const Vector<size_t>& row_perm,
+                               const Vector<size_t>& col_perm)
   {
-    int i, j, k, l, nnz;
-    int m = A.GetM();
-    int n = A.GetN();
-    int* ind = A.GetInd();
-    int* ptr = A.GetPtr();
+    size_t i, j, k, l, nnz;
+    size_t m = A.GetM();
+    size_t n = A.GetN();
+    size_t* ind = A.GetInd();
+    size_t* ptr = A.GetPtr();
     T* data = A.GetData();
 
     /*** Permutation of the rows ***/
 
     Vector<T, VectFull, Allocator> col_data;
     // Row indexes of a given column.
-    Vector<int> col_index;
+    Vector<size_t> col_index;
     for (i = 0; i < n; i++)
       if ((nnz = ptr[i + 1] - ptr[i]) != 0)
         {
@@ -185,22 +185,22 @@ namespace Seldon
     nnz = ptr[n];
 
     // 'col_perm' is const, so it must be copied.
-    Vector<int> col_permutation(col_perm);
+    Vector<size_t> col_permutation(col_perm);
     // Column indexes in the origin matrix: prev_col_index(i) should be the
     // location of the i-th column (from the permuted matrix) in the matrix
     // before permutation.
-    Vector<int> prev_col_index(n);
+    Vector<size_t> prev_col_index(n);
     prev_col_index.Fill();
 
     Sort(col_permutation, prev_col_index);
     col_permutation.Clear();
 
     // Description of the matrix after permutations.
-    Vector<int> new_ptr(n + 1);
-    Vector<int> new_ind(nnz);
+    Vector<size_t> new_ptr(n + 1);
+    Vector<size_t> new_ind(nnz);
     Vector<T, VectFull, Allocator> new_data(nnz);
 
-    int ptr_count = 0, length;
+    size_t ptr_count = 0, length;
     for (i = 0; i < n; i++)
       {
         length = ptr[prev_col_index(i) + 1] - ptr[prev_col_index(i)];
@@ -351,7 +351,7 @@ namespace Seldon
   void ApplyInversePermutation(Matrix<T, Prop, ArrayRowSparse, Allocator>& A,
                                const IVect& row_perm, const IVect& col_perm)
   {
-    int m = A.GetM(), n, i, i_, j, i2;
+    size_t m = A.GetM(), n, i, i_, j, i2;
     IVect ind_tmp, iperm(m), rperm(m);
     for (i = 0; i < m; i++)
       {
@@ -380,7 +380,7 @@ namespace Seldon
 
 	// We update the indices iperm and rperm in order to keep in memory
 	// the place where the row row_perm(i) is.
-	int i_tmp = iperm(i_);
+	size_t i_tmp = iperm(i_);
 	iperm(i_) = iperm(i2);
 	iperm(i2) = i_tmp;
 	rperm(iperm(i_)) = i_;

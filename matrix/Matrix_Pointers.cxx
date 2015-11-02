@@ -180,7 +180,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Pointers<T, Prop, Storage, Allocator>
-  ::Reallocate(int i, int j)
+  ::Reallocate(size_t i, size_t j)
   {
 
     if (i != this->m_ || j != this->n_)
@@ -366,28 +366,28 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Pointers<T, Prop, Storage, Allocator>
-  ::Resize(int i, int j)
+  ::Resize(size_t i, size_t j)
   {
 
     if (i == this->m_ && j == this->n_)
       return;
 
     // Storing the old values of the matrix.
-    int iold = Storage::GetFirst(this->m_, this->n_);
-    int jold = Storage::GetSecond(this->m_, this->n_);
+    size_t iold = Storage::GetFirst(this->m_, this->n_);
+    size_t jold = Storage::GetSecond(this->m_, this->n_);
     Vector<value_type, VectFull, Allocator> xold(this->GetDataSize());
-    for (int k = 0; k < this->GetDataSize(); k++)
+    for (size_t k = 0; k < this->GetDataSize(); k++)
       xold(k) = this->data_[k];
 
     // Reallocation.
-    int inew = Storage::GetFirst(i, j);
-    int jnew = Storage::GetSecond(i, j);
+    size_t inew = Storage::GetFirst(i, j);
+    size_t jnew = Storage::GetSecond(i, j);
     this->Reallocate(i,j);
 
     // Filling the matrix with its old values.
-    int imin = min(iold, inew), jmin = min(jold, jnew);
-    for (int k = 0; k < imin; k++)
-      for (int l = 0; l < jmin; l++)
+    size_t imin = min(iold, inew), jmin = min(jold, jnew);
+    for (size_t k = 0; k < imin; k++)
+      for (size_t l = 0; l < jmin; l++)
 	this->data_[k*jnew+l] = xold(l+jold*k);
   }
 
@@ -420,7 +420,7 @@ namespace Seldon
     
     Fill(zero);
     
-    for (int i = 0; i < min(this->m_, this->n_); i++)
+    for (size_t i = 0; i < min(this->m_, this->n_); i++)
       (*this)(i,i) = one;
   }
 
@@ -433,7 +433,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Pointers<T, Prop, Storage, Allocator>::Fill()
   {
-    for (int i = 0; i < this->GetDataSize(); i++)
+    for (size_t i = 0; i < this->GetDataSize(); i++)
       SetComplexReal(i,  this->data_[i]);
   }
 
@@ -447,7 +447,7 @@ namespace Seldon
   void Matrix_Pointers<T, Prop, Storage, Allocator>::Fill(const T0& x)
   {
     T x_; SetComplexReal(x, x_);
-    for (int i = 0; i < this->GetDataSize(); i++)
+    for (size_t i = 0; i < this->GetDataSize(); i++)
       this->data_[i] = x_;
   }
 
@@ -476,7 +476,7 @@ namespace Seldon
 #ifndef SELDON_WITHOUT_REINIT_RANDOM
     srand(time(NULL));
 #endif
-    for (int i = 0; i < this->GetDataSize(); i++)
+    for (size_t i = 0; i < this->GetDataSize(); i++)
       SetComplexReal(rand(), this->data_[i]);
   }
 
@@ -643,10 +643,10 @@ namespace Seldon
 
     if (with_size)
       {
-	FileStream.write(reinterpret_cast<char*>(const_cast<int*>(&this->m_)),
-			 sizeof(int));
-	FileStream.write(reinterpret_cast<char*>(const_cast<int*>(&this->n_)),
-			 sizeof(int));
+	FileStream.write(reinterpret_cast<char*>(const_cast<size_t*>(&this->m_)),
+			 sizeof(size_t));
+	FileStream.write(reinterpret_cast<char*>(const_cast<size_t*>(&this->n_)),
+			 sizeof(size_t));
       }
 
     FileStream.write(reinterpret_cast<char*>(this->data_),
@@ -712,7 +712,7 @@ namespace Seldon
                     "The stream is not ready.");
 #endif
 
-    int i, j;
+    size_t i, j;
     for (i = 0; i < this->GetM(); i++)
       {
 	for (j = 0; j < this->GetN(); j++)

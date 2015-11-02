@@ -698,7 +698,7 @@ namespace Seldon
   */
   template <class T, template <class U> class Allocator >
   void Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
-  ::Write(string FileName, bool with_size = true) const
+  ::Write(string FileName, bool with_size) const
   {
     ofstream FileStream;
     FileStream.open(FileName.c_str(), ofstream::binary);
@@ -726,7 +726,7 @@ namespace Seldon
   */
   template <class T, template <class U> class Allocator >
   void Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
-  ::Write(ostream& FileStream, bool with_size = true) const
+  ::Write(ostream& FileStream, bool with_size) const
   {
 
 #ifdef SELDON_CHECK_IO

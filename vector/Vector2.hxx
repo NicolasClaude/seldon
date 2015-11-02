@@ -74,34 +74,34 @@ namespace Seldon
     /*** Constructors and destructor ***/
 
     Vector2();
-    Vector2(int length);
-    Vector2(const Vector<int>& length);
+    Vector2(size_t length);
+    Vector2(const Vector<size_t>& length);
     ~Vector2();
 
     /*** Management of the vectors ***/
 
     bool IsEmpty() const;
-    int GetLength() const;
-    int GetSize() const;
-    int GetLength(int i) const;
-    int GetSize(int i) const;
+    size_t GetLength() const;
+    size_t GetSize() const;
+    size_t GetLength(size_t i) const;
+    size_t GetSize(size_t i) const;
     int64_t GetMemorySize() const;
-    int GetNelement() const;
-    int GetNelement(int beg, int end) const;
-    Vector<int> GetShape() const;
-    void GetShape(Vector<int>& shape) const;
-    void Reallocate(int M);
-    void Reallocate(int i, int N);
-    void Reallocate(const Vector<int>& length);
-    void Select(int beg, int end);
+    size_t GetNelement() const;
+    size_t GetNelement(size_t beg, size_t end) const;
+    Vector<size_t> GetShape() const;
+    void GetShape(Vector<size_t>& shape) const;
+    void Reallocate(size_t M);
+    void Reallocate(size_t i, size_t N);
+    void Reallocate(const Vector<size_t>& length);
+    void Select(size_t beg, size_t end);
     Vector<T, VectFull, Allocator0> Flatten() const;
     template <class Td, class Allocatord>
     void Flatten(Vector<Td, VectFull, Allocatord>& data) const;
     template <class Td, class Allocatord>
-    void Flatten(int beg, int end, Vector<Td, VectFull, Allocatord>& data)
+    void Flatten(size_t beg, size_t end, Vector<Td, VectFull, Allocatord>& data)
       const;
 
-    void PushBack(int i, const T& x);
+    void PushBack(size_t i, const T& x);
     void PushBack(const Vector<T, VectFull, Allocator0>& X);
 #ifndef SWIG
     void PushBack(const Vector<Vector<T, VectFull, Allocator0>,
@@ -110,7 +110,7 @@ namespace Seldon
     void PushBack(const Vector2<T, Allocator0, Allocator1>& V);
 
     void Clear();
-    void Clear(int i);
+    void Clear(size_t i);
 
     void Fill(const T& x);
 
@@ -121,9 +121,9 @@ namespace Seldon
                  Allocator1> GetVector() const;
 #endif
 
-    Vector<T, VectFull, Allocator0>& GetVector(int i);
+    Vector<T, VectFull, Allocator0>& GetVector(size_t i);
 #ifndef SWIG
-    const Vector<T, VectFull, Allocator0>& GetVector(int i) const;
+    const Vector<T, VectFull, Allocator0>& GetVector(size_t i) const;
 #endif
 
     void Copy(const Vector2<T, Allocator0, Allocator1>& V);
@@ -132,13 +132,13 @@ namespace Seldon
     /*** Element access and assignment ***/
 
 #ifndef SWIG
-    const Vector<T, VectFull, Allocator0>& operator() (int i) const;
+    const Vector<T, VectFull, Allocator0>& operator() (size_t i) const;
 #endif
-    Vector<T, VectFull, Allocator0>& operator() (int i);
+    Vector<T, VectFull, Allocator0>& operator() (size_t i);
 #ifndef SWIG
-    const_reference operator() (int i, int j) const;
+    const_reference operator() (size_t i, size_t j) const;
 #endif
-    reference operator() (int i, int j);
+    reference operator() (size_t i, size_t j);
 
     /*** Convenient methods ***/
 

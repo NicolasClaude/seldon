@@ -48,7 +48,7 @@ namespace Seldon
     \param i length of the vector.
   */
   template <class T, class Allocator>
-  inline Vector<T, VectSparse, Allocator>::Vector(int i):
+  inline Vector<T, VectSparse, Allocator>::Vector(size_t i):
     Vector<T, VectFull, Allocator>(i)
   {
 
@@ -106,7 +106,7 @@ namespace Seldon
     lost.
   */
   template <class T, class Allocator>
-  inline void Vector<T, VectSparse, Allocator>::Reallocate(int i)
+  inline void Vector<T, VectSparse, Allocator>::Reallocate(size_t i)
   {
     ReallocateVector(i);
   }
@@ -137,7 +137,7 @@ namespace Seldon
   */
   template <class T, class Allocator>
   inline typename Vector<T, VectSparse, Allocator>::reference
-  Vector<T, VectSparse, Allocator>::Value(int i)
+  Vector<T, VectSparse, Allocator>::Value(size_t i)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -155,7 +155,7 @@ namespace Seldon
   */
   template <class T, class Allocator>
   inline typename Vector<T, VectSparse, Allocator>::const_reference
-  Vector<T, VectSparse, Allocator>::Value(int i) const
+  Vector<T, VectSparse, Allocator>::Value(size_t i) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -172,7 +172,7 @@ namespace Seldon
     \return The index of the non-zero element #\a i.
   */
   template <class T, class Allocator>
-  inline int& Vector<T, VectSparse, Allocator>::Index(int i)
+  inline size_t& Vector<T, VectSparse, Allocator>::Index(size_t i)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -189,7 +189,7 @@ namespace Seldon
     \return The row number of the non-zero element #\a i.
   */
   template <class T, class Allocator>
-  inline int Vector<T, VectSparse, Allocator>::Index(int i) const
+  inline size_t Vector<T, VectSparse, Allocator>::Index(size_t i) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -227,7 +227,7 @@ namespace Seldon
     \return A pointer to the array of the indices of the non-zero entries.
   */
   template <class T, class Allocator>
-  inline int* Vector<T, VectSparse, Allocator>::GetIndex() const
+  inline size_t* Vector<T, VectSparse, Allocator>::GetIndex() const
   {
     return this->index_;
   }
@@ -241,7 +241,7 @@ namespace Seldon
   template <class T, class Allocator>
   inline int64_t Vector<T, VectSparse, Allocator>::GetMemorySize() const
   {
-    return sizeof(*this) + int64_t(sizeof(T) + sizeof(int))*this->m_;
+    return sizeof(*this) + int64_t(sizeof(T) + sizeof(size_t))*this->m_;
   }
   
 } // namespace Seldon.

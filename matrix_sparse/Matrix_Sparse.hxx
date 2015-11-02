@@ -51,7 +51,7 @@ namespace Seldon
     typedef typename Allocator::const_pointer const_pointer;
     typedef typename Allocator::reference reference;
     typedef typename Allocator::const_reference const_reference;
-    typedef typename SeldonDefaultAllocator<VectFull, int>::allocator AllocatorInt;
+    typedef typename SeldonDefaultAllocator<VectFull, size_t>::allocator AllocatorInt;
     typedef value_type entry_type;
     typedef value_type access_type;
     typedef value_type const_access_type;
@@ -59,24 +59,24 @@ namespace Seldon
     // Attributes.
   protected:
     // Number of non-zero elements.
-    int nz_;
+    size_t nz_;
     // Index (in data_) of first element stored for each row or column.
-    int* ptr_;
+    size_t* ptr_;
     // Column or row index (in the matrix) each element.
-    int* ind_;
+    size_t* ind_;
 
     // Methods.
   public:
     // Constructors.
     Matrix_Sparse();
-    explicit Matrix_Sparse(int i, int j);
-    explicit Matrix_Sparse(int i, int j, int nz);
+    explicit Matrix_Sparse(size_t i, size_t j);
+    explicit Matrix_Sparse(size_t i, size_t j, size_t nz);
     template <class Storage0, class Allocator0,
 	      class Storage1, class Allocator1,
 	      class Storage2, class Allocator2>
-    Matrix_Sparse(int i, int j, Vector<T, Storage0, Allocator0>& values,
-		  Vector<int, Storage1, Allocator1>& ptr,
-		  Vector<int, Storage2, Allocator2>& ind);
+    Matrix_Sparse(size_t i, size_t j, Vector<T, Storage0, Allocator0>& values,
+		  Vector<size_t, Storage1, Allocator1>& ptr,
+		  Vector<size_t, Storage2, Allocator2>& ind);
     Matrix_Sparse(const Matrix_Sparse<T, Prop, Storage, Allocator>& A);
 
     // Destructor.
@@ -87,41 +87,41 @@ namespace Seldon
     template <class Storage0, class Allocator0,
 	      class Storage1, class Allocator1,
 	      class Storage2, class Allocator2>
-    void SetData(int i, int j,
+    void SetData(size_t i, size_t j,
 		 Vector<T, Storage0, Allocator0>& values,
-		 Vector<int, Storage1, Allocator1>& ptr,
-		 Vector<int, Storage2, Allocator2>& ind);
-    void SetData(int i, int j, int nz, pointer values, int* ptr, int* ind);
+		 Vector<size_t, Storage1, Allocator1>& ptr,
+		 Vector<size_t, Storage2, Allocator2>& ind);
+    void SetData(size_t i, size_t j, size_t nz, pointer values, size_t* ptr, size_t* ind);
     void Nullify();
-    void Reallocate(int i, int j);
-    void Reallocate(int i, int j, int nz);
-    void Resize(int i, int j);
-    void Resize(int i, int j, int nz);
+    void Reallocate(size_t i, size_t j);
+    void Reallocate(size_t i, size_t j, size_t nz);
+    void Resize(size_t i, size_t j);
+    void Resize(size_t i, size_t j, size_t nz);
     void Copy(const Matrix_Sparse<T, Prop, Storage, Allocator>& A);
 
     // Basic methods.
-    int GetNonZeros() const;
-    int GetDataSize() const;
+    size_t GetNonZeros() const;
+    size_t GetDataSize() const;
     int64_t GetMemorySize() const;
-    int* GetPtr() const;
-    int* GetInd() const;
-    int GetPtrSize() const;
-    int GetIndSize() const;
+    size_t* GetPtr() const;
+    size_t* GetInd() const;
+    size_t GetPtrSize() const;
+    size_t GetIndSize() const;
 
     // Element acess and affectation.
-    const value_type operator() (int i, int j) const;
-    value_type& Val(int i, int j);
-    value_type& Get(int i, int j);
+    const value_type operator() (size_t i, size_t j) const;
+    value_type& Val(size_t i, size_t j);
+    value_type& Get(size_t i, size_t j);
 #ifndef SWIG
-    const value_type& Val(int i, int j) const;
-    const value_type& Get(int i, int j) const;
+    const value_type& Val(size_t i, size_t j) const;
+    const value_type& Get(size_t i, size_t j) const;
 #endif
-    void AddInteraction(int i, int j, const T& val);
+    void AddInteraction(size_t i, size_t j, const T& val);
     
-    void AddInteractionRow(int i, int nb, const Vector<int>& col,
+    void AddInteractionRow(size_t i, size_t nb, const Vector<size_t>& col,
 			   const Vector<T>& val);
 
-    void Set(int i, int j, const T& x);
+    void Set(size_t i, size_t j, const T& x);
 #ifndef SWIG
     Matrix_Sparse<T, Prop, Storage, Allocator>&
     operator= (const Matrix_Sparse<T, Prop, Storage, Allocator>& A);
@@ -134,8 +134,8 @@ namespace Seldon
     template <class T0>
     void Fill(const T0& x);
     void FillRand();
-    void FillRand(int Nelement);
-    void FillRand(int Nelement, const T& x);
+    void FillRand(size_t Nelement);
+    void FillRand(size_t Nelement, const T& x);
     
     void Print() const;
     void Write(string FileName) const;
@@ -202,15 +202,15 @@ namespace Seldon
 
   public:
     Matrix();
-    explicit Matrix(int i, int j);
-    explicit Matrix(int i, int j, int nz);
+    explicit Matrix(size_t i, size_t j);
+    explicit Matrix(size_t i, size_t j, size_t nz);
     template <class Storage0, class Allocator0,
 	      class Storage1, class Allocator1,
 	      class Storage2, class Allocator2>
-    Matrix(int i, int j,
+    Matrix(size_t i, size_t j,
 	   Vector<T, Storage0, Allocator0>& values,
-	   Vector<int, Storage1, Allocator1>& ptr,
-	   Vector<int, Storage2, Allocator2>& ind);
+	   Vector<size_t, Storage1, Allocator1>& ptr,
+	   Vector<size_t, Storage2, Allocator2>& ind);
   };
 
 
@@ -228,15 +228,15 @@ namespace Seldon
 
   public:
     Matrix();
-    explicit Matrix(int i, int j);
-    explicit Matrix(int i, int j, int nz);
+    explicit Matrix(size_t i, size_t j);
+    explicit Matrix(size_t i, size_t j, size_t nz);
     template <class Storage0, class Allocator0,
 	      class Storage1, class Allocator1,
 	      class Storage2, class Allocator2>
-    Matrix(int i, int j,
+    Matrix(size_t i, size_t j,
 	   Vector<T, Storage0, Allocator0>& values,
-	   Vector<int, Storage1, Allocator1>& ptr,
-	   Vector<int, Storage2, Allocator2>& ind);
+	   Vector<size_t, Storage1, Allocator1>& ptr,
+	   Vector<size_t, Storage2, Allocator2>& ind);
 
   };
 

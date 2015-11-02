@@ -79,10 +79,10 @@ namespace Seldon
   class ColSparse
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static const bool Sparse = true;
   };
 #endif
@@ -91,10 +91,10 @@ namespace Seldon
   class RowSparse
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static const bool Sparse = true;
   };
 
@@ -246,10 +246,10 @@ namespace Seldon
   class ColUpTriang
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static bool UpLo();
     static const bool Sparse = false;
   };
@@ -258,10 +258,10 @@ namespace Seldon
   class ColLoTriang
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static bool UpLo();
     static const bool Sparse = false;
   };
@@ -270,10 +270,10 @@ namespace Seldon
   class RowUpTriang
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static bool UpLo();
     static const bool Sparse = false;
   };
@@ -282,10 +282,10 @@ namespace Seldon
   class RowLoTriang
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static bool UpLo();
     static const bool Sparse = false;
   };

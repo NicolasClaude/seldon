@@ -34,7 +34,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   Matrix_Triangular<T, Prop, Storage, Allocator>
-  ::Matrix_Triangular(int i, int j): Matrix_Base<T, Allocator>(i, i)
+  ::Matrix_Triangular(size_t i, size_t j): Matrix_Base<T, Allocator>(i, i)
   {
 
 #ifdef SELDON_CHECK_MEMORY
@@ -104,7 +104,7 @@ namespace Seldon
 #endif
 
     pointer ptr = this->data_;
-    int lgth = i;
+    size_t lgth = i;
     for (int k = 0; k < i; k++, ptr += lgth)
       me_[k] = ptr;
   }
@@ -193,7 +193,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Triangular<T, Prop, Storage, Allocator>
-  ::Reallocate(int i, int j)
+  ::Reallocate(size_t i, size_t j)
   {
 
     if (i != this->m_)
@@ -273,8 +273,8 @@ namespace Seldon
 #endif
 
 	pointer ptr = this->data_;
-	int lgth = Storage::GetSecond(i, i);
-	for (int k = 0; k < Storage::GetFirst(i, i); k++, ptr += lgth)
+	size_t lgth = Storage::GetSecond(i, i);
+	for (size_t k = 0; k < Storage::GetFirst(i, i); k++, ptr += lgth)
 	  me_[k] = ptr;
       }
   }
@@ -298,7 +298,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Triangular<T, Prop, Storage, Allocator>
-  ::SetData(int i, int j,
+  ::SetData(size_t i, size_t j,
 	    typename Matrix_Triangular<T, Prop, Storage, Allocator>
 	    ::pointer data)
   {
@@ -390,24 +390,24 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Triangular<T, Prop, Storage, Allocator>
-  ::Resize(int i, int j)
+  ::Resize(size_t i, size_t j)
   {
 
     if (i != this->m_)
       {
 	// Storing the previous values of the matrix.
-	int iold = this->m_;
+	size_t iold = this->m_;
 	Vector<value_type, VectFull, Allocator> xold(this->GetDataSize());
-	for (int k = 0; k < this->GetDataSize(); k++)
+	for (size_t k = 0; k < this->GetDataSize(); k++)
 	  xold(k) = this->data_[k];
 
 	// Reallocation.
 	this->Reallocate(i, i);
 
 	// Filling the matrix with its previous values.
-	int imin = min(iold, i);
-	for (int k = 0; k < imin; k++)
-	  for (int l = 0; l < imin; l++)
+	size_t imin = min(iold, i);
+	for (size_t k = 0; k < imin; k++)
+	  for (size_t l = 0; l < imin; l++)
 	    this->data_[k*i + l] = xold(k*iold + l);
       }
   }

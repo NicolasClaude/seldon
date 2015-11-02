@@ -79,7 +79,7 @@ namespace Seldon
 	for (int i = 0; i < nb_active_row; i++)
 	  {
 	    int irow = vertex(i);
-	    for (int j = Ptr(irow); j < Ptr(irow+1); j++)
+	    for (size_t j = Ptr(irow); j < Ptr(irow+1); j++)
 	      {
 		int icol = Ind(j);
 		if (!RowUsed(icol))

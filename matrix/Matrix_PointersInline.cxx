@@ -69,7 +69,7 @@ namespace Seldon
     \return The number of elements stored in memory.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline int Matrix_Pointers<T, Prop, Storage, Allocator>::GetDataSize() const
+  inline size_t Matrix_Pointers<T, Prop, Storage, Allocator>::GetDataSize() const
   {
     return this->m_ * this->n_;
   }

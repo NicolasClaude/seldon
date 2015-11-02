@@ -246,10 +246,10 @@ namespace Seldon
     CheckDim(X, Y, "Add(X, Y)");
 #endif
 
-    AddVector(alpha, X.GetFloatDense(), Y.GetFloatDense());
-    AdVectord(alpha, X.GetFloatSparse(), Y.GetFloatSparse());
-    AddVector(alpha, X.GetDoubleDense(), Y.GetDoubleDense());
-    AddVector(alpha, X.GetDoubleSparse(), Y.GetDoubleSparse());
+    AddVector((float)alpha, X.GetFloatDense(), Y.GetFloatDense());
+    AddVector((float)alpha, X.GetFloatSparse(), Y.GetFloatSparse());
+    AddVector((double)alpha, X.GetDoubleDense(), Y.GetDoubleDense());
+    AddVector((double)alpha, X.GetDoubleSparse(), Y.GetDoubleSparse());
   }
 
 
@@ -362,9 +362,9 @@ namespace Seldon
   void Swap(Vector<T, VectSparse, Allocator>& X,
 	    Vector<T, VectSparse, Allocator>& Y)
   {
-    int nx = X.GetM();
+    size_t nx = X.GetM();
     T* data = X.GetData();
-    int* index = X.GetIndex();
+    size_t* index = X.GetIndex();
     X.Nullify();
     X.SetData(Y.GetM(), Y.GetData(), Y.GetIndex());
     Y.Nullify();
@@ -484,9 +484,9 @@ namespace Seldon
     T1 value;
     SetComplexZero(value);
 
-    int size_x = X.GetSize();
-    int size_y = Y.GetSize();
-    int kx = 0, ky = 0, pos_x;
+    size_t size_x = X.GetSize();
+    size_t size_y = Y.GetSize();
+    size_t kx = 0, ky = 0, pos_x;
     while (kx < size_x)
       {
 	pos_x = X.Index(kx);

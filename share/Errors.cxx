@@ -372,9 +372,9 @@ namespace Seldon
   /////////////////
 
 
-  void CheckBounds(int i, int length1_, string nom)
+  void CheckBounds(size_t i, size_t length1_, string nom)
   {
-    if (i < 0 || i >= length1_)
+    if (i >= length1_)
       throw WrongIndex(nom + "::operator()",
 		       string("Index along dimension #1 should be in [0, ")
 		       + to_str(length1_-1) + "], but is equal to "

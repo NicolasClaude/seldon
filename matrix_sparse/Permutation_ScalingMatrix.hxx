@@ -23,13 +23,13 @@ namespace Seldon
 {
   template<class T, class Prop, class Allocator>
   void ApplyInversePermutation(Matrix<T, Prop, RowSparse, Allocator>& A,
-                               const Vector<int>& row_perm,
-                               const Vector<int>& col_perm);
+                               const Vector<size_t>& row_perm,
+                               const Vector<size_t>& col_perm);
   
   template<class T, class Prop, class Allocator>
   void ApplyInversePermutation(Matrix<T, Prop, ColSparse, Allocator>& A,
-                               const Vector<int>& row_perm,
-                               const Vector<int>& col_perm);
+                               const Vector<size_t>& row_perm,
+                               const Vector<size_t>& col_perm);
   
   template<class T, class Prop, class Allocator>
   void ApplyInversePermutation(Matrix<T, Prop, RowSymSparse, Allocator>& A,

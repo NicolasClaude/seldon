@@ -23,6 +23,7 @@
 // if you want to redefine you own default allocators, you should
 // include a file with the SELDON_FILE_DEFAULT_ALLOCATOR_HXX
 // such that this file is not included
+ #include <stdint.h>
 
 namespace Seldon
 {
@@ -55,10 +56,10 @@ namespace Seldon
   };  
 
   template<class Storage>
-  class SeldonDefaultAllocator<Storage, unsigned long long int>
+  class SeldonDefaultAllocator<Storage, uint64_t>
   {
   public:
-    typedef MallocAlloc<unsigned long long int> allocator;
+    typedef MallocAlloc<uint64_t> allocator;
   };  
 
   template<class Storage>

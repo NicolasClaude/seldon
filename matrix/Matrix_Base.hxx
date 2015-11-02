@@ -44,26 +44,26 @@ namespace Seldon
     // Attributes.
   protected:
     // Number of rows.
-    int m_;
+    size_t m_;
     // Number of columns.
-    int n_;
+    size_t n_;
 
     // Methods.
   public:
     // Constructors.
     VirtualMatrix();
-    explicit VirtualMatrix(int i, int j);
+    explicit VirtualMatrix(size_t i, size_t j);
 
     // Basic methods.
-    int GetM() const;
-    int GetN() const;
-    int GetM(const Seldon::SeldonTranspose& status) const;
-    int GetN(const Seldon::SeldonTranspose& status) const;
+    size_t GetM() const;
+    size_t GetN() const;
+    size_t GetM(const Seldon::SeldonTranspose& status) const;
+    size_t GetN(const Seldon::SeldonTranspose& status) const;
 #ifdef SELDON_WITH_BLAS
-    int GetM(const CBLAS_TRANSPOSE& status) const;
-    int GetN(const CBLAS_TRANSPOSE& status) const;
+    size_t GetM(const CBLAS_TRANSPOSE& status) const;
+    size_t GetN(const CBLAS_TRANSPOSE& status) const;
 #endif
-    int GetSize() const;
+    size_t GetSize() const;
 
 #ifdef SELDON_WITH_VIRTUAL
     virtual ~VirtualMatrix();
@@ -74,9 +74,9 @@ namespace Seldon
 
     public:
     // basic manipulation of matrix
-    virtual void Reallocate(int, int);
-    virtual void AddInteraction(int, int, const T&);
-    virtual void AddInteractionRow(int, int, const Vector<int>&,
+    virtual void Reallocate(size_t, size_t);
+    virtual void AddInteraction(size_t, size_t, const T&);
+    virtual void AddInteractionRow(size_t, size_t, const Vector<int>&,
 				   const Vector<T>& val);
     
     virtual void AddDistantInteraction(int i, int jglob, int proc,
@@ -87,7 +87,7 @@ namespace Seldon
 
     virtual int64_t GetMemorySize() const;
     virtual void Clear();
-    virtual void ClearRow(int i);
+    virtual void ClearRow(size_t i);
     
     // methods used for iterative solvers
     virtual void ApplySor(Vector<T>& x, const Vector<T>& r,
@@ -155,7 +155,7 @@ namespace Seldon
   public:
     // Constructors.
     Matrix_Base();
-    explicit Matrix_Base(int i, int j);
+    explicit Matrix_Base(size_t i, size_t j);
     Matrix_Base(const Matrix_Base<T, Allocator>& A);
 
     // Destructor.

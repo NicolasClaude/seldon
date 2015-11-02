@@ -47,7 +47,7 @@ namespace Seldon
     \param j number of columns.
   */
   template <class T>
-  inline VirtualMatrix<T>::VirtualMatrix(int i, int j)
+  inline VirtualMatrix<T>::VirtualMatrix(size_t i, size_t j)
   {
 #ifdef SELDON_CHECK_DIMENSIONS
     if (i < 0 || j < 0)
@@ -66,7 +66,7 @@ namespace Seldon
     \return The number of rows.
   */
   template <class T>
-  inline int VirtualMatrix<T>::GetM() const
+  inline size_t VirtualMatrix<T>::GetM() const
   {
     return m_;
   }
@@ -77,7 +77,7 @@ namespace Seldon
     \return The number of columns.
   */
   template <class T>
-  inline int VirtualMatrix<T>::GetN() const
+  inline size_t VirtualMatrix<T>::GetN() const
   {
     return n_;
   }
@@ -89,7 +89,7 @@ namespace Seldon
     \return The number of rows of the possibly-transposed matrix.
   */
   template <class T>
-  inline int VirtualMatrix<T>::GetM(const SeldonTranspose& status) const
+  inline size_t VirtualMatrix<T>::GetM(const SeldonTranspose& status) const
   {
     if (status.NoTrans())
       return m_;
@@ -104,7 +104,7 @@ namespace Seldon
     \return The number of columns of the possibly-transposed matrix.
   */
   template <class T>
-  inline int VirtualMatrix<T>::GetN(const SeldonTranspose& status) const
+  inline size_t VirtualMatrix<T>::GetN(const SeldonTranspose& status) const
   {
     if (status.NoTrans())
       return n_;
@@ -120,7 +120,7 @@ namespace Seldon
     \return The number of rows of the possibly-transposed matrix.
   */
   template <class T>
-  inline int VirtualMatrix<T>::GetM(const CBLAS_TRANSPOSE& status) const
+  inline size_t VirtualMatrix<T>::GetM(const CBLAS_TRANSPOSE& status) const
   {
     if (status == CblasNoTrans)
       return m_;
@@ -137,7 +137,7 @@ namespace Seldon
     \return The number of columns of the possibly-transposed matrix.
   */
   template <class T>
-  inline int VirtualMatrix<T>::GetN(const CBLAS_TRANSPOSE& status) const
+  inline size_t VirtualMatrix<T>::GetN(const CBLAS_TRANSPOSE& status) const
   {
     if (status == CblasNoTrans)
       return n_;
@@ -154,7 +154,7 @@ namespace Seldon
     \return The number of elements in the matrix.
   */
   template <class T>
-  inline int VirtualMatrix<T>::GetSize() const
+  inline size_t VirtualMatrix<T>::GetSize() const
   {
     return m_ * n_;
   }
@@ -192,7 +192,7 @@ namespace Seldon
     \warning the data array is not allocated.
   */
   template <class T, class Allocator>
-  inline Matrix_Base<T, Allocator>::Matrix_Base(int i, int j)
+  inline Matrix_Base<T, Allocator>::Matrix_Base(size_t i, size_t j)
     : VirtualMatrix<T>(i, j)
   {
     this->data_ = NULL;

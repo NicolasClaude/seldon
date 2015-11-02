@@ -21,8 +21,6 @@
 #ifndef SELDON_FILE_VECTOR_HETEROGENEOUSCOLLECTION_INLINE_CXX
 
 
-#include "HeterogeneousCollection.hxx"
-
 
 namespace Seldon
 {

@@ -192,7 +192,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Symmetric<T, Prop, Storage, Allocator>
-  ::Reallocate(int i, int j)
+  ::Reallocate(size_t i, size_t j)
   {
 
     if (i != this->m_)

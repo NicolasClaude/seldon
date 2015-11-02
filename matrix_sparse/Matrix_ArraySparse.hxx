@@ -68,7 +68,7 @@ namespace Seldon
     void Resize(int i, int j);
 
     // Basic methods.
-    int GetNonZeros() const;
+    size_t GetNonZeros() const;
     int64_t GetMemorySize() const;
 
     // Inline methods.
@@ -92,7 +92,7 @@ namespace Seldon
     const T& Value(int num_row, int i) const;
     T& Value(int num_row, int i);
     int Index(int num_row, int i) const;
-    int& Index(int num_row, int i);
+    size_t& Index(size_t num_row, size_t i);
 
     void SetData(int, int, Vector<T, VectSparse, Allocator>*);
     void SetData(int, int, T*, int*);
@@ -189,14 +189,14 @@ namespace Seldon
     void SwapColumn(int i, int i_);
     void ReplaceIndexColumn(int i, IVect& new_index);
 
-    int GetColumnSize(int i) const;
+    size_t GetColumnSize(size_t i) const;
     void PrintColumn(int i) const;
     void AssembleColumn(int i);
 
     void AddInteraction(int i, int j, const T& val);
 
-    void AddInteractionRow(int, int, int*, T*);
-    void AddInteractionColumn(int, int, int*, T*, bool already_sorted = false);
+    void AddInteractionRow(size_t, size_t, size_t*, T*);
+    void AddInteractionColumn(size_t, size_t, size_t*, T*, bool already_sorted = false);
 
     void AddInteractionRow(int i, int nb, const Vector<int>& col,
 			   const Vector<T>& val);
@@ -229,16 +229,16 @@ namespace Seldon
     void ReallocateRow(int i, int j);
     void ResizeRow(int i, int j);
     void SwapRow(int i, int i_);
-    void ReplaceIndexRow(int i, IVect& new_index);
+    void ReplaceIndexRow(size_t i, IVect& new_index);
 
-    int GetRowSize(int i) const;
+    size_t GetRowSize(size_t i) const;
     void PrintRow(int i) const;
     void AssembleRow(int i);
 
     void AddInteraction(int i, int j, const T& val);
 
-    void AddInteractionRow(int, int, int*, T*, bool already_sorted = false);
-    void AddInteractionColumn(int, int, int*, T*);
+    void AddInteractionRow(size_t, size_t, size_t*, T*, bool already_sorted = false);
+    void AddInteractionColumn(size_t, size_t, size_t*, T*);
 
     void AddInteractionRow(int i, int nb, const Vector<int>& col,
 			   const Vector<T>& val, bool already_sorted);
@@ -291,8 +291,8 @@ namespace Seldon
 
     void AddInteraction(int i, int j, const T& val);
 
-    void AddInteractionRow(int, int, int*, T*);
-    void AddInteractionColumn(int, int, int*, T*,
+    void AddInteractionRow(size_t, size_t, size_t*, T*);
+    void AddInteractionColumn(size_t, size_t, size_t*, T*,
                               bool already_sorted = false);
 
     void AddInteractionRow(int i, int nb, const Vector<int>& col,
@@ -345,8 +345,8 @@ namespace Seldon
 
     void AddInteraction(int i, int j, const T& val);
 
-    void AddInteractionRow(int, int, int*, T*, bool already_sorted = false);
-    void AddInteractionColumn(int, int, int*, T*);
+    void AddInteractionRow(size_t, size_t, size_t*, T*, bool already_sorted = false);
+    void AddInteractionColumn(size_t, size_t, size_t*, T*);
 
     void AddInteractionRow(int i, int nb, const Vector<int>& col,
 			   const Vector<T>& val, bool already_sorted);

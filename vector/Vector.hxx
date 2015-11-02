@@ -50,7 +50,7 @@ namespace Seldon
     // Attributes.
   protected:
     // Number of elements.
-    int m_;
+    size_t m_;
     // Pointer to stored elements.
     pointer data_;
 
@@ -58,7 +58,7 @@ namespace Seldon
   public:
     // Constructors.
     Vector_Base();
-    explicit Vector_Base(int i);
+    explicit Vector_Base(size_t i);
     Vector_Base(const Vector_Base<T, Allocator>& A);
 
     // Destructor.
@@ -66,9 +66,9 @@ namespace Seldon
     void Clear();
     
     // Basic methods.
-    int GetM() const;
-    int GetLength() const;
-    int GetSize() const;
+    size_t GetM() const;
+    size_t GetLength() const;
+    size_t GetSize() const;
     int64_t GetMemorySize() const;
     pointer GetData() const;
     const_pointer GetDataConst() const;
@@ -102,8 +102,8 @@ namespace Seldon
   public:
     // Constructor.
     explicit Vector();
-    explicit Vector(int i);
-    Vector(int i, pointer data);
+    explicit Vector(size_t i);
+    Vector(size_t i, pointer data);
     Vector(const Vector<T, VectFull, Allocator>& A);
 
     // Destructor.
@@ -111,21 +111,21 @@ namespace Seldon
     void Clear();
 
     // Memory management.
-    void Reallocate(int i);
-    void ReallocateVector(int i);
-    void Resize(int i);
-    void ResizeVector(int i);
-    void SetData(int i, pointer data);
+    void Reallocate(size_t i);
+    void ReallocateVector(size_t i);
+    void Resize(size_t i);
+    void ResizeVector(size_t i);
+    void SetData(size_t i, pointer data);
     template <class Allocator0>
     void SetData(const Vector<T, VectFull, Allocator0>& V);
     void Nullify();
 
     // Element access and affectation.
-    reference operator() (int i);
-    reference Get(int i);
+    reference operator() (size_t i);
+    reference Get(size_t i);
 #ifndef SWIG
-    const_reference operator() (int i) const;
-    const_reference Get(int i) const;
+    const_reference operator() (size_t i) const;
+    const_reference Get(size_t i) const;
     Vector<T, VectFull, Allocator>& operator= (const Vector<T, VectFull,
 					       Allocator>& X);
 #endif
@@ -138,7 +138,7 @@ namespace Seldon
     void PushBack(const Vector<T, VectFull, Allocator0>& X);
 
     // Basic functions.
-    int GetDataSize();
+    size_t GetDataSize();
 
     // Convenient functions.
     void Zero();
@@ -158,7 +158,7 @@ namespace Seldon
 
     // Norms.
     typename ClassComplexType<T>::Treal GetNormInf() const;
-    int GetNormInfIndex() const;
+    size_t GetNormInfIndex() const;
 
     // Input/output functions.
     void Write(string FileName, bool with_size = true) const;

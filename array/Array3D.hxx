@@ -48,14 +48,14 @@ namespace Seldon
     // Attributes.
   protected:
     // Length along dimension #1.
-    int length1_;
+    size_t length1_;
     // Length along dimension #2.
-    int length2_;
+    size_t length2_;
     // Length along dimension #3.
-    int length3_;
+    size_t length3_;
 
     // Size of a slice (i.e. length1_ by length2_).
-    int length23_;
+    size_t length23_;
 
     // Pointer to stored elements.
     pointer data_;
@@ -64,23 +64,23 @@ namespace Seldon
   public:
     // Constructors.
     Array3D();
-    Array3D(int i, int j, int k);
+    Array3D(size_t i, size_t j, size_t k);
     Array3D(const Array3D<T, Allocator>& A);
 
     // Destructor. (inline)
     ~Array3D();
 
     // Basic methods. (inline)
-    int GetLength1() const;
-    int GetLength2() const;
-    int GetLength3() const;
-    int GetSize() const;
-    int GetDataSize() const;
+    size_t GetLength1() const;
+    size_t GetLength2() const;
+    size_t GetLength3() const;
+    size_t GetSize() const;
+    size_t GetDataSize() const;
     pointer GetData() const;
     pointer GetDataPointer(int i, int j, int k) const;
 
     // Memory management.
-    void Reallocate(int i, int j, int k);
+    void Reallocate(size_t i, size_t j, size_t k);
     void SetData(int i, int j, int k, pointer data);
     void Nullify();
     void Clear();

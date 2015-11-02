@@ -80,7 +80,7 @@ namespace Seldon
 		Vector<T2, Storage2, Allocator2>& Vect);
   
   template<class T, class Storage1, class Allocator1>
-  void Assemble(int& n, Vector<T, Storage1, Allocator1>& Node);
+  void Assemble(size_t& n, Vector<T, Storage1, Allocator1>& Node);
   
   template<class T, class Storage1, class Allocator1>
   void Assemble(Vector<T, Storage1, Allocator1>& Node);

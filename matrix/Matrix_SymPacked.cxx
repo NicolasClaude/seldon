@@ -126,8 +126,8 @@ namespace Seldon
     \warning Depending on your allocator, data may be lost.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  void Matrix_SymPacked<T, Prop, Storage, Allocator>::Reallocate(int i,
-									int j)
+  void Matrix_SymPacked<T, Prop, Storage, Allocator>::Reallocate(size_t i,
+									size_t j)
   {
 
     if (i != this->m_)

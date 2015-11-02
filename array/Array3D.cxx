@@ -54,7 +54,7 @@ namespace Seldon
     \param k length in dimension #3.
   */
   template <class T, class Allocator>
-  Array3D<T, Allocator>::Array3D(int i, int j, int k)
+  Array3D<T, Allocator>::Array3D(size_t i, size_t j, size_t k)
   {
     length1_ = i;
     length2_ = j;
@@ -123,7 +123,7 @@ namespace Seldon
     \warning Depending on your allocator, data may be lost.
   */
   template <class T, class Allocator>
-  void Array3D<T, Allocator>::Reallocate(int i, int j, int k)
+  void Array3D<T, Allocator>::Reallocate(size_t i, size_t j, size_t k)
   {
     if (i != length1_ || j != length2_ || k != length3_)
       {
@@ -293,7 +293,7 @@ namespace Seldon
   template <class T, class Allocator>
   void Array3D<T, Allocator>::Fill()
   {
-    for (int i = 0; i < GetDataSize(); i++)
+    for (size_t i = 0; i < GetDataSize(); i++)
       SetComplexReal(i, data_[i]);
   }
 

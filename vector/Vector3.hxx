@@ -87,41 +87,41 @@ namespace Seldon
     /*** Constructors and destructor ***/
 
     Vector3();
-    Vector3(int);
-    Vector3(Vector<int>& length);
+    Vector3(size_t);
+    Vector3(Vector<size_t>& length);
     template <class Allocator>
-    Vector3(Vector<Vector<int>, Vect_Full, Allocator>& length);
+    Vector3(Vector<Vector<size_t>, Vect_Full, Allocator>& length);
     ~Vector3();
 
     /*** Management of the vectors ***/
 
-    int GetLength() const;
-    int GetSize() const;
-    int GetLength(int i) const;
-    int GetSize(int i) const;
-    int GetLength(int i, int j) const;
-    int GetSize(int i, int j) const;
+    size_t GetLength() const;
+    size_t GetSize() const;
+    size_t GetLength(size_t i) const;
+    size_t GetSize(size_t i) const;
+    size_t GetLength(size_t i, size_t j) const;
+    size_t GetSize(size_t i, size_t j) const;
     int64_t GetMemorySize() const;
-    int GetNelement() const;
-    int GetNelement(int beg, int end) const;
-    int GetNelement(int beg0, int end0, int beg1, int end1) const;
-    Vector<int> GetShape(int i) const;
-    void GetShape(int i, Vector<int>& shape) const;
-    void Reallocate(int N);
-    void Reallocate(int i, int N);
-    void Reallocate(int i, int j, int N);
+    size_t GetNelement() const;
+    size_t GetNelement(size_t beg, size_t end) const;
+    size_t GetNelement(size_t beg0, size_t end0, size_t beg1, size_t end1) const;
+    Vector<size_t> GetShape(size_t i) const;
+    void GetShape(size_t i, Vector<size_t>& shape) const;
+    void Reallocate(size_t N);
+    void Reallocate(size_t i, size_t N);
+    void Reallocate(size_t i, size_t j, size_t N);
 
     template <class Td, class Allocatord>
     void Flatten(Vector<Td, VectFull, Allocatord>& data) const;
     template <class Td, class Allocatord>
-    void Flatten(int beg, int end, Vector<Td, VectFull, Allocatord>& data)
+    void Flatten(size_t beg, size_t end, Vector<Td, VectFull, Allocatord>& data)
       const;
     template <class Td, class Allocatord>
-    void Flatten(int beg0, int end0, int beg1, int end1,
+    void Flatten(size_t beg0, size_t end0, size_t beg1, size_t end1,
                  Vector<Td, VectFull, Allocatord>& data) const;
 
-    void PushBack(int i, int j, const T& x);
-    void PushBack(int i, const Vector<T, Vect_Full, Allocator0>& X);
+    void PushBack(size_t i, size_t j, const T& x);
+    void PushBack(size_t i, const Vector<T, Vect_Full, Allocator0>& X);
     void PushBack(const Vector<Vector<T, Vect_Full, Allocator0>,
 		  Vect_Full, Allocator1>& X);
     void PushBack(const Vector<Vector<Vector<T, Vect_Full, Allocator0>,
@@ -130,8 +130,8 @@ namespace Seldon
 
 
     void Clear();
-    void Clear(int i);
-    void Clear(int i, int j);
+    void Clear(size_t i);
+    void Clear(size_t i, size_t j);
 
     void Fill(const T& x);
 
@@ -143,26 +143,26 @@ namespace Seldon
     GetVector() const;
 
     Vector<Vector<T, Vect_Full, Allocator0>, VectFull, Allocator1>&
-    GetVector(int i);
+    GetVector(size_t i);
     const Vector<Vector<T, Vect_Full, Allocator0>, VectFull, Allocator1>&
-    GetVector(int i) const;
+    GetVector(size_t i) const;
 
-    Vector<T, Vect_Full, Allocator0>& GetVector(int i, int j);
-    const Vector<T, Vect_Full, Allocator0>& GetVector(int i, int j) const;
+    Vector<T, Vect_Full, Allocator0>& GetVector(size_t i, size_t j);
+    const Vector<T, Vect_Full, Allocator0>& GetVector(size_t i, size_t j) const;
 
     /*** Element access and assignment ***/
     const
     Vector<Vector<T, Vect_Full, Allocator0>, VectFull, Allocator1>&
-    operator() (int i) const;
+    operator() (size_t i) const;
     Vector<Vector<T, Vect_Full, Allocator0>, VectFull, Allocator1>&
-    operator() (int i);
+    operator() (size_t i);
 
-    const Vector<T, Vect_Full, Allocator0>& operator() (int i, int j)
+    const Vector<T, Vect_Full, Allocator0>& operator() (size_t i, size_t j)
       const;
-    Vector<T, Vect_Full, Allocator0>& operator() (int i, int j);
+    Vector<T, Vect_Full, Allocator0>& operator() (size_t i, size_t j);
 
-    const_reference operator() (int i, int j, int k) const;
-    reference operator() (int i, int j, int k);
+    const_reference operator() (size_t i, size_t j, size_t k) const;
+    reference operator() (size_t i, size_t j, size_t k);
 
     /*** Convenient method ***/
 

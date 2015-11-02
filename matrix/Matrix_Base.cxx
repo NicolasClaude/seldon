@@ -27,7 +27,7 @@ namespace Seldon
 #ifdef SELDON_WITH_VIRTUAL
   //! reallocates the matrix
   template <class T>
-  void VirtualMatrix<T>::Reallocate(int m, int n)
+  void VirtualMatrix<T>::Reallocate(size_t m, size_t n)
   {
     // this method should be overloaded
     // if not overloaded, an exception is raised:
@@ -37,7 +37,7 @@ namespace Seldon
 
   //! Adds values to several non-zero entries of a sparse matrix.
   template <class T>
-  void VirtualMatrix<T>::AddInteractionRow(int, int, const Vector<int>&,
+  void VirtualMatrix<T>::AddInteractionRow(size_t, size_t, const Vector<int>&,
 					   const Vector<T>& val)
   {
     // this method should be overloaded in sparse matrices
@@ -48,7 +48,7 @@ namespace Seldon
 
   //! Adds x to element (i, j) of the matrix
   template <class T>
-  void VirtualMatrix<T>::AddInteraction(int i, int j, const T& x)
+  void VirtualMatrix<T>::AddInteraction(size_t i, size_t j, const T& x)
   {
     // this method should be overloaded in sparse matrices
     // if not overloaded, an exception is raised:
@@ -116,7 +116,7 @@ namespace Seldon
   
   //! Clears row i
   template <class T>
-  inline void VirtualMatrix<T>::ClearRow(int i)
+  inline void VirtualMatrix<T>::ClearRow(size_t i)
   {
     // this method should be overloaded in sparse matrices
     // if not overloaded, an exception is raised:

@@ -69,7 +69,7 @@ namespace Seldon
     \return The number of elements stored in memory.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline int Matrix_Triangular<T, Prop, Storage, Allocator>::GetDataSize() const
+  inline size_t Matrix_Triangular<T, Prop, Storage, Allocator>::GetDataSize() const
   {
     return this->m_ * this->n_;
   }
@@ -405,7 +405,7 @@ namespace Seldon
     \param j number of columns.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, ColUpTriang, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, ColUpTriang, Allocator>::Matrix(size_t i, size_t j):
     Matrix_Triangular<T, Prop, ColUpTriang, Allocator>(i, j)
   {
   }
@@ -492,7 +492,7 @@ namespace Seldon
     \param j number of columns.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, ColLoTriang, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, ColLoTriang, Allocator>::Matrix(size_t i, size_t j):
     Matrix_Triangular<T, Prop, ColLoTriang, Allocator>(i, j)
   {
   }
@@ -579,7 +579,7 @@ namespace Seldon
     \param j number of columns.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, RowUpTriang, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, RowUpTriang, Allocator>::Matrix(size_t i, size_t j):
     Matrix_Triangular<T, Prop, RowUpTriang, Allocator>(i, j)
   {
   }
@@ -666,7 +666,7 @@ namespace Seldon
     \param j number of columns.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, RowLoTriang, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, RowLoTriang, Allocator>::Matrix(size_t i, size_t j):
     Matrix_Triangular<T, Prop, RowLoTriang, Allocator>(i, j)
   {
   }

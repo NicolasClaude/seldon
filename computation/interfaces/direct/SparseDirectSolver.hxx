@@ -35,7 +35,7 @@ namespace Seldon
     //! ordering (if supplied by the user)
     IVect permut;
     //! size of factorized linear system 
-    int n;
+    size_t n;
     //! pointer to the used solver
     VirtualSparseDirectSolver<T>* solver;
     //! threshold for ilut solver

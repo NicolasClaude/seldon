@@ -121,37 +121,37 @@ namespace Seldon
   ////////////
 
 
-  inline int ColSparse::GetFirst(int i, int j)
+  inline size_t ColSparse::GetFirst(size_t i, size_t j)
   {
     return j;
   }
-  inline int ColSparse::GetSecond(int i, int j)
+  inline size_t ColSparse::GetSecond(size_t i, size_t j)
   {
     return i;
   }
-  inline int ColSparse::GetBeginLoop(int i)
+  inline size_t ColSparse::GetBeginLoop(size_t i)
   {
     return 0;
   }
-  inline int ColSparse::GetEndLoop(int m, int n, int i)
+  inline size_t ColSparse::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return m;
   }
 
 
-  inline int RowSparse::GetFirst(int i, int j)
+  inline size_t RowSparse::GetFirst(size_t i, size_t j)
   {
     return i;
   }
-  inline int RowSparse::GetSecond(int i, int j)
+  inline size_t RowSparse::GetSecond(size_t i, size_t j)
   {
     return j;
   }
-  inline int RowSparse::GetBeginLoop(int i)
+  inline size_t RowSparse::GetBeginLoop(size_t i)
   {
     return 0;
   }
-  inline int RowSparse::GetEndLoop(int m, int n, int i)
+  inline size_t RowSparse::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return n;
   }
@@ -352,19 +352,19 @@ namespace Seldon
   ////////////////
 
 
-  inline int ColUpTriang::GetFirst(int i, int j)
+  inline size_t ColUpTriang::GetFirst(size_t i, size_t j)
   {
     return j;
   }
-  inline int ColUpTriang::GetSecond(int i, int j)
+  inline size_t ColUpTriang::GetSecond(size_t i, size_t j)
   {
     return i;
   }
-  inline int ColUpTriang::GetBeginLoop(int i)
+  inline size_t ColUpTriang::GetBeginLoop(size_t i)
   {
     return 0;
   }
-  inline int ColUpTriang::GetEndLoop(int m, int n, int i)
+  inline size_t ColUpTriang::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return i+1;
   }
@@ -374,19 +374,19 @@ namespace Seldon
   }
 
 
-  inline int ColLoTriang::GetFirst(int i, int j)
+  inline size_t ColLoTriang::GetFirst(size_t i, size_t j)
   {
     return j;
   }
-  inline int ColLoTriang::GetSecond(int i, int j)
+  inline size_t ColLoTriang::GetSecond(size_t i, size_t j)
   {
     return i;
   }
-  inline int ColLoTriang::GetBeginLoop(int i)
+  inline size_t ColLoTriang::GetBeginLoop(size_t i)
   {
     return i;
   }
-  inline int ColLoTriang::GetEndLoop(int m, int n, int i)
+  inline size_t ColLoTriang::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return m;
   }
@@ -396,19 +396,19 @@ namespace Seldon
   }
 
 
-  inline int RowUpTriang::GetFirst(int i, int j)
+  inline size_t RowUpTriang::GetFirst(size_t i, size_t j)
   {
     return i;
   }
-  inline int RowUpTriang::GetSecond(int i, int j)
+  inline size_t RowUpTriang::GetSecond(size_t i, size_t j)
   {
     return j;
   }
-  inline int RowUpTriang::GetBeginLoop(int i)
+  inline size_t RowUpTriang::GetBeginLoop(size_t i)
   {
     return i;
   }
-  inline int RowUpTriang::GetEndLoop(int m, int n, int i)
+  inline size_t RowUpTriang::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return n;
   }
@@ -418,19 +418,19 @@ namespace Seldon
   }
 
 
-  inline int RowLoTriang::GetFirst(int i, int j)
+  inline size_t RowLoTriang::GetFirst(size_t i, size_t j)
   {
     return i;
   }
-  inline int RowLoTriang::GetSecond(int i, int j)
+  inline size_t RowLoTriang::GetSecond(size_t i, size_t j)
   {
     return j;
   }
-  inline int RowLoTriang::GetBeginLoop(int i)
+  inline size_t RowLoTriang::GetBeginLoop(size_t i)
   {
     return 0;
   }
-  inline int RowLoTriang::GetEndLoop(int m, int n, int i)
+  inline size_t RowLoTriang::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return i+1;
   }

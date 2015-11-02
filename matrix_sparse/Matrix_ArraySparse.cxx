@@ -94,11 +94,11 @@ namespace Seldon
     \return The number of non-zero entries.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  int Matrix_ArraySparse<T, Prop, Storage, Allocator>::GetNonZeros()
+  size_t Matrix_ArraySparse<T, Prop, Storage, Allocator>::GetNonZeros()
     const
   {
-    int nnz = 0;
-    for (int i = 0; i < this->val_.GetM(); i++)
+    size_t nnz = 0;
+    for (size_t i = 0; i < this->val_.GetM(); i++)
       nnz += this->val_(i).GetM();
 
     return nnz;
@@ -110,7 +110,7 @@ namespace Seldon
   int64_t Matrix_ArraySparse<T, Prop, Storage, Allocator>::GetMemorySize() const
   {
     int64_t taille = sizeof(*this) + sizeof(pointer)*this->val_.GetM();
-    for (int i = 0; i < this->val_.GetM(); i++)
+    for (size_t i = 0; i < this->val_.GetM(); i++)
       taille += this->val_(i).GetMemorySize();
     
     return taille;
@@ -158,7 +158,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_ArraySparse<T, Prop, Storage, Allocator>::Assemble()
   {
-    for (int i = 0; i < val_.GetM(); i++)
+    for (size_t i = 0; i < val_.GetM(); i++)
       val_(i).Assemble();
   }
 
@@ -483,7 +483,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Allocator>
   void Matrix<T, Prop, ArrayColSparse, Allocator>::
-  AddInteractionRow(int i, int nb, int* col_, T* value_)
+  AddInteractionRow(size_t i, size_t nb, size_t* col_, T* value_)
   {
     IVect col;
     col.SetData(nb, col_);
@@ -504,7 +504,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Allocator>
   void Matrix<T, Prop, ArrayColSparse, Allocator>::
-  AddInteractionColumn(int i, int nb, int* row_, T* value_,
+  AddInteractionColumn(size_t i, size_t nb, size_t* row_, T* value_,
                        bool already_sorted)
   {
     IVect row;
@@ -563,7 +563,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Allocator>
   void Matrix<T, Prop, ArrayRowSparse, Allocator>::
-  AddInteractionRow(int i, int nb, int* col_, T* value_,
+  AddInteractionRow(size_t i, size_t nb, size_t* col_, T* value_,
                     bool already_sorted)
   {
     IVect col;
@@ -585,7 +585,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Allocator>
   void Matrix<T, Prop, ArrayRowSparse, Allocator>::
-  AddInteractionColumn(int i, int nb, int* row_, T* value_)
+  AddInteractionColumn(size_t i, size_t nb, size_t* row_, T* value_)
   {
     IVect row;
     row.SetData(nb, row_);
@@ -660,7 +660,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Allocator>
   void Matrix<T, Prop, ArrayColSymSparse, Allocator>::
-  AddInteractionRow(int i, int nb, int* col_, T* value_)
+  AddInteractionRow(size_t i, size_t nb, size_t* col_, T* value_)
   {
     IVect col;
     col.SetData(nb, col_);
@@ -681,7 +681,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Allocator>
   void Matrix<T, Prop, ArrayColSymSparse, Allocator>::
-  AddInteractionColumn(int i, int nb, int* row_, T* value_,
+  AddInteractionColumn(size_t i, size_t nb, size_t* row_, T* value_,
                        bool already_sorted)
   {
     IVect row;
@@ -752,7 +752,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Allocator>
   void Matrix<T, Prop, ArrayRowSymSparse, Allocator>::
-  AddInteractionRow(int i, int nb, int* col_, T* value_,
+  AddInteractionRow(size_t i, size_t nb, size_t* col_, T* value_,
                     bool already_sorted)
   {
     IVect col;
@@ -774,7 +774,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Allocator>
   void Matrix<T, Prop, ArrayRowSymSparse, Allocator>::
-  AddInteractionColumn(int i, int nb, int* row_, T* value_)
+  AddInteractionColumn(size_t i, size_t nb, size_t* row_, T* value_)
   {
     IVect row;
     row.SetData(nb, row_);

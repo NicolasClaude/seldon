@@ -56,7 +56,7 @@ namespace Seldon
   public:
     // Constructor.
     Matrix_Triangular();
-    explicit Matrix_Triangular(int i, int j);
+    explicit Matrix_Triangular(size_t i, size_t j);
     Matrix_Triangular(const Matrix_Triangular<T, Prop,
 		      Storage, Allocator>& A);
 
@@ -65,13 +65,13 @@ namespace Seldon
     void Clear();
 
     // Basic methods.
-    int GetDataSize() const;
+    size_t GetDataSize() const;
     int64_t GetMemorySize() const;
     
     // Memory management.
-    void Reallocate(int i, int j);
-    void Resize(int i, int j);
-    void SetData(int i, int j, pointer data);
+    void Reallocate(size_t i, size_t j);
+    void Resize(size_t i, size_t j);
+    void SetData(size_t i, size_t j, pointer data);
     void Nullify();
 
     // Element access and affectation.
@@ -157,7 +157,7 @@ namespace Seldon
 
   public:
     Matrix();
-    explicit Matrix(int i, int j);
+    explicit Matrix(size_t i, size_t j);
 
     template <class T0>
     Matrix<T, Prop, ColUpTriang, Allocator>& operator= (const T0& x);
@@ -183,7 +183,7 @@ namespace Seldon
 
   public:
     Matrix();
-    explicit Matrix(int i, int j);
+    explicit Matrix(size_t i, size_t j);
 
     template <class T0>
     Matrix<T, Prop, ColLoTriang, Allocator>& operator= (const T0& x);
@@ -209,7 +209,7 @@ namespace Seldon
 
   public:
     Matrix();
-    explicit Matrix(int i, int j);
+    explicit Matrix(size_t i, size_t j);
 
     template <class T0>
     Matrix<T, Prop, RowUpTriang, Allocator>& operator= (const T0& x);
@@ -235,7 +235,7 @@ namespace Seldon
 
   public:
     Matrix();
-    explicit Matrix(int i, int j);
+    explicit Matrix(size_t i, size_t j);
 
     template <class T0>
     Matrix<T, Prop, RowLoTriang, Allocator>& operator= (const T0& x);

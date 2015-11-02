@@ -79,7 +79,7 @@ namespace Seldon
     lost.
   */
   template <class T, class Allocator>
-  void Vector<T, VectSparse, Allocator>::ReallocateVector(int i)
+  void Vector<T, VectSparse, Allocator>::ReallocateVector(size_t i)
   {
     // function implemented in the aim that explicit specialization
     // of Reallocate can call ReallocateVector
@@ -98,7 +98,7 @@ namespace Seldon
 					reallocate(this->data_, i, this));
 
 	    index_
-	      = reinterpret_cast<int*>(AllocatorInt::
+	      = reinterpret_cast<size_t*>(AllocatorInt::
 				       reallocate(index_, i, this));
 
 #ifdef SELDON_CHECK_MEMORY
@@ -129,7 +129,7 @@ namespace Seldon
     \param n new number of non-zero entries of the vector.
   */
   template <class T, class Allocator>
-  void Vector<T, VectSparse, Allocator>::Resize(int n)
+  void Vector<T, VectSparse, Allocator>::Resize(size_t n)
   {
     ResizeVector(n);
   }
@@ -142,7 +142,7 @@ namespace Seldon
     \param n new number of non-zero entries of the vector.
   */
   template <class T, class Allocator>
-  void Vector<T, VectSparse, Allocator>::ResizeVector(int n)
+  void Vector<T, VectSparse, Allocator>::ResizeVector(size_t n)
   {
     // function implemented in the aim that explicit specialization
     // of Resize can call ResizeVector
@@ -150,9 +150,9 @@ namespace Seldon
       return;
 
     Vector<T, VectFull, Allocator> new_value(n);
-    Vector<int> new_index(n);
-    int Nmin = min(this->m_, n);
-    for (int i = 0; i < Nmin; i++)
+    Vector<size_t> new_index(n);
+    size_t Nmin = min(this->m_, n);
+    for (size_t i = 0; i < Nmin; i++)
       {
 	new_value(i) = this->data_[i];
 	new_index(i) = index_[i];
@@ -180,7 +180,7 @@ namespace Seldon
   */
   template <class T, class Allocator>
   void Vector<T, VectSparse, Allocator>
-  ::SetData(int i, T* data, int* index)
+  ::SetData(size_t i, T* data, size_t* index)
   {
     this->Clear();
 
@@ -205,7 +205,7 @@ namespace Seldon
   template <class T, class Allocator>
   template<class Allocator2>
   void Vector<T, VectSparse, Allocator>
-  ::SetData(Vector<T, VectFull, Allocator2>& data, Vector<int>& index)
+  ::SetData(Vector<T, VectFull, Allocator2>& data, Vector<size_t>& index)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -270,9 +270,9 @@ namespace Seldon
   */
   template <class T, class Allocator>
   typename Vector<T, VectSparse, Allocator>::value_type
-  Vector<T, VectSparse, Allocator>::operator() (int i) const
+  Vector<T, VectSparse, Allocator>::operator() (size_t i) const
   {
-    int k = 0;
+    size_t k = 0;
     T zero;
     SetComplexZero(zero);
     // Searching for the entry.
@@ -296,9 +296,9 @@ namespace Seldon
   */
   template <class T, class Allocator>
   typename Vector<T, VectSparse, Allocator>::value_type
-  Vector<T, VectSparse, Allocator>::operator() (int i)
+  Vector<T, VectSparse, Allocator>::operator() (size_t i)
   {
-    int k = 0;
+    size_t k = 0;
     T zero;
     SetComplexZero(zero);
     // Searching for the entry.
@@ -322,9 +322,9 @@ namespace Seldon
   */
   template <class T, class Allocator>
   typename Vector<T, VectSparse, Allocator>::reference
-  Vector<T, VectSparse, Allocator>::Get(int i)
+  Vector<T, VectSparse, Allocator>::Get(size_t i)
   {
-    int k = 0;
+    size_t k = 0;
     T zero;
     SetComplexZero(zero);
     // Searching for the entry.
@@ -348,9 +348,9 @@ namespace Seldon
   */
   template <class T, class Allocator>
   typename Vector<T, VectSparse, Allocator>::const_reference
-  Vector<T, VectSparse, Allocator>::Get(int i) const
+  Vector<T, VectSparse, Allocator>::Get(size_t i) const
   {
-    int k = 0;
+    size_t k = 0;
     // Searching for the entry.
     while (k < this->m_ && index_[k] < i)
       k++;
@@ -372,9 +372,9 @@ namespace Seldon
   */
   template <class T, class Allocator>
   typename Vector<T, VectSparse, Allocator>::reference
-  Vector<T, VectSparse, Allocator>::Val(int i)
+  Vector<T, VectSparse, Allocator>::Val(size_t i)
   {
-    int k = 0;
+    size_t k = 0;
     // Searching for the entry.
     while (k < this->m_ && index_[k] < i)
       k++;
@@ -397,9 +397,9 @@ namespace Seldon
   */
   template <class T, class Allocator>
   typename Vector<T, VectSparse, Allocator>::const_reference
-  Vector<T, VectSparse, Allocator>::Val(int i) const
+  Vector<T, VectSparse, Allocator>::Val(size_t i) const
   {
-    int k = 0;
+    size_t k = 0;
     // Searching for the entry.
     while (k < this->m_ && index_[k] < i)
       k++;
@@ -454,7 +454,7 @@ namespace Seldon
   template <class T, class Allocator>
   void Vector<T, VectSparse, Allocator>::Print() const
   {
-    for (int i = 0; i < this->GetLength(); i++)
+    for (size_t i = 0; i < this->GetLength(); i++)
       cout << (Index(i) + 1) << ' ' << Value(i) << '\n';
   }
 
@@ -467,10 +467,10 @@ namespace Seldon
   template <class T, class Allocator>
   void Vector<T, VectSparse, Allocator>::Assemble()
   {
-    int new_size = this->m_;
+    size_t new_size = this->m_;
     Vector<T, VectFull, Allocator> values(new_size);
-    Vector<int> index(new_size);
-    for (int i = 0; i < new_size; i++)
+    Vector<size_t> index(new_size);
+    for (size_t i = 0; i < new_size; i++)
       {
 	values(i) = this->data_[i];
 	index(i) = index_[i];
@@ -491,11 +491,11 @@ namespace Seldon
   template <class T, class Allocator> template<class T0>
   void Vector<T, VectSparse, Allocator>::RemoveSmallEntry(const T0& epsilon)
   {
-    int new_size = this->m_;
+    size_t new_size = this->m_;
     Vector<T, VectFull, Allocator> values(new_size);
-    Vector<int> index(new_size);
+    Vector<size_t> index(new_size);
     new_size = 0;
-    for (int i = 0; i < this->m_; i++)
+    for (size_t i = 0; i < this->m_; i++)
       if (abs(this->data_[i]) > epsilon)
 	{
 	  values(new_size) = this->data_[i];
@@ -516,10 +516,10 @@ namespace Seldon
     \param[in] val value to be added to the vector component \a i.
   */
   template <class T, class Allocator>
-  void Vector<T, VectSparse, Allocator>::AddInteraction(int i, const T& val)
+  void Vector<T, VectSparse, Allocator>::AddInteraction(size_t i, const T& val)
   {
     // Searching for the position where the entry may be.
-    int pos = 0;
+    size_t pos = 0;
     while (pos < this->m_ && index_[pos] < i)
       pos++;
 
@@ -530,7 +530,7 @@ namespace Seldon
 	return;
       }
 
-    int k;
+    size_t k;
 
     // If the entry does not exist, the vector is reallocated.
     Resize(this->m_ + 1);
@@ -559,9 +559,9 @@ namespace Seldon
   */
   template <class T, class Allocator>
   void Vector<T, VectSparse, Allocator>::
-  AddInteractionRow(int n, int* index, T* value, bool already_sorted)
+  AddInteractionRow(size_t n, size_t* index, T* value, bool already_sorted)
   {
-    Vector<int> ind;
+    Vector<size_t> ind;
     Vector<T, VectFull, Allocator> val;
     ind.SetData(n, index);
     val.SetData(n, value);
@@ -584,18 +584,18 @@ namespace Seldon
   template <class T, class Allocator>
   template<class Allocator0>
   void Vector<T, VectSparse, Allocator>::
-  AddInteractionRow(int n, const Vector<int>& index2,
+  AddInteractionRow(size_t n, const Vector<size_t>& index2,
 		    const Vector<T, VectFull, Allocator0>& value2,
 		    bool already_sorted)
   {
-    Vector<int> index;
+    Vector<size_t> index;
     Vector<T, VectFull, Allocator0> value;
 
     if (!already_sorted)
       {
         // checking if numbers are sorted
         already_sorted = true;
-        for (int i = 0; i < n-1; i++)
+        for (size_t i = 0; i < n-1; i++)
           if (index2(i+1) <= index2(i))
             already_sorted = false;
       }
@@ -604,7 +604,7 @@ namespace Seldon
       {
         index.Reallocate(n);
         value.Reallocate(n);
-        for (int i = 0; i < n; i++)
+        for (size_t i = 0; i < n; i++)
           {
             index(i) = index2(i);
             value(i) = value2(i);
@@ -622,11 +622,11 @@ namespace Seldon
     /***  Values that already have an entry ***/
 
     // Number of values to be added without entry.
-    int Nnew = 0;
+    size_t Nnew = 0;
     Vector<bool> new_index(n);
     new_index.Fill(true);
-    int k = 0;
-    for (int j = 0; j < n; j++)
+    size_t k = 0;
+    for (size_t j = 0; j < n; j++)
       {
 	while (k < this->m_ && index_[k] < index(j))
 	  k++;
@@ -644,10 +644,10 @@ namespace Seldon
       {
 	// Some values to be added have no entry yet.
 	Vector<T> new_val(this->m_ + Nnew);
-	Vector<int> new_ind(this->m_ + Nnew);
-	int nb = 0;
+	Vector<size_t> new_ind(this->m_ + Nnew);
+	size_t nb = 0;
 	k = 0;
-	for (int j = 0; j < n; j++)
+	for (size_t j = 0; j < n; j++)
 	  if (new_index(j))
 	    {
 	      while (k < this->m_ && index_[k] < index(j))
@@ -693,7 +693,7 @@ namespace Seldon
   Vector<T, VectSparse, Allocator>::GetNormInf() const
   {
     typename ClassComplexType<T>::Treal res(0);
-    for (int i = 0; i < this->m_; i++)
+    for (size_t i = 0; i < this->m_; i++)
       res = max(res, abs(this->data_[i]));
     
     return res;
@@ -705,7 +705,7 @@ namespace Seldon
     \return The index of the element that has the highest absolute value.
   */
   template <class T, class Allocator>
-  int Vector<T, VectSparse, Allocator>::GetNormInfIndex() const
+  size_t Vector<T, VectSparse, Allocator>::GetNormInfIndex() const
   {
 
 #ifdef SELDON_CHECK_DIMENSIONS
@@ -715,8 +715,8 @@ namespace Seldon
 #endif
 
     typename ClassComplexType<T>::Treal res(0), temp;
-    int j = 0;
-    for (int i = 0; i < this->GetLength(); i++)
+    size_t j = 0;
+    for (size_t i = 0; i < this->GetLength(); i++)
       {
 	temp = res;
 	res = max(res, abs(this->data_[i]));
@@ -774,11 +774,11 @@ namespace Seldon
                     "Stream is not ready.");
 #endif
 
-    stream.write(reinterpret_cast<char*>(const_cast<int*>(&this->m_)),
-		 sizeof(int));
+    stream.write(reinterpret_cast<char*>(const_cast<size_t*>(&this->m_)),
+		 sizeof(size_t));
 
     stream.write(reinterpret_cast<char*>(this->index_),
-		 this->m_ * sizeof(int));
+		 this->m_ * sizeof(size_t));
 
     stream.write(reinterpret_cast<char*>(this->data_),
 		 this->m_ * sizeof(value_type));
@@ -838,7 +838,7 @@ namespace Seldon
 #endif
 
     // First entries.
-    for (int i = 0; i < this->m_; i++)
+    for (size_t i = 0; i < this->m_; i++)
       stream << (Index(i) + 1) << " " << Value(i) << '\n';
     
 #ifdef SELDON_CHECK_IO
@@ -891,11 +891,11 @@ namespace Seldon
                     "Stream is not ready.");
 #endif
 
-    int m;
-    stream.read(reinterpret_cast<char*>(&m), sizeof(int));
+    size_t m;
+    stream.read(reinterpret_cast<char*>(&m), sizeof(size_t));
     this->Reallocate(m);
 
-    stream.read(reinterpret_cast<char*>(this->index_), m * sizeof(int));
+    stream.read(reinterpret_cast<char*>(this->index_), m * sizeof(size_t));
 
     stream.read(reinterpret_cast<char*>(this->data_),
 		m * sizeof(value_type));
@@ -952,10 +952,10 @@ namespace Seldon
 #endif
 
     Vector<T, VectFull, Allocator> values;
-    Vector<int> index;
+    Vector<size_t> index;
     T entry;
-    int ind = 0;
-    int nb_elt = 0;
+    size_t ind = 0;
+    size_t nb_elt = 0;
     while (!stream.eof())
       {
 	// New entry is read.
@@ -992,7 +992,7 @@ namespace Seldon
       {
 	// Allocating to the right size.
 	this->Reallocate(nb_elt);
-	for (int i = 0; i < nb_elt; i++)
+	for (size_t i = 0; i < nb_elt; i++)
 	  {
 	    Index(i) = index(i);
 	    Value(i) = values(i);
@@ -1011,7 +1011,7 @@ namespace Seldon
   ostream& operator << (ostream& out,
 			const Vector<T, VectSparse, Allocator>& V)
   {
-    for (int i = 0; i < V.GetLength(); i++)
+    for (size_t i = 0; i < V.GetLength(); i++)
       out << (V.Index(i) + 1) << ' ' << V.Value(i) << '\n';
 
     return out;

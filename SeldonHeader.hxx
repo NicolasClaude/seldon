@@ -383,7 +383,7 @@ namespace Seldon
 {
 
   typedef Array3D<int> IArr3D;
-  typedef Vector<int, VectFull> IVect;
+  typedef Vector<size_t, VectFull> IVect;
   typedef Vector<float, VectFull> SVect;
   typedef Vector<double, VectFull> DVect;
   typedef Vector<complex<float>, VectFull> CVect;

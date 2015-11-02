@@ -42,7 +42,7 @@ namespace Seldon
 
     virtual void SelectOrdering(int);
     virtual void SelectParallelOrdering(int);
-    virtual void SetPermutation(const Vector<int>&);
+    virtual void SetPermutation(const Vector<size_t>&);
     virtual void SetNumberOfThreadPerNode(int n);
     
 #ifdef SELDON_WITH_MPI

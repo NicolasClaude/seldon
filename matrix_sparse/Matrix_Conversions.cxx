@@ -32,27 +32,32 @@ namespace Seldon
     index => starting index (usually 0 or 1)
     sym = true => the upper part and lower part are both generated
   */
-  
-  
+
+
   //! Conversion from RowSparse to coordinate format.
-  template<class T, class Prop, class Allocator1, class Allocator2,
-	   class Tint, class Allocator3, class Allocator4>
+      template<class T,
+       class Prop, 
+       class Allocator1,
+        class Allocator2,
+    	   class Tint, 
+    	   class Allocator3,
+    	   	 class Allocator4>
   void
   ConvertMatrix_to_Coordinates(const Matrix<T, Prop, RowSparse,
 			       Allocator1>& A,
 			       Vector<Tint, VectFull, Allocator2>& IndRow,
 			       Vector<Tint, VectFull, Allocator3>& IndCol,
 			       Vector<T, VectFull, Allocator4>& Val,
-			       int index, bool sym)
+			       size_t index, bool sym)
   {
-    int i, j;
-    int m = A.GetM();
-    int nnz = A.GetDataSize();
+    size_t i, j;
+    size_t m = A.GetM();
+    size_t nnz = A.GetDataSize();
     IndRow.Reallocate(nnz);
     IndCol.Reallocate(nnz);
     Val.Reallocate(nnz);
-    int* ptr = A.GetPtr();
-    int* ind = A.GetInd();
+    size_t* ptr = A.GetPtr();
+    size_t* ind = A.GetInd();
     T* val = A.GetData();
     for (i = 0; i < m; i++)
       for (j = ptr[i]; j< ptr[i+1]; j++)
@@ -264,16 +269,16 @@ namespace Seldon
 			       Vector<Tint, VectFull, Allocator2>& IndRow,
 			       Vector<Tint, VectFull, Allocator3>& IndCol,
 			       Vector<T, VectFull, Allocator4>& Val,
-			       int index, bool sym)
+			       size_t index, bool sym)
   {
-    int i, j;
-    int m = A.GetM();
-    int nnz = A.GetDataSize();
+    size_t i, j;
+    size_t m = A.GetM();
+    size_t nnz = A.GetDataSize();
     // Allocating arrays.
     IndRow.Reallocate(nnz);
     IndCol.Reallocate(nnz);
     Val.Reallocate(nnz);
-    int nb = 0;
+    size_t nb = 0;
     for (i = 0; i < m; i++)
       for (j = 0; j < A.GetRowSize(i); j++)
 	{
@@ -485,17 +490,17 @@ namespace Seldon
   template<class T, class Prop, class Allocator1,
 	   class Allocator2, class Allocator3>
   void
-  ConvertMatrix_from_Coordinates(Vector<int, VectFull, Allocator1>& IndRow_,
-				 Vector<int, VectFull, Allocator2>& IndCol_,
+  ConvertMatrix_from_Coordinates(Vector<size_t, VectFull, Allocator1>& IndRow_,
+				 Vector<size_t, VectFull, Allocator2>& IndCol_,
 				 Vector<T, VectFull, Allocator3>& Val,
 				 Matrix<T, Prop, RowSparse, Allocator3>& A,
 				 int index)
   {
-    int Nelement = IndRow_.GetLength();
+    size_t Nelement = IndRow_.GetLength();
 
-    Vector<int> IndRow(Nelement), IndCol(Nelement);
+    Vector<size_t> IndRow(Nelement), IndCol(Nelement);
     
-    for (int i = 0; i < Nelement; i++)
+    for (size_t i = 0; i < Nelement; i++)
       {
 	IndRow(i) = IndRow_(i) - index;
 	IndCol(i) = IndCol_(i) - index;
@@ -504,27 +509,27 @@ namespace Seldon
     IndRow_.Clear();
     IndCol_.Clear();
     
-    int row_max = IndRow.GetNormInf();
-    int col_max = IndCol.GetNormInf();
+    size_t row_max = IndRow.GetNormInf();
+    size_t col_max = IndCol.GetNormInf();
     
-    int m = row_max + 1;
-    int n = col_max + 1;
+    size_t m = row_max + 1;
+    size_t n = col_max + 1;
     m = max(m, A.GetM());
     n = max(n, A.GetN());
     
     Sort(IndRow, IndCol, Val);
     
     // Construction of array 'Ptr'.
-    Vector<int> Ptr(m + 1);
+    Vector<size_t> Ptr(m + 1);
     Ptr.Zero();
-    for (int i = 0; i < Nelement; i++)
+    for (size_t i = 0; i < Nelement; i++)
       Ptr(IndRow(i)+1)++;
     
-    for (int i = 0; i < m; i++)
+    for (size_t i = 0; i < m; i++)
       Ptr(i + 1) += Ptr(i);
 
     // Sorts 'IndCol'
-    for (int i = 0; i < m; i++)
+    for (size_t i = 0; i < m; i++)
       Sort(Ptr(i), Ptr(i + 1) - 1, IndCol, Val);
     
     A.SetData(m, n, Val, Ptr, IndCol);
@@ -1074,10 +1079,10 @@ namespace Seldon
                     Vector<T, VectFull, Alloc4>& Val, bool sym_pat)
   {
     // Matrix (m,n) with nnz entries.
-    int nnz = A.GetDataSize();
-    int n = A.GetN();
-    int* ptr_ = A.GetPtr();
-    int* ind_ = A.GetInd();
+    size_t nnz = A.GetDataSize();
+    size_t n = A.GetN();
+    size_t* ptr_ = A.GetPtr();
+    size_t* ind_ = A.GetInd();
     
     // Conversion in coordinate format.
     Vector<Tint> IndCol;
@@ -1091,23 +1096,23 @@ namespace Seldon
     Ptr.Fill(0);
 
     // Counting non-zero entries per column.
-    for (int i = 0; i < nnz; i++)
+    for (size_t i = 0; i < nnz; i++)
       Ptr(IndCol(i) + 1)++;
 
-    int nb_new_val = 0;
+    size_t nb_new_val = 0;
     if (sym_pat)
       {
         // Counting entries that are on the symmetrized pattern without being
         // in the original pattern.
-        int k = 0;
-        for (int i = 0; i < n; i++)
+        size_t k = 0;
+        for (size_t i = 0; i < n; i++)
           {
             while (k < IndCol.GetM() && IndCol(k) < i)
               k++;
 
-            for (int j = ptr_[i]; j < ptr_[i+1]; j++)
+            for (size_t j = ptr_[i]; j < ptr_[i+1]; j++)
               {
-                int irow = ind_[j];
+                size_t irow = ind_[j];
                 while (k < IndCol.GetM() && IndCol(k) == i
                        && IndRow(k) < irow)
                   k++;
@@ -1127,7 +1132,7 @@ namespace Seldon
     
     // Accumulation to get pointer array.
     Ptr(0) = 0;
-    for (int i = 0; i < n; i++)
+    for (size_t i = 0; i < n; i++)
       Ptr(i + 1) += Ptr(i);
     
     if (sym_pat && (nb_new_val > 0))
@@ -1137,9 +1142,9 @@ namespace Seldon
         Vector<T, VectFull, Alloc4> OldVal(Val);
 	IndRow.Reallocate(nnz + nb_new_val);
         Val.Reallocate(nnz + nb_new_val);
-        int k = 0, nb = 0;
+        size_t k = 0, nb = 0;
         T zero; SetComplexZero(zero);
-        for (int i = 0; i <= n; i++)
+        for (size_t i = 0; i <= n; i++)
           {
 	    while (k < IndCol.GetM() && IndCol(k) < i)
               {
@@ -1150,9 +1155,9 @@ namespace Seldon
               }
 	    
 	    if (i < n)
-	      for (int j = ptr_[i]; j < ptr_[i+1]; j++)
+	      for (size_t j = ptr_[i]; j < ptr_[i+1]; j++)
 		{
-		  int irow = ind_[j];
+		  size_t irow = ind_[j];
 		  while (k < IndCol.GetM() && IndCol(k) == i
 			 && OldInd(k) < irow)
 		    {
@@ -1192,8 +1197,8 @@ namespace Seldon
                     Vector<T, VectFull, Alloc4>& Val, bool sym_pat)
   {
     // Matrix (m,n) with nnz entries.
-    int nnz = A.GetDataSize();
-    int n = A.GetN();
+    size_t nnz = A.GetDataSize();
+    size_t n = A.GetN();
 
     // Conversion in coordinate format.
     Vector<Tint> IndCol;
@@ -1207,23 +1212,23 @@ namespace Seldon
     Ptr.Fill(0);
 
     // Counting non-zero entries per column.
-    for (int i = 0; i < nnz; i++)
+    for (size_t i = 0; i < nnz; i++)
       Ptr(IndCol(i) + 1)++;
 
-    int nb_new_val = 0;
+    size_t nb_new_val = 0;
     if (sym_pat)
       {
         // Counting entries that are on the symmetrized pattern without being
         // in the original pattern.
-        int k = 0;
-        for (int i = 0; i < n; i++)
+        size_t k = 0;
+        for (size_t i = 0; i < n; i++)
           {
             while (k < IndCol.GetM() && IndCol(k) < i)
               k++;
 
-	    for (int j = 0; j < A.GetRowSize(i); j++)
+	    for (size_t j = 0; j < A.GetRowSize(i); j++)
               {
-                int irow = A.Index(i, j);
+                size_t irow = A.Index(i, j);
                 while (k < IndCol.GetM() && IndCol(k) == i
                        && IndRow(k) < irow)
                   k++;
@@ -1243,7 +1248,7 @@ namespace Seldon
     
     // Accumulation to get pointer array.
     Ptr(0) = 0;
-    for (int i = 0; i < n; i++)
+    for (size_t i = 0; i < n; i++)
       Ptr(i + 1) += Ptr(i);
     
     if (sym_pat && (nb_new_val > 0))
@@ -1253,9 +1258,9 @@ namespace Seldon
         Vector<T, VectFull, Alloc4> OldVal(Val);
         IndRow.Reallocate(nnz + nb_new_val);
         Val.Reallocate(nnz + nb_new_val);
-        int k = 0, nb = 0;
+        size_t k = 0, nb = 0;
         T zero; SetComplexZero(zero);
-        for (int i = 0; i <= n; i++)
+        for (size_t i = 0; i <= n; i++)
           {
             while (k < IndCol.GetM() && IndCol(k) < i)
               {
@@ -1266,9 +1271,9 @@ namespace Seldon
               }
 	    
 	    if (i < n)
-	      for (int j = 0; j < A.GetRowSize(i); j++)
+	      for (size_t j = 0; j < A.GetRowSize(i); j++)
 		{
-		  int irow = A.Index(i, j);
+		  size_t irow = A.Index(i, j);
 		  while (k < IndCol.GetM() && IndCol(k) == i
 			 && OldInd(k) < irow)
 		    {
@@ -2005,11 +2010,11 @@ namespace Seldon
   void CopyMatrix(const Matrix<T, Prop, RowSparse, Alloc1>& A,
 		  Matrix<T, Prop, ColSparse, Alloc2>& B)
   {
-    Vector<int> Ptr;
-    Vector<int> Ind;
+    Vector<size_t> Ptr;
+    Vector<size_t> Ind;
     Vector<T, VectFull, Alloc2> Val;
 
-    int m = A.GetM(), n = A.GetN();
+    size_t m = A.GetM(), n = A.GetN();
     General sym;
     ConvertToCSC(A, sym, Ptr, Ind, Val);
 
@@ -2050,11 +2055,11 @@ namespace Seldon
   void CopyMatrix(const Matrix<T0, Prop0, ArrayRowSparse,Allocator0>& mat_array,
 		  Matrix<T1, Prop1, ColSparse, Allocator1>& mat_csr)
   {
-    Vector<int> Ptr, IndRow;
+    Vector<size_t> Ptr, IndRow;
     Vector<T1, VectFull, Allocator1> Val;
 
-    int m = mat_array.GetM();
-    int n = mat_array.GetN();
+    size_t m = mat_array.GetM();
+    size_t n = mat_array.GetN();
     General sym;
     ConvertToCSC(mat_array, sym, Ptr, IndRow, Val);
 
@@ -2345,8 +2350,8 @@ namespace Seldon
                     Vector<Tint, VectFull, Alloc3>& IndCol,
                     Vector<T, VectFull, Alloc4>& Value)
   {
-    int m = A.GetM();
-    int  nnz = A.GetDataSize();
+    size_t m = A.GetM();
+    size_t  nnz = A.GetDataSize();
     if (m <= 0)
       {
 	Ptr.Clear();
@@ -2359,9 +2364,9 @@ namespace Seldon
     IndCol.Reallocate(nnz);
     Value.Reallocate(nnz);
     nnz = 0; Ptr(0) = 0;
-    for (int i = 0; i < m; i++)
+    for (size_t i = 0; i < m; i++)
       {
-	for (int j = 0; j < A.GetRowSize(i); j++)
+	for (size_t j = 0; j < A.GetRowSize(i); j++)
 	  {
 	    IndCol(nnz + j) = A.Index(i, j);
 	    Value(nnz + j) = A.Value(i, j);
@@ -2707,14 +2712,14 @@ namespace Seldon
 		  Matrix<T1, Prop1, RowSparse, Allocator1>& mat_csr)
   {
     Vector<T1, VectFull, Allocator1> Val;
-    Vector<int> IndRow;
-    Vector<int> IndCol;
+    Vector<size_t> IndRow;
+    Vector<size_t> IndCol;
 
     General sym;
     ConvertToCSR(mat_array, sym, IndRow, IndCol, Val);
 
-    int m = mat_array.GetM();
-    int n = mat_array.GetN();
+    size_t m = mat_array.GetM();
+    size_t n = mat_array.GetN();
     mat_csr.SetData(m, n, Val, IndRow, IndCol);
   }
 
@@ -3027,24 +3032,24 @@ namespace Seldon
   void CopyMatrix(const Matrix<T0, Prop0, RowSparse, Allocator0>& A,
 		  Matrix<T1, Prop1, ArrayRowSparse, Allocator1>& B)
   {
-    int m = A.GetM();
-    int n = A.GetN();
+    size_t m = A.GetM();
+    size_t n = A.GetN();
     if (n <= 0)
       {
 	B.Clear();
 	return;
       }
     
-    int* ptr_ = A.GetPtr();
-    int* ind_ = A.GetInd();
+    size_t* ptr_ = A.GetPtr();
+    size_t* ind_ = A.GetInd();
     T0* data_ = A.GetData();
     
     B.Reallocate(m, n);
-    for (int i = 0; i < m; i++)
+    for (size_t i = 0; i < m; i++)
       {
-	int size_row = ptr_[i+1] - ptr_[i];
+	size_t size_row = ptr_[i+1] - ptr_[i];
 	B.ReallocateRow(i, size_row);
-	for (int j = 0; j < size_row; j++)
+	for (size_t j = 0; j < size_row; j++)
 	  {
 	    B.Index(i, j) = ind_[ptr_[i] + j];
 	    B.Value(i, j) = data_[ptr_[i] + j];
@@ -3436,10 +3441,10 @@ namespace Seldon
                            Vector<Tint, VectFull, Allocator3>& Ind)
   {
     typedef typename Matrix<T, Prop, Storage, Allocator>::entry_type T0;
-    int n = A.GetM();
+    size_t n = A.GetM();
 
     // Converting to coordinates.
-    Vector<int> IndRow, IndCol;
+    Vector<size_t> IndRow, IndCol;
     Vector<T0> Value;
     ConvertMatrix_to_Coordinates(A, IndRow, IndCol, Value);
 
@@ -3447,17 +3452,17 @@ namespace Seldon
     Value.Clear();
 
     // Sorting columns too.
-    Vector<int> IndRow2, IndCol2, Index(2*n);
+    Vector<size_t> IndRow2, IndCol2, Index(2*n);
     IndRow2 = IndRow;
     IndCol2 = IndCol;
     Sort(IndCol2.GetM(), IndCol2, IndRow2);
 
     Tint max_nnz = 0;
-    for (int i = 0; i < IndRow.GetM(); i++)
+    for (size_t i = 0; i < IndRow.GetM(); i++)
       if (IndRow(i) <= IndCol(i))
         max_nnz++;
 
-    for (int i = 0; i < IndRow.GetM(); i++)
+    for (size_t i = 0; i < IndRow.GetM(); i++)
       if (IndCol2(i) <= IndRow2(i))
         max_nnz++;
 
@@ -3465,10 +3470,10 @@ namespace Seldon
     Ptr.Reallocate(n+1);
     Ind.Reallocate(max_nnz);
     Tint j_end = 0;
-    int size_row = 0;
+    size_t size_row = 0;
     Tint j2_end = 0;
     Ptr(0) = 0;
-    for (int i = 0; i < A.GetM(); i++)
+    for (size_t i = 0; i < A.GetM(); i++)
       {
         size_row = 0;
         // We retrieve column numbers.
@@ -3498,7 +3503,7 @@ namespace Seldon
         Assemble(size_row, Index);
 
         // Updating Ptr, Ind.
-        for (int j = 0; j < size_row; j++)
+        for (size_t j = 0; j < size_row; j++)
 	  Ind(Ptr(i) + j) = Index(j);
 
         Ptr(i+1) = Ptr(i) + size_row;

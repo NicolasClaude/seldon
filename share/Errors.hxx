@@ -160,7 +160,7 @@ namespace Seldon
   /////////////////
 
   
-  void CheckBounds(int i, int length1_, string nom);
+  void CheckBounds(size_t i, size_t length1_, string nom);
   void CheckBounds(int i, int j, int length1_, int length2_, string nom);
   void CheckBoundsSym(int i, int j, int length1_, int length2_, string nom);
   void CheckBoundsTriang(int i, int j, int length1_, int length2_,
