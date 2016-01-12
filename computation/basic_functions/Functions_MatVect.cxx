@@ -115,18 +115,18 @@ namespace Seldon
 		    const Vector<T2, Storage2, Allocator2>& X,
 		    Vector<T4, Storage4, Allocator4>& Y)
   {
-    int ma = M.GetM();
+    size_t ma = M.GetM();
 
 #ifdef SELDON_CHECK_DIMENSIONS
     CheckDim(M, X, Y, "Mlt(M, X, Y)");
 #endif
 
-    int i, j;
+    size_t i, j;
     T4 zero, temp;
     SetComplexZero(zero);
 
-    int* ptr = M.GetPtr();
-    int* ind = M.GetInd();
+    size_t* ptr = M.GetPtr();
+    size_t* ind = M.GetInd();
     T1* data = M.GetData();
 
     for (i = 0; i < ma; i++)
@@ -837,7 +837,7 @@ namespace Seldon
 		    const Vector<T2, Storage2, Allocator2>& X,
 		    const T3& beta, Vector<T4, Storage4, Allocator4>& Y)
   {
-    int ma = M.GetM();
+    size_t ma = M.GetM();
 
 #ifdef SELDON_CHECK_DIMENSIONS
     CheckDim(M, X, Y, "MltAdd(alpha, M, X, beta, Y)");
@@ -845,13 +845,13 @@ namespace Seldon
 
     Mlt(beta, Y);
 
-    int i, j;
+    size_t i, j;
     T4 zero;
     SetComplexZero(zero);
     T4 temp;
 
-    int* ptr = M.GetPtr();
-    int* ind = M.GetInd();
+    size_t* ptr = M.GetPtr();
+    size_t* ind = M.GetInd();
     typename Matrix<T1, Prop1, RowSymSparse, Allocator1>::pointer
       data = M.GetData();
 
@@ -879,7 +879,7 @@ namespace Seldon
 		    const Vector<T2, Storage2, Allocator2>& X,
 		    const T3& beta, Vector<T4, Storage4, Allocator4>& Y)
   {
-    int ma = M.GetM();
+    size_t ma = M.GetM();
 
 #ifdef SELDON_CHECK_DIMENSIONS
     CheckDim(M, X, Y, "MltAdd(alpha, M, X, beta, Y)");
@@ -887,13 +887,13 @@ namespace Seldon
 
     Mlt(beta, Y);
 
-    int i, j;
+    size_t i, j;
     T4 zero;
     SetComplexZero(zero);
     T4 temp;
 
-    int* ptr = M.GetPtr();
-    int* ind = M.GetInd();
+    size_t* ptr = M.GetPtr();
+    size_t* ind = M.GetInd();
     typename Matrix<T1, Prop1, ColSymSparse, Allocator1>::pointer
       data = M.GetData();
 
@@ -967,7 +967,7 @@ namespace Seldon
 		    const Vector<T2, Storage2, Allocator2>& X,
 		    const T3& beta, Vector<T4, Collection, Allocator4>& Y)
   {
-    int ma = M.GetM();
+    size_t ma = M.GetM();
 
 #ifdef SELDON_CHECK_DIMENSIONS
     CheckDim(M, X, Y, "MltAdd(alpha, M, X, beta, Y)");
@@ -975,13 +975,13 @@ namespace Seldon
 
     Mlt(beta, Y);
 
-    int i, j;
+    size_t i, j;
     typename T4::value_type zero;
     SetComplexZero(zero);
     typename T4::value_type temp;
 
-    int* ptr = M.GetPtr();
-    int* ind = M.GetInd();
+    size_t* ptr = M.GetPtr();
+    size_t* ind = M.GetInd();
     typename Matrix<T1, Prop1, RowSymSparse, Allocator1>::pointer
       data = M.GetData();
 

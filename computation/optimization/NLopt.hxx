@@ -155,7 +155,7 @@ namespace nlopt
 
     void alloc_tmp()
     {
-      if (xtmp.GetSize() != int(nlopt_get_dimension(o)))
+      if (xtmp.GetSize() != size_t(nlopt_get_dimension(o)))
         {
           xtmp = Seldon::Vector<double>(nlopt_get_dimension(o));
           gradtmp = Seldon::Vector<double>(nlopt_get_dimension(o));
@@ -233,7 +233,7 @@ namespace nlopt
 
     result optimize(Seldon::Vector<double>& x, double& opt_f)
     {
-      if (o && int(nlopt_get_dimension(o)) != x.GetSize())
+      if (o && size_t(nlopt_get_dimension(o)) != x.GetSize())
         throw Seldon::WrongArgument("SeldonOpt::optimize("
                                     "Seldon::Vector<double>& x,"
                                     " double& opt_f)", "Dimension mismatch.");
@@ -634,7 +634,7 @@ namespace nlopt
       mythrow(nlopt_set_##name##1(o, val));                             \
     }                                                                   \
     void get_##name(Seldon::Vector<double> &v) const {                  \
-      if (o && int(nlopt_get_dimension(o)) != v.GetSize())              \
+      if (o && size_t(nlopt_get_dimension(o)) != v.GetSize())              \
         throw Seldon::WrongArgument("SeldonOpt::get_" #name "(Vector&)" \
                                     " const",                           \
                                     "Nlopt invalid argument.");         \
@@ -650,7 +650,7 @@ namespace nlopt
       return v;                                                         \
     }                                                                   \
     void set_##name(const Seldon::Vector<double> &v) {                  \
-      if (o && int(nlopt_get_dimension(o)) != v.GetSize())              \
+      if (o && size_t(nlopt_get_dimension(o)) != v.GetSize())              \
         throw Seldon::WrongArgument("SeldonOpt::get_" #name "(Vector&)" \
                                     " const",                           \
                                     "Nlopt invalid argument.");         \
@@ -714,8 +714,8 @@ namespace nlopt
     void get_initial_step(const Seldon::Vector<double> &x,
                           Seldon::Vector<double> &dx) const
     {
-      if (o && (int(nlopt_get_dimension(o)) != x.GetSize()
-                || int(nlopt_get_dimension(o)) != dx.GetSize()))
+      if (o && (size_t(nlopt_get_dimension(o)) != x.GetSize()
+                || size_t(nlopt_get_dimension(o)) != dx.GetSize()))
         throw Seldon::WrongArgument("SeldonOpt::get_initial_step("
                                     "Vector<double>& x, double& dx)",
                                     "Dimension mismatch.");

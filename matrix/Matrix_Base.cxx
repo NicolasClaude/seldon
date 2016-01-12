@@ -241,10 +241,10 @@ namespace Seldon
   ostream& operator << (ostream& out,
 			const Matrix<T, Prop, Storage, Allocator>& A)
   {
-    
-    for (int i = 0; i < A.GetM(); i++)
+
+    for (size_t i = 0; i < A.GetM(); i++)
       {
-	for (int j = 0; j < A.GetN(); j++)
+	for (size_t j = 0; j < A.GetN(); j++)
 	  out << A(i, j) << '\t';
 	out << endl;
       }

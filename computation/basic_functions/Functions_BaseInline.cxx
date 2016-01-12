@@ -78,6 +78,22 @@ namespace Seldon
     AddVector(alpha, X, Y);
   }
 
+  template<class T1, class Allocator1, class Allocator2>
+  void Add(const typename T1::value_type& alpha,
+     const Vector<T1, Collection, Allocator1>& X,
+     Vector<T1, Collection, Allocator2>& Y)
+  {
+    AddVector(alpha, X, Y);
+  }
+
+  template<class T0,class T1, class Allocator1, class Allocator2, class Storage1>
+  void Add(const T0& alpha,
+     const Vector<T0, Storage1, Allocator1>& X,
+     Vector<T1, Collection, Allocator2>& Y)
+  {
+    AddVector(alpha, X, Y);
+  }
+
   template<class T, class Storage1, class Allocator1,
 	   class Storage2, class Allocator2>
   inline void Add(const T& alpha, const Vector<T, Storage1, Allocator1>& X,
@@ -130,6 +146,13 @@ namespace Seldon
   template<class Allocator1, class Allocator2>
   inline double DotProd(const Vector<FloatDouble, DenseSparseCollection, Allocator1>& X,
        const Vector<FloatDouble, DenseSparseCollection, Allocator2>& Y)
+  {
+    return DotProdVector(X, Y);
+  }
+
+  template<class T1, class Allocator1, class Allocator2>
+  typename T1::value_type DotProd(const Vector<T1, Collection, Allocator1>& X,
+      const Vector<T1, Collection, Allocator2>& Y)
   {
     return DotProdVector(X, Y);
   }
@@ -602,6 +625,13 @@ namespace Seldon
     MltScalar(alpha, A);
   }
 
+  template<class T, class Prop, class Allocator>
+  void Mlt(const T& alpha, Matrix<FloatDouble, Prop, DenseSparseCollection, Allocator>& A)
+  {
+    MltScalar(alpha, A);
+  }
+
+
   template <class T,
 	    class Prop1, class Storage1, class Allocator1,
 	    class Prop2, class Storage2, class Allocator2,
@@ -658,6 +688,18 @@ namespace Seldon
     MltAddMatrix(alpha, transA, A, transB, B, beta, C);
   }
 
+  template <class T,
+      class Prop1, class Allocator1,
+      class Prop2, class Allocator2,
+      class Prop3, class Allocator3>
+  void MltAdd(const T& alpha,
+        const Matrix<FloatDouble, Prop1, DenseSparseCollection, Allocator1>& A,
+        const Matrix<FloatDouble, Prop2, DenseSparseCollection, Allocator2>& B,
+        const T& beta,
+        Matrix<FloatDouble, Prop3, DenseSparseCollection, Allocator3>& C)
+  {
+    MltAddMatrix(alpha, A, B, beta, C);
+  }
 
   template <class T,
 	    class Prop1, class Storage1, class Allocator1,
@@ -700,6 +742,15 @@ namespace Seldon
     throw WrongArgument("Add", "incompatible types");    
   }
 
+  template <class T,
+      class Prop1, class Allocator1,
+      class Prop2, class Allocator2>
+  void Add(const T& alpha,
+     const Matrix<FloatDouble, Prop1, DenseSparseCollection, Allocator1>& A,
+     Matrix<FloatDouble, Prop2, DenseSparseCollection, Allocator2>& B)
+  {
+     AddMatrix(alpha, A, B);
+  }
 
   template<class T, class Prop1, class Storage1, class Allocator1,
 	   class Prop2, class Storage2, class Allocator2>

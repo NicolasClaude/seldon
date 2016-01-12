@@ -55,12 +55,12 @@ namespace Seldon
     \param[in] i length of the vector.
   */
   template <class T, class Allocator>
-  inline Vector<T, Collection, Allocator>::Vector(int i):
+  inline Vector<T, Collection, Allocator>::Vector(size_t i):
     Vector_Base<T, Allocator>(0), length_(i), length_sum_(i), vector_(i),
     label_map_(), label_vector_()
   {
     Nvector_ = i;
-    for (int k = 0; k < i; k++)
+    for (size_t k = 0; k < i; k++)
       length_(k) = length_sum_(k) = 0;
   }
 
@@ -74,6 +74,7 @@ namespace Seldon
   Vector(const Vector<T, Collection, Allocator>& V):
     Vector_Base<T, Allocator>(V), Nvector_(0)
   {
+    ERR(ctor copy);
     Copy(V);
   }
 
@@ -88,7 +89,7 @@ namespace Seldon
     \return The total length of the vector.
   */
   template <class T, class Allocator >
-  inline int Vector<T, Collection, Allocator>::GetM() const
+  inline size_t Vector<T, Collection, Allocator>::GetM() const
   {
     return this->m_;
   }
@@ -99,7 +100,7 @@ namespace Seldon
     \return The total length of the vector.
   */
   template <class T, class Allocator >
-  inline int Vector<T, Collection, Allocator>::GetLength() const
+  inline size_t Vector<T, Collection, Allocator>::GetLength() const
   {
     return this->m_;
   }
@@ -110,7 +111,7 @@ namespace Seldon
     \return The total number of aggregated vectors.
   */
   template <class T, class Allocator >
-  inline int Vector<T, Collection, Allocator>::GetNvector() const
+  inline size_t Vector<T, Collection, Allocator>::GetNvector() const
   {
     return Nvector_;
   }
@@ -121,7 +122,7 @@ namespace Seldon
     \return The lengths of the underlying vectors.
   */
   template <class T, class Allocator >
-  inline const Vector<int, VectFull, MallocAlloc<int> >&
+  inline const Vector<size_t, VectFull, MallocAlloc<size_t> >&
   Vector<T, Collection, Allocator>::GetVectorLength() const
   {
     return length_;
@@ -133,7 +134,7 @@ namespace Seldon
     \return The cumulative sum of the lengths of the underlying vectors.
   */
   template <class T, class Allocator >
-  inline const Vector<int, VectFull, MallocAlloc<int> >&
+  inline const Vector<size_t, VectFull, MallocAlloc<size_t> >&
   Vector<T, Collection, Allocator>::GetLengthSum() const
   {
     return length_sum_;
@@ -171,7 +172,7 @@ namespace Seldon
   */
   template <class T, class Allocator >
   inline typename Vector<T, Collection, Allocator>::vector_reference
-  Vector<T, Collection, Allocator>::GetVector(int i)
+  Vector<T, Collection, Allocator>::GetVector(size_t i)
   {
     return vector_(i);
   }
@@ -185,7 +186,7 @@ namespace Seldon
   template <class T, class Allocator >
   inline typename
   Vector<T, Collection, Allocator>::const_vector_reference
-  Vector<T, Collection, Allocator>::GetVector(int i) const
+  Vector<T, Collection, Allocator>::GetVector(size_t i) const
   {
     return vector_(i);
   }
@@ -200,13 +201,13 @@ namespace Seldon
   inline Vector<T, Collection, Allocator>&
   Vector<T, Collection, Allocator>::operator*= (const T0& alpha)
   {
-    for (int i = 0; i < this->Nvector_; i++)
+    for (size_t i = 0; i < this->Nvector_; i++)
       this->vector_(i) *= alpha;
 
     return *this;
   }
-  
-  
+
+
 } // namespace Seldon.
 
 

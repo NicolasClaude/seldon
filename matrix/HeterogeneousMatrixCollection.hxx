@@ -164,8 +164,8 @@ namespace Seldon
     void Print() const;
 
     // Input/output functions.
-    void Write(string FileName, bool with_size) const;
-    void Write(ostream& FileStream, bool with_size) const;
+    void Write(string FileName, bool with_size = true) const;
+    void Write(ostream& FileStream, bool with_size = true) const;
     void WriteText(string FileName) const;
     void WriteText(ostream& FileStream) const;
 
@@ -196,6 +196,7 @@ namespace Seldon
 
 } // namespace Seldon.
 
+#include "HeterogeneousMatrixCollectionInline.cxx"
 
 #define SELDON_FILE_HETEROGENEOUS_MATRIX_COLLECTION_HXX
 #endif

@@ -2840,8 +2840,8 @@ namespace Seldon
 		  Matrix<T1, Prop1, RowSymSparse, Allocator1>& mat_csr)
   {
     Vector<T1, VectFull, Allocator1> Val;
-    Vector<int> IndRow;
-    Vector<int> IndCol;
+    Vector<size_t> IndRow;
+    Vector<size_t> IndCol;
 
     Symmetric sym;
     ConvertToCSR(mat_array, sym, IndRow, IndCol, Val);

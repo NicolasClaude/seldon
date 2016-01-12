@@ -54,7 +54,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline Matrix_SymSparse<T, Prop, Storage, Allocator>
-  ::Matrix_SymSparse(int i, int j): Matrix_Base<T, Allocator>()
+  ::Matrix_SymSparse(size_t i, size_t j): Matrix_Base<T, Allocator>()
   {
     nz_ = 0;
     ptr_ = NULL;
@@ -76,7 +76,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline Matrix_SymSparse<T, Prop, Storage, Allocator>::
-  Matrix_SymSparse(int i, int j, int nz):
+  Matrix_SymSparse(size_t i, size_t j, size_t nz):
     Matrix_Base<T, Allocator>()
   {
     this->nz_ = 0;
@@ -111,7 +111,7 @@ namespace Seldon
     of non-zero elements).
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline int Matrix_SymSparse<T, Prop, Storage, Allocator>::GetNonZeros() const
+  inline size_t Matrix_SymSparse<T, Prop, Storage, Allocator>::GetNonZeros() const
   {
     return nz_;
   }
@@ -123,7 +123,7 @@ namespace Seldon
     of non-zero elements).
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline int Matrix_SymSparse<T, Prop, Storage, Allocator>::GetDataSize() const
+  inline size_t Matrix_SymSparse<T, Prop, Storage, Allocator>::GetDataSize() const
   {
     return nz_;
   }
@@ -135,7 +135,7 @@ namespace Seldon
     \return The array of start indices.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline int* Matrix_SymSparse<T, Prop, Storage, Allocator>::GetPtr() const
+  inline size_t* Matrix_SymSparse<T, Prop, Storage, Allocator>::GetPtr() const
   {
     return ptr_;
   }
@@ -150,7 +150,7 @@ namespace Seldon
     non-zero entries.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline int* Matrix_SymSparse<T, Prop, Storage, Allocator>::GetInd() const
+  inline size_t* Matrix_SymSparse<T, Prop, Storage, Allocator>::GetInd() const
   {
     return ind_;
   }
@@ -161,7 +161,7 @@ namespace Seldon
     \return The length of the array of start indices.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline int Matrix_SymSparse<T, Prop, Storage, Allocator>::GetPtrSize() const
+  inline size_t Matrix_SymSparse<T, Prop, Storage, Allocator>::GetPtrSize() const
   {
     return (this->m_ + 1);
   }
@@ -178,7 +178,7 @@ namespace Seldon
     number of non-zero entries that are stored.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline int Matrix_SymSparse<T, Prop, Storage, Allocator>::GetIndSize() const
+  inline size_t Matrix_SymSparse<T, Prop, Storage, Allocator>::GetIndSize() const
   {
     return nz_;
   }
@@ -190,22 +190,22 @@ namespace Seldon
 
 
   //! Access method.
-  /*! Returns reference to element (\a i, \a j) 
+  /*! Returns reference to element (\a i, \a j)
     \param[in] i row index.
     \param[in] j column index.
     \return Element (\a i, \a j) of the matrix.
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline const typename Matrix_SymSparse<T, Prop, Storage, Allocator>::value_type&
-  Matrix_SymSparse<T, Prop, Storage, Allocator>::Get(int i, int j) const
+  Matrix_SymSparse<T, Prop, Storage, Allocator>::Get(size_t i, size_t j) const
   {
     return Val(i, j);
   }
-  
-  
+
+
   //! Add a value to a non-zero entry.
   /*! This function adds \a val to the element (\a i, \a j), provided that
-    this element is already a non-zero entry. Otherwise 
+    this element is already a non-zero entry. Otherwise
     a non-zero entry is inserted equal to \a val.
     \param[in] i row index.
     \param[in] j column index.
@@ -213,7 +213,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_SymSparse<T, Prop, Storage, Allocator>
-  ::AddInteraction(int i, int j, const T& val)
+  ::AddInteraction(size_t i, size_t j, const T& val)
   {
     if (i <= j)
       Get(i, j) += val;
@@ -223,7 +223,7 @@ namespace Seldon
   //! Adds values to several non-zero entries on a given row
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_SymSparse<T, Prop, Storage, Allocator>
-  ::AddInteractionRow(int i, int nb, const Vector<int>& col,
+  ::AddInteractionRow(size_t i, size_t nb, const Vector<size_t>& col,
 		      const Vector<T>& val)
   {
     throw Undefined("AddInteractionRow", "Not implemented");
@@ -238,7 +238,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_SymSparse<T, Prop, Storage, Allocator>
-  ::Set(int i, int j, const T& val)
+  ::Set(size_t i, size_t j, const T& val)
   {
     Get(i, j) = val;
   }
@@ -271,7 +271,7 @@ namespace Seldon
     SOR(static_cast<const Matrix<T, Prop, Storage, Allocator>& >(*this),
 	x, r, omega, nb_iter, stage_ssor);
   }
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_SymSparse<T, Prop, Storage, Allocator>
   ::ApplySor(const class_SeldonTrans& trans, Vector<T>& x, const Vector<T>& r,
@@ -282,7 +282,7 @@ namespace Seldon
 	static_cast<const Matrix<T, Prop, Storage, Allocator>& >(*this),
 	x, r, omega, nb_iter, stage_ssor);
   }
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_SymSparse<T, Prop, Storage, Allocator>
   ::MltAddVector(const Treal& alpha, const Vector<Treal>& x,
@@ -324,7 +324,7 @@ namespace Seldon
 	   static_cast<const Matrix<T, Prop, Storage, Allocator>& >(*this),
 	   x, beta, y);
   }
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_SymSparse<T, Prop, Storage, Allocator>
   ::MltVector(const Vector<Treal>& x, Vector<Treal>& y) const
@@ -340,7 +340,7 @@ namespace Seldon
   }
 
   template <class T, class Prop, class Storage, class Allocator>
-  inline void Matrix_SymSparse<T, Prop, Storage, Allocator>  
+  inline void Matrix_SymSparse<T, Prop, Storage, Allocator>
   ::MltVector(const SeldonTranspose& trans,
 	      const Vector<Treal>& x, Vector<Treal>& y) const
   {
@@ -349,7 +349,7 @@ namespace Seldon
   }
 
   template <class T, class Prop, class Storage, class Allocator>
-  inline void Matrix_SymSparse<T, Prop, Storage, Allocator>  
+  inline void Matrix_SymSparse<T, Prop, Storage, Allocator>
   ::MltVector(const SeldonTranspose& trans,
 	      const Vector<Tcplx>& x, Vector<Tcplx>& y) const
   {
@@ -358,14 +358,14 @@ namespace Seldon
   }
 
   template <class T, class Prop, class Storage, class Allocator>
-  inline bool Matrix_SymSparse<T, Prop, Storage, Allocator>  
+  inline bool Matrix_SymSparse<T, Prop, Storage, Allocator>
   ::IsSymmetric() const
   {
     return true;
   }
 #endif
 
-  
+
   //////////////////////////
   // MATRIX<COLSYMSPARSE> //
   //////////////////////////
@@ -392,7 +392,7 @@ namespace Seldon
     \param j number of columns.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, ColSymSparse, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, ColSymSparse, Allocator>::Matrix(size_t i, size_t j):
     Matrix_SymSparse<T, Prop, ColSymSparse, Allocator>(i, j, 0)
   {
   }
@@ -407,7 +407,7 @@ namespace Seldon
     \warning 'j' is assumed to be equal to 'i' so that 'j' is discarded.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, ColSymSparse, Allocator>::Matrix(int i, int j, int nz):
+  inline Matrix<T, Prop, ColSymSparse, Allocator>::Matrix(size_t i, size_t j, size_t nz):
     Matrix_SymSparse<T, Prop, ColSymSparse, Allocator>(i, j, nz)
   {
   }
@@ -431,10 +431,10 @@ namespace Seldon
 	    class Storage1, class Allocator1,
 	    class Storage2, class Allocator2>
   inline Matrix<T, Prop, ColSymSparse, Allocator>::
-  Matrix(int i, int j,
+  Matrix(size_t i, size_t j,
 	 Vector<T, Storage0, Allocator0>& values,
-	 Vector<int, Storage1, Allocator1>& ptr,
-	 Vector<int, Storage2, Allocator2>& ind):
+	 Vector<size_t, Storage1, Allocator1>& ptr,
+	 Vector<size_t, Storage2, Allocator2>& ind):
     Matrix_SymSparse<T, Prop, ColSymSparse, Allocator>(i, j, values, ptr, ind)
   {
   }
@@ -468,7 +468,7 @@ namespace Seldon
     \param j number of columns.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, RowSymSparse, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, RowSymSparse, Allocator>::Matrix(size_t i, size_t j):
     Matrix_SymSparse<T, Prop, RowSymSparse, Allocator>(i, j, 0)
   {
   }
@@ -483,7 +483,7 @@ namespace Seldon
     \warning 'j' is assumed to be equal to 'i' so that 'j' is discarded.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, RowSymSparse, Allocator>::Matrix(int i, int j, int nz):
+  inline Matrix<T, Prop, RowSymSparse, Allocator>::Matrix(size_t i, size_t j, size_t nz):
     Matrix_SymSparse<T, Prop, RowSymSparse, Allocator>(i, j, nz)
   {
   }
@@ -507,15 +507,15 @@ namespace Seldon
 	    class Storage1, class Allocator1,
 	    class Storage2, class Allocator2>
   inline Matrix<T, Prop, RowSymSparse, Allocator>::
-  Matrix(int i, int j,
+  Matrix(size_t i, size_t j,
 	 Vector<T, Storage0, Allocator0>& values,
-	 Vector<int, Storage1, Allocator1>& ptr,
-	 Vector<int, Storage2, Allocator2>& ind):
+	 Vector<size_t, Storage1, Allocator1>& ptr,
+	 Vector<size_t, Storage2, Allocator2>& ind):
     Matrix_SymSparse<T, Prop, RowSymSparse, Allocator>(i, j, values, ptr, ind)
   {
   }
-    
-  
+
+
 } // namespace Seldon.
 
 #define SELDON_FILE_MATRIX_SYMSPARSE_INLINE_CXX

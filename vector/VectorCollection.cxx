@@ -45,7 +45,7 @@ namespace Seldon
   template <class T, class Allocator >
   Vector<T, Collection, Allocator>::~Vector()
   {
-    for (int i = 0; i < Nvector_; i++)
+    for (size_t i = 0; i < Nvector_; i++)
       vector_(i).Nullify();
     label_map_.clear();
     label_vector_.clear();
@@ -59,7 +59,7 @@ namespace Seldon
   template <class T, class Allocator >
   void Vector<T, Collection, Allocator>::Clear()
   {
-    for (int i = 0; i < Nvector_; i++)
+    for (size_t i = 0; i < Nvector_; i++)
       vector_(i).Nullify();
     vector_.Clear();
     length_sum_.Clear();
@@ -78,7 +78,7 @@ namespace Seldon
     \param[in] i new size.
   */
   template <class T, class Allocator >
-  void Vector<T, Collection, Allocator>::Reallocate(int i)
+  void Vector<T, Collection, Allocator>::Reallocate(size_t i)
   {
     Clear();
     vector_type v;
@@ -95,7 +95,7 @@ namespace Seldon
   template <class T, class Allocator >
   void Vector<T, Collection, Allocator>::Deallocate()
   {
-    for (int i = 0; i < Nvector_; i++)
+    for (size_t i = 0; i < Nvector_; i++)
       vector_(i).Clear();
     vector_.Clear();
     length_sum_.Clear();
@@ -118,10 +118,10 @@ namespace Seldon
     \return The vector index of the aggregated vector.
   */
   template <class T, class Allocator >
-  int Vector<T, Collection, Allocator>
+  size_t Vector<T, Collection, Allocator>
   ::GetVectorIndex(string name) const
   {
-    map<string,int>::const_iterator label_iterator = label_map_.find(name);
+    map<string,size_t>::const_iterator label_iterator = label_map_.find(name);
     if (label_iterator == label_map_.end())
       throw WrongArgument("VectorCollection::GetVectorIndex(string name)",
 			  "Unknown vector name: \"" + name + "\".");
@@ -136,9 +136,9 @@ namespace Seldon
     \return The index of the first element of the aggregated vector.
   */
   template <class T, class Allocator >
-  int Vector<T, Collection, Allocator>::GetIndex(string name) const
+  size_t Vector<T, Collection, Allocator>::GetIndex(string name) const
   {
-    map<string,int>::const_iterator label_iterator = label_map_.find(name);
+    map<string,size_t>::const_iterator label_iterator = label_map_.find(name);
     if (label_iterator == label_map_.end())
       throw WrongArgument("VectorCollection::GetIndex(string name)",
 			  string("Unknown vector name: \"") + name + "\".");
@@ -157,7 +157,7 @@ namespace Seldon
   Vector<T, Collection, Allocator>::const_vector_reference
   Vector<T, Collection, Allocator>::GetVector(string name) const
   {
-    map<string,int>::const_iterator label_iterator;
+    map<string,size_t>::const_iterator label_iterator;
     label_iterator = label_map_.find(name);
     if (label_iterator == label_map_.end())
       throw WrongArgument("VectorCollection::SetVector(string name)",
@@ -175,7 +175,7 @@ namespace Seldon
   typename Vector<T, Collection, Allocator>::vector_reference
   Vector<T, Collection, Allocator>::GetVector(string name)
   {
-    map<string,int>::iterator label_iterator;
+    map<string,size_t>::iterator label_iterator;
     label_iterator = label_map_.find(name);
     if (label_iterator == label_map_.end())
       throw WrongArgument("VectorCollection::SetVector(string name)",
@@ -196,7 +196,7 @@ namespace Seldon
   */
   template <class T, class Allocator >
   typename Vector<T, Collection, Allocator>::reference
-  Vector<T, Collection, Allocator>::operator() (int i)
+  Vector<T, Collection, Allocator>::operator() (size_t i)
   {
 #ifdef SELDON_CHECK_BOUNDS
     if (i < 0 || i >= this->m_)
@@ -206,7 +206,7 @@ namespace Seldon
 		       + "], but is equal to " + to_str(i) + ".");
 #endif
 
-    int j = 0;
+    size_t j = 0;
     while (i >= length_sum_(j))
       j++;
     return (j == 0) ? vector_(j)(i) : vector_(j)(i - length_sum_(j - 1));
@@ -220,7 +220,7 @@ namespace Seldon
   */
   template <class T, class Allocator >
   typename Vector<T, Collection, Allocator>::const_reference
-  Vector<T, Collection, Allocator>::operator() (int i) const
+  Vector<T, Collection, Allocator>::operator() (size_t i) const
   {
 #ifdef SELDON_CHECK_BOUNDS
     if (i < 0 || i >= this->m_)
@@ -230,7 +230,7 @@ namespace Seldon
 		       + "], but is equal to " + to_str(i) + ".");
 #endif
 
-    int j = 0;
+    size_t j = 0;
     while (i >= length_sum_(j))
       j++;
     return (j == 0) ? vector_(j)(i) : vector_(j)(i - length_sum_(j - 1));
@@ -261,11 +261,11 @@ namespace Seldon
   */
   template <class T, class Allocator >
   void Vector<T, Collection, Allocator>
-  ::Copy(const Vector<T, Collection, Allocator>& X)
+  ::Copy(const Vector<T, Collection, Allocator>& X, bool duplicate_data)
   {
     Clear();
-    for (int i = 0; i < X.GetNvector(); i++)
-      AddVector(X.GetVector(i));
+    for (size_t i = 0; i < X.GetNvector(); i++)
+      AddVector(X.GetVector(i), "", duplicate_data);
     label_map_.insert(X.label_map_.begin(), X.label_map_.end());
     label_vector_.assign(X.label_vector_.begin(), X.label_vector_.end());
   }
@@ -280,7 +280,7 @@ namespace Seldon
   template <class T, class Allocator >
   template <class T0, class Allocator0>
   void Vector<T, Collection, Allocator>
-  ::Copy(const Vector<T0, VectFull, Allocator0>& X)
+  ::Copy(const Vector<T0, VectFull, Allocator0>& X, bool duplicate_data)
   {
 #ifdef SELDON_CHECK_BOUNDS
     if (this->m_ != X.GetM())
@@ -290,38 +290,8 @@ namespace Seldon
 		       + ", but is equal to " + to_str(X.GetM()) + ".");
 #endif
 
-    for (int i = 0; i < X.GetM(); i++)
+    for (size_t i = 0; i < X.GetM(); i++)
       (*this)(i) = X(i);
-  }
-
-
-  //! Adds a vector to the list of vectors.
-  /*! The vector is "appended" to the existing data.
-    \param[in] vector vector to be appended.
-  */
-  template <class T, class Allocator >
-  template <class T0, class Storage0, class Allocator0>
-  void Vector<T, Collection, Allocator>
-  ::AddVector(const Vector<T0,
-              Storage0, Allocator0>& vector)
-  {
-    Nvector_++;
-    length_.PushBack(0);
-    length_sum_.PushBack(this->m_);
-
-    // Resizes 'vector_'.
-    collection_type new_vector(Nvector_);
-    for (int i = 0; i < Nvector_ - 1; i++)
-      {
-	new_vector(i).SetData(vector_(i));
-	vector_(i).Nullify();
-      }
-    vector_.Clear();
-    vector_.SetData(new_vector);
-    new_vector.Nullify();
-
-    // Adds the new vector.
-    SetVector(Nvector_ - 1, vector);
   }
 
 
@@ -333,35 +303,28 @@ namespace Seldon
   template <class T, class Allocator >
   template <class T0, class Storage0, class Allocator0>
   void Vector<T, Collection, Allocator>
-  ::AddVector(const Vector<T0,
-              Storage0, Allocator0>& vector,
-	      string name)
+  ::AddVector(const Vector<T0, Storage0, Allocator0>& vector,
+	      string name, bool duplicate_data)
   {
-    AddVector(vector);
-    SetName(Nvector_ - 1, name);
-  }
+    Nvector_++;
+    length_.PushBack(0);
+    length_sum_.PushBack(this->m_);
 
+    // Resizes 'vector_'.
+    collection_type new_vector(Nvector_);
+    for (size_t i = 0; i < Nvector_ - 1; i++)
+      {
+	new_vector(i).SetData(vector_(i));
+	vector_(i).Nullify();
+      }
+    vector_.Clear();
+    vector_.SetData(new_vector);
+    new_vector.Nullify();
 
-  //! Sets a vector in the list of vectors.
-  /*!
-    \param[in] i index of the vector to be set.
-    \param[in] vector new value of the vector.
-  */
-  template <class T, class Allocator >
-  template <class T0, class Storage0, class Allocator0>
-  void Vector<T, Collection, Allocator>
-  ::SetVector(int i, const Vector<T0,
-              Storage0, Allocator0>& vector)
-  {
-    int size_difference;
-    size_difference = vector.GetM() - vector_(i).GetM();
-    this->m_ += size_difference;
-    length_(i) = vector.GetM();
-    for (int k = i; k < Nvector_; k++)
-      length_sum_(k) += size_difference;
-
-    vector_(i).Nullify();
-    vector_(i).SetData(vector);
+    // Adds the new vector.
+    SetVector(Nvector_ - 1, vector, name, duplicate_data);
+    if (name != "")
+      SetName(Nvector_ - 1, name);
   }
 
 
@@ -374,11 +337,22 @@ namespace Seldon
   template <class T, class Allocator >
   template <class T0, class Storage0, class Allocator0>
   void Vector<T, Collection, Allocator>
-  ::SetVector(int i, const Vector<T0, Storage0, Allocator0>& vector,
-	      string name)
+  ::SetVector(size_t i, const Vector<T0, Storage0, Allocator0>& vector,
+	      string name, bool duplicate_data)
   {
-    SetVector(i, vector);
-    SetName(i, name);
+    size_t size_difference;
+    size_difference = vector.GetM() - vector_(i).GetM();
+    this->m_ += size_difference;
+    length_(i) = vector.GetM();
+    for (size_t k = i; k < Nvector_; k++)
+      length_sum_(k) += size_difference;
+    vector_(i).Nullify();
+    if (duplicate_data)
+      vector_(i).Copy(vector);
+    else
+      vector_(i).SetData(vector);
+    if (name != "")
+      SetName(i, name);
   }
 
 
@@ -390,15 +364,15 @@ namespace Seldon
   template <class T, class Allocator >
   template <class T0, class Storage0, class Allocator0>
   void Vector<T, Collection, Allocator>
-  ::SetVector(string name, const Vector<T0,
-              Storage0, Allocator0>& vector)
+  ::SetVector(string name, const Vector<T0, Storage0, Allocator0>& vector,
+              bool duplicate_data)
   {
-    map<string,int>::iterator label_iterator;
+    map<string,size_t>::iterator label_iterator;
     label_iterator = label_map_.find(name);
     if (label_iterator == label_map_.end())
       throw WrongArgument("VectorCollection::SetVector(string name, Vector)",
 			  string("Unknown vector name: \"") + name + "\".");
-    SetVector(label_iterator->second, vector);
+    SetVector(label_iterator->second, vector, duplicate_data);
   }
 
 
@@ -409,18 +383,18 @@ namespace Seldon
   */
   template <class T, class Allocator >
   void Vector<T, Collection, Allocator>
-  ::SetName(int i, string name)
+  ::SetName(size_t i, string name)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
     if (i < 0 || i >= Nvector_)
-      throw WrongIndex("VectorCollection::SetName(int i, string name)",
+      throw WrongIndex("VectorCollection::SetName(size_t i, string name)",
 		       string("Index should be in [0, ")
                        + to_str(Nvector_ - 1)
 		       + "], but is equal to " + to_str(i) + ".");
 #endif
 
-    if (i >= int(label_vector_.size()))
+    if (i >= size_t(label_vector_.size()))
       label_vector_.resize(Nvector_, "");
 
     if (label_vector_[i] != "")
@@ -441,7 +415,7 @@ namespace Seldon
   ::SetData(const Vector<T, Collection, Allocator>& X)
   {
     Clear();
-    for (int i = 0; i < X.GetNvector(); i++)
+    for (size_t i = 0; i < X.GetNvector(); i++)
       AddVector(X.GetVector(i));
     label_map_.insert(X.label_map_.begin(), X.label_map_.end());
     label_vector_.assign(X.label_vector_.begin(), X.label_vector_.end());
@@ -452,13 +426,13 @@ namespace Seldon
   template <class T, class Allocator >
   void Vector<T, Collection, Allocator>::Nullify()
   {
-    for (int i = 0; i < Nvector_; i++)
+    for (size_t i = 0; i < Nvector_; i++)
       vector_(i).Nullify();
-    for (int i = 0; i < Nvector_; i++)
+    for (size_t i = 0; i < Nvector_; i++)
       length_(i) = length_sum_(i) = 0;
   }
 
-  
+
   ///////////////////////
   // CONVENIENT METHOD //
   ///////////////////////
@@ -472,7 +446,7 @@ namespace Seldon
   template <class T0>
   void Vector<T, Collection, Allocator>::Fill(const T0& x)
   {
-    for (int i = 0; i < Nvector_; i++)
+    for (size_t i = 0; i < Nvector_; i++)
       vector_(i).Fill(x);
   }
 
@@ -481,7 +455,7 @@ namespace Seldon
   template <class T, class Allocator >
   void Vector<T, Collection, Allocator>::Print() const
   {
-    for (int i = 0; i < GetNvector(); i++)
+    for (size_t i = 0; i < GetNvector(); i++)
       {
         if (i < int(label_vector_.size()) && label_vector_[i] != "")
           cout << label_vector_[i] << ":" << endl;
@@ -540,10 +514,10 @@ namespace Seldon
 #endif
     if (with_size)
       FileStream
-        .write(reinterpret_cast<char*>(const_cast<int*>(&this->m_)),
-               sizeof(int));
+        .write(reinterpret_cast<char*>(const_cast<size_t*>(&this->m_)),
+               sizeof(size_t));
 
-    for (int i = 0; i < GetNvector(); i++)
+    for (size_t i = 0; i < GetNvector(); i++)
       vector_(i).Write(FileStream, false);
 
 #ifdef SELDON_CHECK_IO
@@ -601,7 +575,7 @@ namespace Seldon
                     "The stream is not ready.");
 #endif
 
-    for (int i = 0; i < GetNvector(); i++)
+    for (size_t i = 0; i < GetNvector(); i++)
       vector_(i).WriteText(FileStream);
 
 #ifdef SELDON_CHECK_IO
@@ -632,7 +606,7 @@ namespace Seldon
                     string("Unable to open file \"") + FileName + "\".");
 #endif
 
-    Vector<int> length;
+    Vector<size_t> length;
     length.Read(FileStream);
 
     this->Read(FileStream, length);
@@ -649,7 +623,7 @@ namespace Seldon
   */
   template <class T, class Allocator >
   void Vector<T, Collection, Allocator>
-  ::Read(string FileName, Vector<int, VectFull, MallocAlloc<int> >& length)
+  ::Read(string FileName, Vector<size_t, VectFull, MallocAlloc<size_t> >& length)
   {
     ifstream FileStream;
     FileStream.open(FileName.c_str(), ifstream::binary);
@@ -676,7 +650,7 @@ namespace Seldon
   template <class T, class Allocator >
   void Vector<T, Collection, Allocator>
   ::Read(istream& FileStream,
-         Vector<int, VectFull, MallocAlloc<int> >& length)
+         Vector<size_t, VectFull, MallocAlloc<size_t> >& length)
   {
 
 #ifdef SELDON_CHECK_IO
@@ -689,14 +663,14 @@ namespace Seldon
     T working_vector;
     working_vector.Read(FileStream);
 
-    Vector<int, VectFull, MallocAlloc<int> > length_sum;
-    int Nvector;
+    Vector<size_t, VectFull, MallocAlloc<size_t> > length_sum;
+    size_t Nvector;
 
     Clear();
     Nvector = length.GetSize();
     length_sum.Reallocate(Nvector);
     length_sum(0) = length(0);
-    for (int i = 1; i < Nvector; i++)
+    for (size_t i = 1; i < Nvector; i++)
       length_sum(i) = length_sum(i - 1) + length(i);
 
     T U, V;
@@ -705,7 +679,7 @@ namespace Seldon
     AddVector(V);
     U.Nullify();
     V.Nullify();
-    for (int i = 1; i < Nvector; i++)
+    for (size_t i = 1; i < Nvector; i++)
       {
 	U.SetData(length(i), &working_vector.GetData()[length_sum(i - 1)]);
 	V.Copy(U);
@@ -734,7 +708,7 @@ namespace Seldon
   ostream&  operator <<
   (ostream& out, const Vector<T, Collection, Allocator>& V)
   {
-    for (int i = 0; i < V.GetNvector() - 1; i++)
+    for (size_t i = 0; i < V.GetNvector() - 1; i++)
       out << V.GetVector(i) << '\t';
     if (V.GetNvector() != 0)
       out << V.GetVector(V.GetNvector() - 1);

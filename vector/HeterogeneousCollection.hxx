@@ -65,15 +65,15 @@ namespace Seldon
     // Attributes.
   protected:
     //! Total number of vectors.
-    int Nvector_;
+    size_t Nvector_;
     //! For each underlying vectors, index of the corresponding collection.
-    Vector<int, VectFull, MallocAlloc<int> > collection_;
+    Vector<size_t, VectFull, MallocAlloc<size_t> > collection_;
     //! Index of the underlying vectors in the inner collection.
-    Vector<int, VectFull, MallocAlloc<int> > subvector_;
+    Vector<size_t, VectFull, MallocAlloc<size_t> > subvector_;
     //! Lengths of the underlying vectors.
-    Vector<int, VectFull, MallocAlloc<int> > length_;
+    Vector<size_t, VectFull, MallocAlloc<size_t> > length_;
     //! Cumulative sum of the lengths of the underlying vectors.
-    Vector<int, VectFull, MallocAlloc<int> > length_sum_;
+    Vector<size_t, VectFull, MallocAlloc<size_t> > length_sum_;
 
     //! Pointers of the underlying float dense vectors.
     float_dense_c float_dense_c_;
@@ -85,7 +85,7 @@ namespace Seldon
     double_sparse_c double_sparse_c_;
 
     //! Indexes of the inner vectors that have a name.
-    map<string, int> label_map_;
+    map<string, size_t> label_map_;
     //! Names associated with the inner vectors.
     vector<string> label_vector_;
 
@@ -109,34 +109,34 @@ namespace Seldon
     template <class T0, class Storage0, class Allocator0>
     void AddVector(const Vector<T0, Storage0, Allocator0>&, string name);
 
-    void SetVector(int i,
+    void SetVector(size_t i,
 		   const Vector<float, VectFull, Allocator<float> >&);
-    void SetVector(int i,
+    void SetVector(size_t i,
 		   const Vector<float, VectSparse, Allocator<float> >&);
-    void SetVector(int i,
+    void SetVector(size_t i,
 		   const Vector<double, VectFull, Allocator<double> >&);
-    void SetVector(int i,
+    void SetVector(size_t i,
 		   const Vector<double, VectSparse, Allocator<double> >&);
 
     template <class T0, class Storage0, class Allocator0>
-    void SetVector(int i, const Vector<T0, Storage0, Allocator0>&,
+    void SetVector(size_t i, const Vector<T0, Storage0, Allocator0>&,
                    string name);
     template <class T0, class Storage0, class Allocator0>
     void SetVector(string name, const Vector<T0, Storage0, Allocator0>&);
-    void SetName(int i, string name);
+    void SetName(size_t i, string name);
 
     void Nullify();
 
     // Basic methods.
-    int GetM() const;
-    int GetLength() const;
-    int GetNvector() const;
+    size_t GetM() const;
+    size_t GetLength() const;
+    size_t GetNvector() const;
 
-    const Vector<int, VectFull, MallocAlloc<int> >& GetVectorLength() const;
-    const Vector<int, VectFull, MallocAlloc<int> >& GetLengthSum() const;
-    const Vector<int, VectFull, MallocAlloc<int> >& GetCollectionIndex()
+    const Vector<size_t, VectFull, MallocAlloc<size_t> >& GetVectorLength() const;
+    const Vector<size_t, VectFull, MallocAlloc<size_t> >& GetLengthSum() const;
+    const Vector<size_t, VectFull, MallocAlloc<size_t> >& GetCollectionIndex()
       const;
-    const Vector<int, VectFull, MallocAlloc<int> >& GetSubvectorIndex() const;
+    const Vector<size_t, VectFull, MallocAlloc<size_t> >& GetSubvectorIndex() const;
 
     float_dense_c& GetFloatDense();
     const float_dense_c& GetFloatDense() const;
@@ -148,16 +148,16 @@ namespace Seldon
     const double_sparse_c& GetDoubleSparse() const;
 
 
-    void GetVector(int i, float_dense_v& vector) const;
-    void GetVector(int i, float_sparse_v& vector) const;
-    void GetVector(int i, double_dense_v& vector) const;
-    void GetVector(int i, double_sparse_v& vector) const;
+    void GetVector(size_t i, float_dense_v& vector) const;
+    void GetVector(size_t i, float_sparse_v& vector) const;
+    void GetVector(size_t i, double_dense_v& vector) const;
+    void GetVector(size_t i, double_sparse_v& vector) const;
     template <class T0, class Storage0, class Allocator0>
     void GetVector(string name, Vector<T0, Storage0, Allocator0>& vector)
       const;
 
     // Element access and assignment.
-    double operator() (int i) const;
+    double operator() (size_t i) const;
 
     Vector<FloatDouble, DenseSparseCollection, Allocator<T> >& operator=
     (const Vector<FloatDouble, DenseSparseCollection, Allocator<T> >& X);
@@ -173,8 +173,8 @@ namespace Seldon
     void Print() const;
 
     // Input/output functions.
-    void Write(string FileName, bool with_size = false) const;
-    void Write(ostream& FileStream, bool with_size = false) const;
+    void Write(string FileName, bool with_size = true) const;
+    void Write(ostream& FileStream, bool with_size = true) const;
     void WriteText(string FileName) const;
     void WriteText(ostream& FileStream) const;
 
@@ -182,7 +182,7 @@ namespace Seldon
     void Read(istream& FileStream);
 
   protected:
-    string GetType(int i) const;
+    string GetType(size_t i) const;
   };
 
   template <class T, template <class U> class Allocator >

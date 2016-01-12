@@ -62,16 +62,16 @@ namespace Seldon
     // Attributes.
   protected:
     // Number of vectors.
-    int Nvector_;
+    size_t Nvector_;
     // Lengths of the underlying vectors.
-    Vector<int, VectFull, MallocAlloc<int> > length_;
+    Vector<size_t, VectFull, MallocAlloc<size_t> > length_;
     // Cumulative sum of the lengths of the underlying vectors.
-    Vector<int, VectFull, MallocAlloc<int> > length_sum_;
+    Vector<size_t, VectFull, MallocAlloc<size_t> > length_sum_;
     // Pointers of the underlying vectors.
     collection_type vector_;
 
     //! Indexes of the inner vectors that have a name.
-    map<string, int> label_map_;
+    map<string, size_t> label_map_;
     //! Names associated with the inner vectors.
     vector<string> label_vector_;
 
@@ -79,63 +79,59 @@ namespace Seldon
   public:
     // Constructor.
     explicit Vector();
-    explicit Vector(int i);
+    explicit Vector(size_t i);
     Vector(const Vector<T, Collection, Allocator>& A);
 
     // Destructor.
     ~Vector();
     void Clear();
-    void Reallocate(int i);
+    void Reallocate(size_t i);
     void Deallocate();
 
    // Management of the vectors.
     template <class T0, class Storage0, class Allocator0>
-    void AddVector(const Vector<T0,
-                   Storage0, Allocator0>& vector);
+    void AddVector(const Vector<T0, Storage0, Allocator0>& vector,
+                   string name="", bool duplicate_data = false);
     template <class T0, class Storage0, class Allocator0>
-    void AddVector(const Vector<T0,
-                   Storage0, Allocator0>& vector, string name);
+    void SetVector(size_t i, const Vector<T0, Storage0, Allocator0>& vector,
+                   string name = "", bool duplicate_data = false);
     template <class T0, class Storage0, class Allocator0>
-    void SetVector(int i, const Vector<T0,
-                   Storage0, Allocator0>& vector);
-    template <class T0, class Storage0, class Allocator0>
-    void SetVector(int i, const Vector<T0,
-                   Storage0, Allocator0>& vector, string name);
-    template <class T0, class Storage0, class Allocator0>
-    void SetVector(string name, const Vector<T0,
-                   Storage0, Allocator0>& vector);
-    void SetName(int i, string name);
+    void SetVector(string name, const Vector<T0, Storage0,
+                   Allocator0>& vector, bool duplicate_data = false);
+    void SetName(size_t i, string name);
 
     void SetData(const Vector<T, Collection, Allocator>& X);
     void Nullify();
 
     // Basic methods.
-    int GetM() const;
-    int GetLength() const;
-    int GetNvector() const;
+    size_t GetM() const;
+    size_t GetLength() const;
+    size_t GetNvector() const;
 
-    const Vector<int, VectFull, MallocAlloc<int> >& GetVectorLength() const;
-    const Vector<int, VectFull, MallocAlloc<int> >& GetLengthSum() const;
+    const Vector<size_t, VectFull, MallocAlloc<size_t> >& GetVectorLength() const;
+    const Vector<size_t, VectFull, MallocAlloc<size_t> >& GetLengthSum() const;
 
-    int GetVectorIndex(string name) const;
-    int GetIndex(string name) const;
+    size_t GetVectorIndex(string name) const;
+    size_t GetIndex(string name) const;
 
     collection_reference GetVector();
     const_collection_reference GetVector() const;
-    vector_reference GetVector(int i);
-    const_vector_reference GetVector(int i) const;
+    vector_reference GetVector(size_t i);
+    const_vector_reference GetVector(size_t i) const;
     vector_reference GetVector(string name);
     const_vector_reference GetVector(string name) const;
 
     // Element access and assignment.
-    const_reference operator() (int i) const;
-    reference operator() (int i);
+    const_reference operator() (size_t i) const;
+    reference operator() (size_t i);
     Vector<T, Collection, Allocator>& operator=
     (const Vector<T, Collection, Allocator>& X);
 
-    void Copy(const Vector<T, Collection, Allocator>& X);
+    void Copy(const Vector<T, Collection, Allocator>& X,
+              bool duplicate_data = true);
     template <class T0, class Allocator0>
-    void Copy(const Vector<T0, VectFull, Allocator0>& X);
+    void Copy(const Vector<T0, VectFull, Allocator0>& X,
+              bool duplicate_data = true);
 
     template <class T0>
     Vector<T, Collection, Allocator>& operator*= (const T0& X);
@@ -152,8 +148,8 @@ namespace Seldon
     void WriteText(ostream& FileStream) const;
 
     void Read(string FileName);
-    void Read(string FileName, Vector<int, VectFull, MallocAlloc<int> >& length_);
-    void Read(istream& FileStream, Vector<int, VectFull, MallocAlloc<int> >& length_);
+    void Read(string FileName, Vector<size_t, VectFull, MallocAlloc<size_t> >& length_);
+    void Read(istream& FileStream, Vector<size_t, VectFull, MallocAlloc<size_t> >& length_);
 
 
   };

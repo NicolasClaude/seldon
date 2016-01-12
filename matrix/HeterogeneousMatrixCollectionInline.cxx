@@ -20,7 +20,6 @@
 
 #ifndef SELDON_FILE_HETEROGENEOUS_MATRIX_COLLECTION_INLINE_CXX
 
-#include "HeterogeneousMatrixCollection.hxx"
 
 namespace Seldon
 {

@@ -120,7 +120,7 @@ namespace Seldon
   ::AddVector(const Vector<float, VectFull, Allocator<float> >& vector)
   {
     Nvector_++;
-    int m = vector.GetM();
+    size_t m = vector.GetM();
     this->m_+= m;
     length_.PushBack(m);
     length_sum_.PushBack(this->m_);
@@ -139,7 +139,7 @@ namespace Seldon
   ::AddVector(const Vector<float, VectSparse, Allocator<float> >& vector)
   {
     Nvector_++;
-    int m = vector.GetM();
+    size_t m = vector.GetM();
     this->m_+= m;
     length_.PushBack(m);
     length_sum_.PushBack(this->m_);
@@ -158,7 +158,7 @@ namespace Seldon
   ::AddVector(const Vector<double, VectFull, Allocator<double> >& vector)
   {
     Nvector_++;
-    int m = vector.GetM();
+    size_t m = vector.GetM();
     this->m_+= m;
     length_.PushBack(m);
     length_sum_.PushBack(this->m_);
@@ -177,7 +177,7 @@ namespace Seldon
   ::AddVector(const Vector<double, VectSparse, Allocator<double> >& vector)
   {
     Nvector_++;
-    int m = vector.GetM();
+    size_t m = vector.GetM();
     this->m_+= m;
     length_.PushBack(m);
     length_sum_.PushBack(this->m_);
@@ -209,13 +209,13 @@ namespace Seldon
   */
   template <class T, template <class U> class Allocator >
   void Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
-  ::SetVector(int i, const Vector<float, VectFull, Allocator<float> >& vector)
+  ::SetVector(size_t i, const Vector<float, VectFull, Allocator<float> >& vector)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
     if (i < 0 || i >= Nvector_)
       throw WrongIndex("Vector<FloatDouble, DenseSparseCollection>"
-		       "::SetVector(int i, Vector<float, VectFull>)",
+		       "::SetVector(size_t i, Vector<float, VectFull>)",
 		       string("Index should be in [0, ")
                        + to_str(Nvector_ - 1)
 		       + "], but is equal to " + to_str(i) + ".");
@@ -223,15 +223,15 @@ namespace Seldon
 
     if (collection_(i) != 0)
       WrongArgument("Vector<FloatDouble, DenseSparseCollection>"
-                    "::SetVector(int i, Vector<float, VectFull>)",
+                    "::SetVector(size_t i, Vector<float, VectFull>)",
                     string("The ") + to_str(i) + "-th inner vector "
                     "should be of type " + GetType(i) + ".");
 
-    int size_difference;
+    size_t size_difference;
     size_difference = vector.GetM() - length_(i);
     this->m_ += size_difference;
     length_(i) = vector.GetM();
-    for (int k = i; k < Nvector_; k++)
+    for (size_t k = i; k < Nvector_; k++)
       length_sum_(k) += size_difference;
     float_dense_c_.SetVector(subvector_(i), vector);
   }
@@ -244,14 +244,14 @@ namespace Seldon
   */
   template <class T, template <class U> class Allocator >
   void Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
-  ::SetVector(int i,
+  ::SetVector(size_t i,
 	      const Vector<float, VectSparse, Allocator<float> >& vector)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
     if (i < 0 || i >= Nvector_)
       throw WrongIndex("Vector<FloatDouble, DenseSparseCollection>"
-                       "::SetVector(int i, Vector<float, VectSparse>)",
+                       "::SetVector(size_t i, Vector<float, VectSparse>)",
 		       string("Index should be in [0, ")
                        + to_str(Nvector_ - 1)
 		       + "], but is equal to " + to_str(i) + ".");
@@ -259,15 +259,15 @@ namespace Seldon
 
     if (collection_(i) != 1)
       WrongArgument("Vector<FloatDouble, DenseSparseCollection>"
-                    "::SetVector(int i, Vector<float, VectSparse>)",
+                    "::SetVector(size_t i, Vector<float, VectSparse>)",
                     string("The ") + to_str(i) + "-th inner vector "
                     "should be of type " + GetType(i) + ".");
 
-    int size_difference;
+    size_t size_difference;
     size_difference = vector.GetM() - length_(i);
     this->m_ += size_difference;
     length_(i) = vector.GetM();
-    for (int k = i; k < Nvector_; k++)
+    for (size_t k = i; k < Nvector_; k++)
       length_sum_(k) += size_difference;
     float_sparse_c_.SetVector(subvector_(i), vector);
   }
@@ -280,14 +280,14 @@ namespace Seldon
   */
   template <class T, template <class U> class Allocator >
   void Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
-  ::SetVector(int i,
+  ::SetVector(size_t i,
 	      const Vector<double, VectFull, Allocator<double> >& vector)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
     if (i < 0 || i >= Nvector_)
       throw WrongIndex("Vector<FloatDouble, DenseSparseCollection>"
-                       "::SetVector(int i, Vector<double, VectFull>)",
+                       "::SetVector(size_t i, Vector<double, VectFull>)",
 		       string("Index should be in [0, ")
                        + to_str(Nvector_ - 1)
 		       + "], but is equal to " + to_str(i) + ".");
@@ -295,15 +295,15 @@ namespace Seldon
 
     if (collection_(i) != 2)
       WrongArgument("Vector<FloatDouble, DenseSparseCollection>"
-                    "::SetVector(int i, Vector<double, VectFull>)",
+                    "::SetVector(size_t i, Vector<double, VectFull>)",
                     string("The ") + to_str(i) + "-th inner vector "
                     "should be of type " + GetType(i) + ".");
 
-    int size_difference;
+    size_t size_difference;
     size_difference = vector.GetM() - length_(i);
     this->m_ += size_difference;
     length_(i) = vector.GetM();
-    for (int k = i; k < Nvector_; k++)
+    for (size_t k = i; k < Nvector_; k++)
       length_sum_(k) += size_difference;
     double_dense_c_.SetVector(subvector_(i), vector);
   }
@@ -316,14 +316,14 @@ namespace Seldon
   */
   template <class T, template <class U> class Allocator >
   void Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
-  ::SetVector(int i,
+  ::SetVector(size_t i,
 	      const Vector<double, VectSparse, Allocator<double> >& vector)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
     if (i < 0 || i >= Nvector_)
       throw WrongIndex("Vector<FloatDouble, DenseSparseCollection>"
-                       "::SetVector(int i, Vector<double, VectSparse>)",
+                       "::SetVector(size_t i, Vector<double, VectSparse>)",
 		       string("Index should be in [0, ")
                        + to_str(Nvector_ - 1)
 		       + "], but is equal to " + to_str(i) + ".");
@@ -331,15 +331,15 @@ namespace Seldon
 
     if (collection_(i) != 3)
       WrongArgument("Vector<FloatDouble, DenseSparseCollection>"
-                    "::SetVector(int i, Vector<double, VectSparse>)",
+                    "::SetVector(size_t i, Vector<double, VectSparse>)",
                     string("The ") + to_str(i) + "-th inner vector "
                     "should be of type " + GetType(i) + ".");
 
-    int size_difference;
+    size_t size_difference;
     size_difference = vector.GetM() - length_(i);
     this->m_ += size_difference;
     length_(i) = vector.GetM();
-    for (int k = i; k < Nvector_; k++)
+    for (size_t k = i; k < Nvector_; k++)
       length_sum_(k) += size_difference;
     double_sparse_c_.SetVector(subvector_(i), vector);
   }
@@ -354,7 +354,7 @@ namespace Seldon
   template <class T, template <class U> class Allocator >
   template <class T0, class Storage0, class Allocator0>
   void Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
-  ::SetVector(int i, const Vector<T0, Storage0, Allocator0>& vector,
+  ::SetVector(size_t i, const Vector<T0, Storage0, Allocator0>& vector,
 	      string name)
   {
     SetVector(i, vector);
@@ -372,7 +372,7 @@ namespace Seldon
   void Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
   ::SetVector(string name, const Vector<T0, Storage0, Allocator0>& vector)
   {
-    map<string,int>::iterator label_iterator;
+    map<string,size_t>::iterator label_iterator;
     label_iterator = label_map_.find(name);
     if (label_iterator == label_map_.end())
       throw WrongArgument("Vector<FloatDouble, DenseSparseCollection>"
@@ -389,18 +389,18 @@ namespace Seldon
   */
   template <class T, template <class U> class Allocator >
   void Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
-  ::SetName(int i, string name)
+  ::SetName(size_t i, string name)
   {
 #ifdef SELDON_CHECK_BOUNDS
     if (i < 0 || i >= Nvector_)
       throw WrongIndex("Vector<FloatDouble, DenseSparseCollection>"
-		       "::SetVector(int i, string name)",
+		       "::SetVector(size_t i, string name)",
 		       string("Index should be in [0, ")
                        + to_str(Nvector_ - 1)
 		       + "], but is equal to " + to_str(i) + ".");
 #endif
 
-    if (i >= int(label_vector_.size()))
+    if (i >= size_t(label_vector_.size()))
       label_vector_.resize(Nvector_, "");
 
     if (label_vector_[i] != "")
@@ -426,14 +426,14 @@ namespace Seldon
   */
   template <class T, template <class U> class Allocator >
   void Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
-  ::GetVector(int i, typename
+  ::GetVector(size_t i, typename
 	      Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
 	      ::float_dense_v& vector) const
   {
 #ifdef SELDON_CHECK_BOUNDS
     if (i < 0 || i >= Nvector_)
       throw WrongIndex("Vector<FloatDouble, DenseSparseCollection>"
-                       "::GetVector(int i, Vector<float, VectFull>&)",
+                       "::GetVector(size_t i, Vector<float, VectFull>&)",
 		       string("Index should be in [0, ")
                        + to_str(Nvector_ - 1)
 		       + "], but is equal to " + to_str(i) + ".");
@@ -441,7 +441,7 @@ namespace Seldon
 
     if (collection_(i) != 0)
       WrongArgument("Vector<FloatDouble, DenseSparseCollection>"
-                    "::GetVector(int i, Vector<float, VectFull>&)",
+                    "::GetVector(size_t i, Vector<float, VectFull>&)",
                     string("The ") + to_str(i) + "-th inner vector "
                     "is of type " + GetType(i) + ".");
 
@@ -456,14 +456,14 @@ namespace Seldon
   */
   template <class T, template <class U> class Allocator >
   void Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
-  ::GetVector(int i, typename
+  ::GetVector(size_t i, typename
 	      Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
 	      ::float_sparse_v& vector) const
   {
 #ifdef SELDON_CHECK_BOUNDS
     if (i < 0 || i >= Nvector_)
       throw WrongIndex("Vector<FloatDouble, DenseSparseCollection>"
-                       "::GetVector(int i, Vector<float, VectSparse>&)",
+                       "::GetVector(size_t i, Vector<float, VectSparse>&)",
 		       string("Index should be in [0, ")
                        + to_str(Nvector_ - 1)
 		       + "], but is equal to " + to_str(i) + ".");
@@ -471,7 +471,7 @@ namespace Seldon
 
     if (collection_(i) != 1)
       WrongArgument("Vector<FloatDouble, DenseSparseCollection>"
-                    "::GetVector(int i, Vector<float, VectSparse>&)",
+                    "::GetVector(size_t i, Vector<float, VectSparse>&)",
                     string("The ") + to_str(i) + "-th inner vector "
                     "is of type " + GetType(i) + ".");
 
@@ -486,14 +486,14 @@ namespace Seldon
   */
   template <class T, template <class U> class Allocator >
   void Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
-  ::GetVector(int i, typename
+  ::GetVector(size_t i, typename
 	      Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
 	      ::double_dense_v& vector) const
   {
 #ifdef SELDON_CHECK_BOUNDS
     if (i < 0 || i >= Nvector_)
       throw WrongIndex("Vector<FloatDouble, DenseSparseCollection>"
-                       "::GetVector(int i, Vector<double, VectDense>&)",
+                       "::GetVector(size_t i, Vector<double, VectDense>&)",
 		       string("Index should be in [0, ")
                        + to_str(Nvector_ - 1)
 		       + "], but is equal to " + to_str(i) + ".");
@@ -501,7 +501,7 @@ namespace Seldon
 
     if (collection_(i) != 2)
       WrongArgument("Vector<FloatDouble, DenseSparseCollection>"
-                    "::GetVector(int i, Vector<double, VectDense>&)",
+                    "::GetVector(size_t i, Vector<double, VectDense>&)",
                     string("The ") + to_str(i) + "-th inner vector "
                     "is of type " + GetType(i) + ".");
 
@@ -516,14 +516,14 @@ namespace Seldon
   */
   template <class T, template <class U> class Allocator >
   void Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
-  ::GetVector(int i, typename
+  ::GetVector(size_t i, typename
 	      Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
 	      ::double_sparse_v& vector) const
   {
 #ifdef SELDON_CHECK_BOUNDS
     if (i < 0 || i >= Nvector_)
       throw WrongIndex("Vector<FloatDouble, DenseSparseCollection>"
-                       "::GetVector(int i, Vector<double, VectSparse>&)",
+                       "::GetVector(size_t i, Vector<double, VectSparse>&)",
 		       string("Index should be in [0, ")
                        + to_str(Nvector_ - 1)
 		       + "], but is equal to " + to_str(i) + ".");
@@ -531,7 +531,7 @@ namespace Seldon
 
     if (collection_(i) != 3)
       WrongArgument("Vector<FloatDouble, DenseSparseCollection>"
-                    "::GetVector(int i, Vector<double, VectSparse>&)",
+                    "::GetVector(size_t i, Vector<double, VectSparse>&)",
                     string("The ") + to_str(i) + "-th inner vector "
                     "is of type " + GetType(i) + ".");
 
@@ -549,7 +549,7 @@ namespace Seldon
   void Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
   ::GetVector(string name,Vector<T0, Storage0, Allocator0>& vector) const
   {
-    map<string,int>::const_iterator label_iterator;
+    map<string,size_t>::const_iterator label_iterator;
     label_iterator = label_map_.find(name);
     if (label_iterator == label_map_.end())
       throw WrongArgument("Vector<FloatDouble, DenseSparseCollection>"
@@ -572,7 +572,7 @@ namespace Seldon
   template <class T, template <class U> class Allocator >
   double
   Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
-  ::operator() (int i) const
+  ::operator() (size_t i) const
   {
 #ifdef SELDON_CHECK_BOUNDS
     if (i < 0 || i >= this->m_)
@@ -582,7 +582,7 @@ namespace Seldon
 		       + "], but is equal to " + to_str(i) + ".");
 #endif
 
-    int j = 0;
+    size_t j = 0;
     while (i >= length_sum_(j))
       j++;
 
@@ -651,7 +651,7 @@ namespace Seldon
     double_sparse_c_ *= alpha;
     return *this;
   }
-  
+
 
   ////////////////////////
   // CONVENIENT METHODS //
@@ -663,9 +663,9 @@ namespace Seldon
   void Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
   ::Print() const
   {
-    for (int i = 0; i < Nvector_; i++)
+    for (size_t i = 0; i < Nvector_; i++)
       {
-	if (i < int(label_vector_.size()) && label_vector_[i] != "")
+	if (i < size_t(label_vector_.size()) && label_vector_[i] != "")
 	  cout << label_vector_[i] << ":" << endl;
 	else
           cout << "(noname):" << endl;
@@ -738,12 +738,12 @@ namespace Seldon
 #endif
     if (with_size)
       FileStream
-        .write(reinterpret_cast<char*>(const_cast<int*>(&this->Nvector_)),
-               sizeof(int));
+        .write(reinterpret_cast<char*>(const_cast<size_t*>(&this->Nvector_)),
+               sizeof(size_t));
 
     collection_.Write(FileStream, with_size);
 
-    for (int i = 0; i < Nvector_; i++)
+    for (size_t i = 0; i < Nvector_; i++)
       {
 	switch (collection_(i))
 	  {
@@ -820,7 +820,7 @@ namespace Seldon
                     "The stream is not ready.");
 #endif
 
-    for (int i = 0; i < Nvector_; i++)
+    for (size_t i = 0; i < Nvector_; i++)
       {
 	switch (collection_(i))
 	  {
@@ -895,10 +895,12 @@ namespace Seldon
                     "The stream is not ready.");
 #endif
 
-    int* Nvector = new int;
-    FileStream.read(reinterpret_cast<char*>(Nvector), sizeof(int));
+    size_t* Nvector = new size_t;
+    FileStream.read(reinterpret_cast<char*>(Nvector), sizeof(size_t));
 
-    Vector<int, VectFull, MallocAlloc<int> > collection(*Nvector);
+
+
+    Vector<size_t, VectFull, MallocAlloc<size_t> > collection(*Nvector);
     collection.Read(FileStream);
 
     Clear();
@@ -908,7 +910,7 @@ namespace Seldon
     double_dense_v v2;
     double_sparse_v v3;
 
-    for (int i = 0; i < *Nvector; i++)
+    for (size_t i = 0; i < *Nvector; i++)
       {
 	switch (collection(i))
 	  {
@@ -963,7 +965,7 @@ namespace Seldon
     Vector<float, VectSparse, Allocator<float> > v1;
     Vector<double, VectFull, Allocator<double> > v2;
     Vector<double, VectSparse, Allocator<double> > v3;
-    for (int i = 0; i < V.GetNvector(); i++)
+    for (size_t i = 0; i < V.GetNvector(); i++)
       {
 	switch (V.GetCollectionIndex()(i))
 	  {
@@ -1006,7 +1008,7 @@ namespace Seldon
   */
   template <class T, template <class U> class Allocator >
   string Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
-  ::GetType(int i) const
+  ::GetType(size_t i) const
   {
     if (collection_(i) == 0)
       return "Vector<float, VectDense>";

@@ -105,7 +105,7 @@ namespace Seldon
 
     pointer ptr = this->data_;
     size_t lgth = i;
-    for (int k = 0; k < i; k++, ptr += lgth)
+    for (size_t k = 0; k < i; k++, ptr += lgth)
       me_[k] = ptr;
   }
 
@@ -470,7 +470,7 @@ namespace Seldon
   {
     T x_;
     SetComplexReal(x, x_);
-    for (int i = 0; i < this->GetDataSize(); i++)
+    for (size_t i = 0; i < this->GetDataSize(); i++)
       this->data_[i] = x_;
   }
 

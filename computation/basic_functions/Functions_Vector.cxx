@@ -228,7 +228,7 @@ namespace Seldon
     CheckDim(X, Y, "Add(X, Y)", "X + Y");
 #endif
 
-    for (int i = 0; i < X.GetNvector(); i++)
+    for (size_t i = 0; i < X.GetNvector(); i++)
       Add(alpha, X.GetVector(i), Y.GetVector(i));
   }
 
@@ -406,7 +406,7 @@ namespace Seldon
     CheckDim(X, Y, "DotProd(X, Y)");
 #endif
 
-    for (int i = 0; i < X.GetM(); i++)
+    for (size_t i = 0; i < X.GetM(); i++)
       value += X(i) * Y(i);
 
     return value;
@@ -426,7 +426,7 @@ namespace Seldon
     CheckDim(X, Y, "DotProd(X, Y)", "<X, Y>");
 #endif
 
-    for (int i = 0; i < X.GetNvector(); i++)
+    for (size_t i = 0; i < X.GetNvector(); i++)
       value += DotProdVector(X.GetVector(i), Y.GetVector(i));
     return value;
   }
@@ -582,8 +582,8 @@ namespace Seldon
   Norm1(const Vector<T1, Storage1, Allocator1>& X)
   {
     typename ClassComplexType<T1>::Treal value(0);
-    
-    for (int i = 0; i < X.GetM(); i++)
+
+    for (size_t i = 0; i < X.GetM(); i++)
       value += ComplexAbs(X(i));
 
     return value;

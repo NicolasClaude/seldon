@@ -73,7 +73,7 @@ namespace Seldon
     \return The total length of the vector.
   */
   template <class T, template <class U> class Allocator >
-  inline int Vector<FloatDouble, DenseSparseCollection, Allocator<T> >::GetM()
+  inline size_t Vector<FloatDouble, DenseSparseCollection, Allocator<T> >::GetM()
     const
   {
     return this->m_;
@@ -85,7 +85,7 @@ namespace Seldon
     \return The total length of the vector.
   */
   template <class T, template <class U> class Allocator >
-  inline int Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
+  inline size_t Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
   ::GetLength() const
   {
     return this->m_;
@@ -97,7 +97,7 @@ namespace Seldon
     \return The total number of aggregated vectors.
   */
   template <class T, template <class U> class Allocator >
-  inline int Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
+  inline size_t Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
   ::GetNvector() const
   {
     return Nvector_;
@@ -109,7 +109,7 @@ namespace Seldon
     \return The lengths of the underlying vectors.
   */
   template <class T, template <class U> class Allocator >
-  inline const Vector<int, VectFull, MallocAlloc<int> >&
+  inline const Vector<size_t, VectFull, MallocAlloc<size_t> >&
   Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
   ::GetVectorLength() const
   {
@@ -122,7 +122,7 @@ namespace Seldon
     \return The cumulative sum of the lengths of the underlying vectors.
   */
   template <class T, template <class U> class Allocator >
-  inline const Vector<int, VectFull, MallocAlloc<int> >&
+  inline const Vector<size_t, VectFull, MallocAlloc<size_t> >&
   Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
   ::GetLengthSum() const
   {
@@ -135,7 +135,7 @@ namespace Seldon
     \return The collection index vector of the underlying vectors.
   */
   template <class T, template <class U> class Allocator >
-  inline const Vector<int, VectFull, MallocAlloc<int> >&
+  inline const Vector<size_t, VectFull, MallocAlloc<size_t> >&
   Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
   ::GetCollectionIndex() const
   {
@@ -149,7 +149,7 @@ namespace Seldon
     collection.
   */
   template <class T, template <class U> class Allocator >
-  inline const Vector<int, VectFull, MallocAlloc<int> >&
+  inline const Vector<size_t, VectFull, MallocAlloc<size_t> >&
   Vector<FloatDouble, DenseSparseCollection, Allocator<T> >
   ::GetSubvectorIndex() const
   {

@@ -424,7 +424,7 @@ namespace Seldon
   inline Matrix<T, Prop, ColMajor, Allocator>&
   Matrix<T, Prop, ColMajor, Allocator>::operator*= (const T0& alpha)
   {
-    for (int i = 0; i < this->m_ * this->n_; i++)
+    for (size_t i = 0; i < this->m_ * this->n_; i++)
       this->data_[i] *= alpha;
 
     return *this;

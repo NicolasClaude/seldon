@@ -846,7 +846,7 @@ namespace Seldon
   template <class Prop0, class Storage0,
 	    class Prop1, class Storage1,
 	    template <class U> class Allocator>
-  HeterogeneousMatrixCollection<Prop0, Storage0, Prop1, Storage1, Allocator>
+  void HeterogeneousMatrixCollection<Prop0, Storage0, Prop1, Storage1, Allocator>
   ::Copy(const HeterogeneousMatrixCollection<Prop0, Storage0, Prop1,
          Storage1, Allocator>& A)
   {
@@ -977,7 +977,7 @@ namespace Seldon
 	    class Prop1, class Storage1,
 	    template <class U> class Allocator> void
   HeterogeneousMatrixCollection<Prop0, Storage0, Prop1, Storage1, Allocator>
-  ::Write(ostream& FileStream, bool with_size = true) const
+  ::Write(ostream& FileStream, bool with_size) const
   {
 
 #ifdef SELDON_CHECK_IO
