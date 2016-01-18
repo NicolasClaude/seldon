@@ -70,28 +70,28 @@ namespace Seldon
 	    class T1, class Prop1, class Storage1, class Allocator1>
   void MltScalar(const T0& alpha,
 		 Matrix<T1, Prop1, Storage1, Allocator1>& A)  throw();
-  
+
   template <class T0,
 	    class T1, class Prop1, class Allocator1>
   void MltScalar(const T0& alpha,
 		 Matrix<T1, Prop1, ColMajorCollection, Allocator1>& A);
-  
+
   template <class T0,
 	    class T1, class Prop1, class Allocator1>
   void MltScalar(const T0& alpha,
 		 Matrix<T1, Prop1, RowMajorCollection, Allocator1>& A);
-  
+
   template <class T0, class Allocator>
   void MltScalar(const T0& alpha,
 		 Matrix<FloatDouble, General, DenseSparseCollection, Allocator>& A);
-  
+
   template <class T0, class Prop0, class Allocator0,
 	    class T1, class Prop1, class Allocator1,
 	    class T2, class Prop2, class Allocator2>
   void MltMatrix(const Matrix<T0, Prop0, RowSparse, Allocator0>& A,
 		 const Matrix<T1, Prop1, RowSparse, Allocator1>& B,
 		 Matrix<T2, Prop2, RowSparse, Allocator2>& C);
-  
+
   template <class T0, class Prop0, class Allocator0,
 	    class T1, class Prop1, class Allocator1,
 	    class T2, class Prop2, class Allocator2>
@@ -116,8 +116,8 @@ namespace Seldon
 		 const class_SeldonTrans&,
 		 const Matrix<T1, Prop1, RowSparse, Allocator1>& B,
 		 Matrix<T2, Prop2, RowSparse, Allocator2>& C);
-  
-  
+
+
   // MLT //
   /////////
 
@@ -149,17 +149,6 @@ namespace Seldon
 		    const Matrix<T2, Prop2, Storage2, Allocator2>& B,
 		    const T3& beta,
 		    Matrix<T4, Prop4, Storage4, Allocator4>& C);
-
-  template <class T0,
-            class T1, class Prop1, class Allocator1,
-            class T2, class Allocator2,
-            class T3,
-            class T4, class Prop4, class Allocator4>
-  void MltAddMatrix(const T0& alpha,
-		    const Matrix<T1, Prop1, PETScMPIDense, Allocator1>& A,
-		    const Matrix<T2, General, RowMajor, Allocator2>& B,
-		    const T3& beta,
-		    Matrix<T4, Prop4, PETScMPIDense, Allocator4>& C);
 
   template <class T0,
 	    class T1, class Prop1, class Allocator1,
@@ -245,7 +234,7 @@ namespace Seldon
 			     DenseSparseCollection, Allocator3>& C,
 			     Matrix<T4, Prop4, Storage4, Allocator4>& mc,
 			     int j, int k);
-  
+
   template <class T0, class Allocator1, class Allocator2, class T3,
 	    class Allocator4>
   void MltAddMatrix(const T0& alpha,
@@ -256,7 +245,7 @@ namespace Seldon
 		    const T3& beta,
 		    Matrix<FloatDouble, General, DenseSparseCollection,
 		    Allocator4>& C);
-  
+
   template <class T0,
 	    class T1, class Prop1, class Allocator1,
 	    class T2, class Prop2, class Allocator2,
@@ -267,7 +256,7 @@ namespace Seldon
 		    const Matrix<T2, Prop2, RowSparse, Allocator2>& B,
 		    const T3& beta,
 		    Matrix<T4, Prop4, RowSparse, Allocator4>& C);
-  
+
   template <class T0,
 	    class T1, class Prop1, class Allocator1,
 	    class T2, class Prop2, class Allocator2,
@@ -280,16 +269,16 @@ namespace Seldon
 		    const Matrix<T2, Prop2, RowSparse, Allocator2>& B,
 		    const T3& beta,
 		    Matrix<T4, Prop4, RowSparse, Allocator4>& C);
-  
+
   template<class T0, class T1, class Prop1, class Allocator1, class T4,
            class T2, class Prop2, class Storage2, class Allocator2,
            class T3, class Prop3, class Storage3, class Allocator3>
   void MltAddMatrix(const T0& alpha,
-		    const Matrix<T1, Prop1, RowSparse, Allocator1>& A,              
+		    const Matrix<T1, Prop1, RowSparse, Allocator1>& A,
 		    const Matrix<T2, Prop2, Storage2, Allocator2>& B,
 		    const T4& beta,
 		    Matrix<T3, Prop3, Storage3, Allocator3>& C);
-  
+
   template<class T0, class T1, class Prop1, class Allocator1, class T4,
            class T2, class Prop2, class Storage2, class Allocator2,
            class T3, class Prop3, class Storage3, class Allocator3>
@@ -313,7 +302,7 @@ namespace Seldon
 		    const Matrix<T2, Prop2, RowSparse, Allocator2>& B,
 		    const T3& beta,
 		    Matrix<T4, Prop4, RowMajor, Allocator4>& C);
-  
+
 
   // MLTADD //
   ////////////
@@ -328,21 +317,21 @@ namespace Seldon
   void AddMatrix(const T0& alpha,
 		 const Matrix<T1, Prop1, Storage1, Allocator1>& A,
 		 Matrix<T2, Prop2, Storage2, Allocator2>& B);
-  
+
   template<class T0,
 	   class T1, class Prop1, class Allocator1,
 	   class T2, class Prop2, class Allocator2>
   void AddMatrix(const T0& alpha,
 		 const Matrix<T1, Prop1, RowMajorCollection, Allocator1>& A,
 		 Matrix<T2, Prop2, RowMajorCollection, Allocator2>& B);
-  
+
   template<class T0,
 	   class T1, class Prop1, class Allocator1,
 	   class T2, class Prop2, class Allocator2>
   void AddMatrix(const T0& alpha,
 		 const Matrix<T1, Prop1, ColMajorCollection, Allocator1>& A,
 		 Matrix<T2, Prop2, ColMajorCollection, Allocator2>& B);
-  
+
   template <class T0,
 	    class T1, class Prop1, class Storage1, class Allocator1,
 	    class Allocator2>
@@ -351,7 +340,7 @@ namespace Seldon
 			 Matrix<FloatDouble, General,
                          DenseSparseCollection, Allocator2>& B,
 			 int i, int j);
-  
+
   template <class T0, class Allocator1, class Allocator2>
   void AddMatrix(const T0& alpha,
 		 const Matrix<FloatDouble, General,
@@ -363,44 +352,44 @@ namespace Seldon
   void AddMatrix(const T0& alpha,
 		 const Matrix<T1, Prop1, RowMajor, Allocator1>& A,
 		 Matrix<T2, Prop2, RowSparse, Allocator2>& B);
-  
+
   template<class T0, class T1, class Prop1, class Allocator1,
            class T2, class Prop2, class Allocator2>
   void AddMatrix(const T0& alpha,
 		 const Matrix<T1, Prop1, ColMajor, Allocator1>& A,
 		 Matrix<T2, Prop2, RowSparse, Allocator2>& B);
-  
+
   template<class T0, class T1, class Prop1, class Allocator1,
            class T2, class Prop2, class Storage, class Allocator2>
   void Add_csr(const T0& alpha,
                const Matrix<T1, Prop1, Storage, Allocator1>& A,
                Matrix<T2, Prop2, Storage, Allocator2>& B, size_t p);
-  
+
   template<class T0, class T1, class Prop1, class Allocator1,
            class T2, class Prop2, class Allocator2>
   void AddMatrix(const T0& alpha,
 		 const Matrix<T1, Prop1, RowSparse, Allocator1>& A,
 		 Matrix<T2, Prop2, RowSparse, Allocator2>& B);
-  
+
   template<class T0, class T1, class Prop1, class Allocator1,
            class T2, class Prop2, class Allocator2>
   void AddMatrix(const T0& alpha,
 		 const Matrix<T1, Prop1, ColSparse, Allocator1>& A,
 		 Matrix<T2, Prop2, ColSparse, Allocator2>& B);
-  
+
   template<class T0, class T1, class Prop1, class Allocator1,
            class T2, class Prop2, class Allocator2>
   void AddMatrix(const T0& alpha,
 		 const Matrix<T1, Prop1, RowSymSparse, Allocator1>& A,
 		 Matrix<T2, Prop2, RowSymSparse, Allocator2>& B);
-  
+
   template<class T0, class T1, class Prop1, class Allocator1,
            class T2, class Prop2, class Allocator2>
   void AddMatrix(const T0& alpha,
 		 const Matrix<T1, Prop1, ColSymSparse, Allocator1>& A,
 		 Matrix<T2, Prop2, ColSymSparse, Allocator2>& B);
-  
-  
+
+
   // ADD //
   /////////
 
@@ -477,27 +466,27 @@ namespace Seldon
   ///////////
   // NORMS //
 
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   typename ClassComplexType<T>::Treal
   MaxAbs(const Matrix<T, Prop, Storage, Allocator>& A);
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   typename ClassComplexType<T>::Treal
   Norm1(const Matrix<T, Prop, Storage, Allocator>& A);
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   typename ClassComplexType<T>::Treal
   NormInf(const Matrix<T, Prop, Storage, Allocator>& A);
-  
+
   template <class T, class Prop, class Allocator>
   typename ClassComplexType<T>::Treal
   MaxAbs(const Matrix<T, Prop, RowSparse, Allocator>& A);
-  
+
   template <class T, class Prop, class Allocator>
   typename ClassComplexType<T>::Treal
   Norm1(const Matrix<T, Prop, RowSparse, Allocator>& A);
-  
+
   template <class T, class Prop, class Allocator>
   typename ClassComplexType<T>::Treal
   NormInf(const Matrix<T, Prop, RowSparse, Allocator>& A);
@@ -505,97 +494,97 @@ namespace Seldon
   template <class T, class Prop, class Allocator>
   typename ClassComplexType<T>::Treal
   MaxAbs(const Matrix<T, Prop, ColSparse, Allocator>& A);
-  
+
   template <class T, class Prop, class Allocator>
   typename ClassComplexType<T>::Treal
   Norm1(const Matrix<T, Prop, ColSparse, Allocator>& A);
-  
+
   template <class T, class Prop, class Allocator>
   typename ClassComplexType<T>::Treal
   NormInf(const Matrix<T, Prop, ColSparse, Allocator>& A);
-  
+
   template <class T, class Prop, class Allocator>
   typename ClassComplexType<T>::Treal
   MaxAbs(const Matrix<T, Prop, RowSymSparse, Allocator>& A);
-  
+
   template <class T, class Prop, class Allocator>
   typename ClassComplexType<T>::Treal
   Norm1(const Matrix<T, Prop, RowSymSparse, Allocator>& A);
-  
+
   template <class T, class Prop, class Allocator>
   typename ClassComplexType<T>::Treal
   NormInf(const Matrix<T, Prop, RowSymSparse, Allocator>& A);
-  
+
   template <class T, class Prop, class Allocator>
   typename ClassComplexType<T>::Treal
   MaxAbs(const Matrix<T, Prop, ColSymSparse, Allocator>& A);
-  
+
   template <class T, class Prop, class Allocator>
   typename ClassComplexType<T>::Treal
   Norm1(const Matrix<T, Prop, ColSymSparse, Allocator>& A);
-  
+
   template <class T, class Prop, class Allocator>
   typename ClassComplexType<T>::Treal
   NormInf(const Matrix<T, Prop, ColSymSparse, Allocator>& A);
 
-  
+
   // NORMS //
   ///////////
-  
+
 
   ///////////////
-  // TRANSPOSE //  
-  
-  
+  // TRANSPOSE //
+
+
   template<class T, class Prop, class Storage, class Allocator>
   void Transpose(Matrix<T, Prop, Storage, Allocator>& A);
-  
+
   template<class T, class Prop, class Storage, class Allocator>
   void Transpose(const Matrix<T, Prop, Storage, Allocator>& A,
                  Matrix<T, Prop, Storage, Allocator>& B);
-  
+
   template<class T, class Storage, class Allocator>
   void Transpose(Matrix<T, Symmetric, Storage, Allocator>& A);
-  
+
   template<class T, class Storage, class Allocator>
   void Transpose(Matrix<T, Hermitian, Storage, Allocator>& A);
-  
+
   template<class T, class Storage, class Allocator>
   void Transpose(const Matrix<T, Symmetric, Storage, Allocator>& A,
                  Matrix<T, Symmetric, Storage, Allocator>& B);
-  
+
   template<class T, class Storage, class Allocator>
   void Transpose(const Matrix<T, Hermitian, Storage, Allocator>& A,
                  Matrix<T, Hermitian, Storage, Allocator>& B);
-  
+
   template<class T, class Allocator>
   void Transpose(const Matrix<T, General, RowSparse, Allocator>& A,
                  Matrix<T, General, RowSparse, Allocator>& B);
-  
+
   template<class T, class Allocator>
   void Transpose(Matrix<T, General, RowSparse, Allocator>& A);
-  
+
   template<class T, class Allocator>
   void Transpose(const Matrix<T, General, ColSparse, Allocator>& A,
                  Matrix<T, General, ColSparse, Allocator>& B);
-  
+
   template<class T, class Allocator>
   void Transpose(Matrix<T, General, ColSparse, Allocator>& A);
-  
+
   template<class T, class Prop, class Storage, class Allocator>
   void Conjugate(Matrix<T, Prop, Storage, Allocator>& A);
-  
+
   template<class T, class Prop, class Storage, class Allocator>
   void TransposeConj(const Matrix<T, Prop, Storage, Allocator>& A,
                      Matrix<T, Prop, Storage, Allocator>& B);
-  
+
   template<class T, class Prop, class Storage, class Allocator>
   void TransposeConj(Matrix<T, Prop, Storage, Allocator>& A);
 
 
-  // TRANSPOSE //    
+  // TRANSPOSE //
   ///////////////
-  
+
 } // namespace Seldon.
 
 #endif

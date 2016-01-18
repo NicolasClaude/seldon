@@ -78,17 +78,18 @@ namespace Seldon
     const Mat& GetPetscMatrix() const;
 
     int64_t GetMemorySize() const;
-    
+
     // Memory management.
     void Resize(int i, int j);
     void SetData(int i, int j, pointer data);
+    void GetLocalData(T* data) const;
 
     const_reference Val(int i, int j) const;
     reference Val(int i, int j);
     reference operator[] (int i);
     const_reference operator[] (int i) const;
     void Set(int, int, T);
-    void SetBuffer(int, int, T, InsertMode);
+    void SetBuffer(int, int, T, InsertMode = INSERT_VALUES);
     void Flush() const;
     void GetProcessorRowRange(int& i, int& j) const;
     void Copy(const Mat& A);
@@ -105,8 +106,8 @@ namespace Seldon
     void Print(int l) const;
 
     // Input/output functions.
-    void Write(string FileName, bool with_size) const;
-    void Write(ostream& FileStream, bool with_size) const;
+    void Write(string FileName, bool with_size = true) const;
+    void Write(ostream& FileStream, bool with_size = true) const;
     void WriteText(string FileName) const;
     void WriteText(ostream& FileStream) const;
 
@@ -175,6 +176,7 @@ namespace Seldon
 
     value_type operator() (int i, int j);
     value_type operator() (int i, int j) const;
+    value_type GetOnAll(int i, int j) const;
 
     void Copy(const Matrix<T, Prop, PETScMPIDense, Allocator>& A);
     Matrix<T, Prop, PETScMPIDense, Allocator>&
@@ -209,6 +211,7 @@ namespace Seldon
 
     value_type operator() (int i, int j);
     value_type operator() (int i, int j) const;
+    value_type GetOnAll(int i, int j) const;
 
     void Copy(const Matrix<T, Prop, PETScMPIAIJ, Allocator>& A);
     Matrix<T, Prop, PETScMPIAIJ, Allocator>&
@@ -226,6 +229,7 @@ namespace Seldon
 
 } // namespace Seldon.
 
+#include "PetscMatrixInline.cxx"
 
 #define SELDON_FILE_MATRIX_PETSCMATRIX_HXX
 #endif

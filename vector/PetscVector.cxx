@@ -40,7 +40,7 @@ namespace Seldon
     Clear();
 
     int ierr;
-    ierr = VecGetSize(petsc_vector, &this->m_);
+    ierr = VecGetSize(petsc_vector, (int*)&this->m_);
     CHKERRABORT(mpi_communicator_, ierr);
     PetscObjectGetComm(reinterpret_cast<PetscObject>(petsc_vector),
                        &mpi_communicator_);
@@ -469,8 +469,12 @@ namespace Seldon
   void Vector<T, PETScPar, Allocator>
   ::Read(istream& FileStream, bool with_size)
   {
-    throw Undefined("PETScVector<T, PETScPar, Allocator>"
-                    "::Read(istream& FileStream, bool with_size)");
+    Vector<T> tmp;
+    tmp.Read(FileStream, with_size);
+    this->Reallocate(tmp.GetM());
+    for (size_t i = 0 ; i < tmp.GetM(); i++)
+      this->SetBuffer(i, tmp(i));
+    this->Flush();
   }
 
 

@@ -73,6 +73,8 @@ namespace Seldon
 
     void Resize(int i);
     void SetData(int i, pointer data);
+    template <class Allocator0>
+    void SetData(const PETScVector<T, Allocator0>& V);
     void Nullify();
 
     // Element access.
@@ -82,7 +84,10 @@ namespace Seldon
     void GetProcessorRange(int& i, int& j) const;
     void Copy(const PETScVector<T, Allocator>& X);
     void Copy(const Vec& petsc_vector);
+    template <class T0, class Allocator0>
+    void Copy(const Vector<T0, VectFull, Allocator0>);
     void Append(const T& x);
+    value_type GetOnAll(int i) const;
 
     // Basic functions.
     int GetDataSize() const;
@@ -218,6 +223,8 @@ namespace Seldon
 
 
 } // namespace Seldon.
+
+#include "PetscVectorInline.cxx"
 
 #define SELDON_FILE_VECTOR_PETSCVECTOR_HXX
 #endif

@@ -49,7 +49,7 @@ namespace Seldon
   /////////
   // MLT //
 
-  
+
   // Y = M X for RowSparse matrices
   template <class T1, class Prop1, class Allocator1,
 	    class T2, class Storage2, class Allocator2,
@@ -70,17 +70,17 @@ namespace Seldon
     int* ptr = M.GetPtr();
     int* ind = M.GetInd();
     T1* data = M.GetData();
-    
+
     for (int i = 0; i < ma; i++)
       {
 	temp = zero;
 	for (int j = ptr[i]; j < ptr[i+1]; j++)
 	  temp += data[j] * X(ind[j]);
-	
+
 	Y(i) = temp;
       }
   }
-  
+
 
   // Y = M X for ColSparse matrices
   template <class T1, class Prop1, class Allocator1,
@@ -106,7 +106,7 @@ namespace Seldon
       }
   }
 
-  
+
   // Y = M X for RowSymSparse
   template <class T1, class Prop1, class Allocator1,
 	    class T2, class Storage2, class Allocator2,
@@ -134,16 +134,16 @@ namespace Seldon
 	temp = zero;
 	for (j = ptr[i]; j < ptr[i + 1]; j++)
 	  temp += data[j] * X(ind[j]);
-	
+
 	Y(i) = temp;
       }
-    
+
     for (i = 0; i < ma-1; i++)
       for (j = ptr[i]; j < ptr[i + 1]; j++)
 	if (ind[j] != i)
 	  Y(ind[j]) += data[j] * X(i);
   }
-  
+
 
   // Y = M X for ColSymSparse
   template <class T1, class Prop1, class Allocator1,
@@ -173,17 +173,17 @@ namespace Seldon
 	for (j = ptr[i]; j < ptr[i + 1]; j++)
 	  if (ind[j] != i)
             temp += data[j] * X(ind[j]);
-        
+
 	Y(i) = temp;
       }
 
     for (i = 0; i < ma; i++)
       for (j = ptr[i]; j < ptr[i + 1]; j++)
 	Y(ind[j]) += data[j] * X(i);
-    
+
   }
 
-  
+
   // Y = M X or M^T X or M^H X for RowSparse
   template <class T1, class Prop1, class Allocator1,
 	    class T2, class Storage2, class Allocator2,
@@ -201,7 +201,7 @@ namespace Seldon
 
     int i, j;
     int ma = M.GetM();
-    
+
 #ifdef SELDON_CHECK_DIMENSIONS
     CheckDim(Trans, M, X, Y, "Mlt(SeldonTrans, M, X, Y)");
 #endif
@@ -210,7 +210,7 @@ namespace Seldon
     int* ind = M.GetInd();
     T1* data = M.GetData();
     Y.Zero();
-    
+
     if (Trans.Trans())
       {
 	for (i = 0; i < ma; i++)
@@ -224,8 +224,8 @@ namespace Seldon
 	    Y(ind[j]) += conjugate(data[j]) * X(i);
       }
   }
-  
-  
+
+
   // Y = M X or M^T X or M^H X for ColSparse
   template <class T1, class Prop1, class Allocator1,
 	    class T2, class Storage2, class Allocator2,
@@ -246,14 +246,14 @@ namespace Seldon
 #ifdef SELDON_CHECK_DIMENSIONS
     CheckDim(Trans, M, X, Y, "Mlt(SeldonTrans, M, X, Y)");
 #endif
-    
+
     T4 temp, zero;
     SetComplexZero(zero);
-    
+
     int* ptr = M.GetPtr();
     int* ind = M.GetInd();
     T1* data = M.GetData();
-    
+
     if (Trans.Trans())
       {
 	for (i = 0; i < M.GetN(); i++)
@@ -261,7 +261,7 @@ namespace Seldon
 	    temp = zero;
 	    for (j = ptr[i]; j < ptr[i + 1]; j++)
 	      temp += data[j] * X(ind[j]);
-	    
+
 	    Y(i) = temp;
 	  }
       }
@@ -272,7 +272,7 @@ namespace Seldon
 	    temp = zero;
 	    for (j = ptr[i]; j < ptr[i + 1]; j++)
 	      temp += conjugate(data[j]) * X(ind[j]);
-	    
+
 	    Y(i) = temp;
 	  }
       }
@@ -303,7 +303,7 @@ namespace Seldon
     int i, j;
     T4 zero, temp;
     SetComplexZero(zero);
-    
+
     int* ptr = M.GetPtr();
     int* ind = M.GetInd();
     T1* data = M.GetData();
@@ -313,17 +313,17 @@ namespace Seldon
 	temp = zero;
 	for (j = ptr[i]; j < ptr[i + 1]; j++)
 	  temp += conjugate(data[j]) * X(ind[j]);
-	
+
         Y(i) = temp;
       }
-    
+
     for (i = 0; i < ma - 1; i++)
       for (j = ptr[i]; j < ptr[i + 1]; j++)
 	if (ind[j] != i)
 	  Y(ind[j]) += conjugate(data[j]) * X(i);
   }
-  
-    
+
+
   // Y = M X or M^T X or M^H X for ColSymSparse
   template <class T1, class Prop1, class Allocator1,
 	    class T2, class Storage2, class Allocator2,
@@ -358,17 +358,17 @@ namespace Seldon
 	temp = zero;
 	for (j = ptr[i]; j < ptr[i + 1]; j++)
 	  temp += conjugate(data[j]) * X(ind[j]);
-	
+
         Y(i) = temp;
       }
-    
+
     for (i = 0; i < ma; i++)
       for (j = ptr[i]; j < ptr[i + 1]; j++)
 	if (ind[j] != i)
 	  Y(ind[j]) += conjugate(data[j]) * X(i);
   }
 
-  
+
   // Y = M X for any matrix
   template <class T1, class Prop1, class Storage1, class Allocator1,
 	    class T2, class Storage2, class Allocator2,
@@ -379,7 +379,7 @@ namespace Seldon
   {
     int ma = M.GetM();
     int na = M.GetN();
-    
+
 #ifdef SELDON_CHECK_DIMENSIONS
     CheckDim(M, X, Y, "Mlt(M, X, Y)");
 #endif
@@ -388,7 +388,7 @@ namespace Seldon
     if (Storage1::Sparse)
       throw WrongArgument("Mlt", "This function is intended to dense"
                           " matrices only and not to sparse matrices");
-    
+
     T4 zero, temp;
     SetComplexZero(zero);
 
@@ -397,7 +397,7 @@ namespace Seldon
 	temp = zero;
 	for (int j = 0; j < na; j++)
 	  temp += M(i, j) * X(j);
-	
+
 	Y(i) = temp;
       }
   }
@@ -424,14 +424,14 @@ namespace Seldon
 #ifdef SELDON_CHECK_DIMENSIONS
     CheckDim(Trans, M, X, Y, "Mlt(trans, M, X, Y)");
 #endif
-    
+
     if (Storage1::Sparse)
       throw WrongArgument("MltAdd", "This function is intended to dense"
                           " matrices only and not to sparse matrices");
 
     T4 zero, temp;
     SetComplexZero(zero);
-    
+
     if (Trans.Trans())
       {
 	for (int i = 0; i < na; i++)
@@ -439,7 +439,7 @@ namespace Seldon
 	    temp = zero;
 	    for (int j = 0; j < ma; j++)
 	      temp += M(j, i) * X(j);
-	    
+
 	    Y(i) = temp;
 	  }
       }
@@ -450,273 +450,19 @@ namespace Seldon
 	    temp = zero;
 	    for (int j = 0; j < ma; j++)
 	      temp += conjugate(M(j, i)) * X(j);
-	    
+
 	Y(i) = temp;
 	  }
       }
   }
-  
-    
+
+
   // MLT //
   /////////
 
 
   ////////////
   // MLTADD //
-
-
-  /*** PETSc matrices ***/
-
-
-  template <class T0,
-            class T1, class Prop1, class Allocator1,
-            class T2, class Allocator2,
-            class T3,
-            class T4, class Allocator4>
-  void MltAddVector(const T0& alpha,
-		    const Matrix<T1, Prop1, PETScMPIAIJ, Allocator1>& M,
-		    const Vector<T2, PETScSeq, Allocator2>& X,
-		    const T3& beta, Vector<T4, PETScSeq, Allocator4>& Y)
-  {
-#ifdef SELDON_CHECK_DIMENSIONS
-    CheckDim(M, X, Y, "MltAdd(alpha, M, X, beta, Y)");
-#endif
-    if (beta == T3(0))
-      {
-	if (alpha == T0(0))
-	  {
-	    Y.Zero();
-	    return;
-	  }
-	else
-	  {
-	    MatMult(M.GetPetscMatrix(), X.GetPetscVector(), Y.GetPetscVector());
-	    if (alpha != T0(1))
-	      VecScale(Y.GetPetscVector(), alpha);
-	    return;
-	  }
-      }
-    if (alpha == T0(1))
-      {
-        if (beta != T3(1))
-          VecScale(Y.GetPetscVector(), beta);
-        MatMultAdd(M.GetPetscMatrix(), X.GetPetscVector(),
-                   Y.GetPetscVector(),Y.GetPetscVector());
-        return;
-      }
-    Vector<T2, PETScSeq, Allocator2> tmp;
-    tmp.Copy(Y);
-    MatMult(M.GetPetscMatrix(), X.GetPetscVector(), tmp.GetPetscVector());
-    VecAXPBY(Y.GetPetscVector(), alpha, beta, tmp.GetPetscVector());
-    return;
-  }
-
-
-  template <class T0,
-            class T1, class Prop1, class Allocator1,
-            class T2, class Allocator2,
-            class T3,
-            class T4, class Allocator4>
-  void MltAddVector(const T0& alpha,
-		    const Matrix<T1, Prop1, PETScMPIAIJ, Allocator1>& M,
-		    const Vector<T2, PETScPar, Allocator2>& X,
-		    const T3& beta, Vector<T4, PETScPar, Allocator4>& Y)
-  {
-#ifdef SELDON_CHECK_DIMENSIONS
-    CheckDim(M, X, Y, "MltAdd(alpha, M, X, beta, Y)");
-#endif
-    if (beta == T3(0))
-      {
-	if (alpha == T0(0))
-	  {
-	    Y.Zero();
-	    return;
-	  }
-	else
-	  {
-	    MatMult(M.GetPetscMatrix(), X.GetPetscVector(), Y.GetPetscVector());
-	    if (alpha != T0(1))
-	      VecScale(Y.GetPetscVector(), alpha);
-	    return;
-	  }
-      }
-    if (alpha == T0(1))
-      {
-        if (beta != T3(1))
-          VecScale(Y.GetPetscVector(), beta);
-        MatMultAdd(M.GetPetscMatrix(), X.GetPetscVector(),
-                   Y.GetPetscVector(),Y.GetPetscVector());
-        return;
-      }
-    Vector<T2, PETScPar, Allocator2> tmp;
-    tmp.Copy(Y);
-    MatMult(M.GetPetscMatrix(), X.GetPetscVector(), tmp.GetPetscVector());
-    VecAXPBY(Y.GetPetscVector(), alpha, beta, tmp.GetPetscVector());
-    return;
-  }
-
-
-  template <class T0,
-            class T1, class Prop1, class Allocator1,
-            class T2, class Allocator2,
-            class T3,
-            class T4, class Allocator4>
-  void MltAddVector(const T0& alpha,
-		    const Matrix<T1, Prop1, PETScMPIAIJ, Allocator1>& M,
-		    const Vector<T2, VectFull, Allocator2>& X,
-		    const T3& beta, Vector<T4, PETScSeq, Allocator4>& Y)
-  {
-#ifdef SELDON_CHECK_DIMENSIONS
-    CheckDim(M, X, Y, "MltAdd(alpha, M, X, beta, Y)");
-#endif
-
-    Vector<T4, PETScSeq, Allocator4> X_Petsc;
-    X_Petsc.Reallocate(X.GetM());
-    for (int i = 0; i < X.GetM(); i++)
-      X_Petsc.SetBuffer(i, X(i));
-    X_Petsc.Flush();
-
-    if (beta == T3(0))
-      {
-	if (alpha == T0(0))
-	  {
-	    Y.Zero();
-	    return;
-	  }
-	else
-	  {
-	    MatMult(M.GetPetscMatrix(), X_Petsc.GetPetscVector(),
-		    Y.GetPetscVector());
-	    if (alpha != T0(1))
-	      VecScale(Y.GetPetscVector(), alpha);
-	    return;
-	  }
-      }
-    if (alpha == T0(1))
-      {
-        if (beta != T3(1))
-          VecScale(Y.GetPetscVector(), beta);
-        MatMultAdd(M.GetPetscMatrix(), X_Petsc.GetPetscVector(),
-                   Y.GetPetscVector(),Y.GetPetscVector());
-        return;
-      }
-    Vector<T2, PETScSeq, Allocator2> tmp;
-    tmp.Copy(Y);
-    MatMult(M.GetPetscMatrix(), X_Petsc.GetPetscVector(),
-            tmp.GetPetscVector());
-    VecAXPBY(Y.GetPetscVector(), alpha, beta, tmp.GetPetscVector());
-    return;
-  }
-
-
-  template <class T0,
-            class T1, class Prop1, class Allocator1,
-            class T2, class Allocator2,
-            class T3,
-            class T4, class Allocator4>
-  void MltAddVector(const T0& alpha,
-		    const Matrix<T1, Prop1, PETScMPIAIJ, Allocator1>& M,
-		    const Vector<T2, VectFull, Allocator2>& X,
-		    const T3& beta, Vector<T4, PETScPar, Allocator4>& Y)
-  {
-#ifdef SELDON_CHECK_DIMENSIONS
-    CheckDim(M, X, Y, "MltAdd(alpha, M, X, beta, Y)");
-#endif
-
-    Vector<T4, PETScPar, Allocator4> X_Petsc;
-    X_Petsc.SetCommunicator(M.GetCommunicator());
-    X_Petsc.Reallocate(X.GetM());
-    for (int i = 0; i < X.GetM(); i++)
-      X_Petsc.SetBuffer(i, X(i));
-    X_Petsc.Flush();
-
-    if (beta == T3(0))
-      {
-	if (alpha == T0(0))
-	  {
-	    Y.Zero();
-	    return;
-	  }
-	else
-	  {
-	    MatMult(M.GetPetscMatrix(), X_Petsc.GetPetscVector(),
-		    Y.GetPetscVector());
-	    if (alpha != T0(1))
-	      VecScale(Y.GetPetscVector(), alpha);
-	    return;
-	  }
-      }
-    if (alpha == T0(1))
-      {
-        if (beta != T3(1))
-          VecScale(Y.GetPetscVector(), beta);
-        MatMultAdd(M.GetPetscMatrix(), X_Petsc.GetPetscVector(),
-                   Y.GetPetscVector(),Y.GetPetscVector());
-        return;
-      }
-    Vector<T2, PETScPar, Allocator2> tmp;
-    tmp.Copy(Y);
-    MatMult(M.GetPetscMatrix(), X_Petsc.GetPetscVector(),
-            tmp.GetPetscVector());
-    VecAXPBY(Y.GetPetscVector(), alpha, beta, tmp.GetPetscVector());
-    return;
-  }
-
-
-  template <class T0,
-            class T1, class Prop1, class Allocator1,
-            class T2, class Allocator2,
-            class T3,
-            class T4, class Allocator4>
-  void MltAddVector(const T0& alpha,
-		    const Matrix<T1, Prop1, PETScMPIDense, Allocator1>& M,
-		    const Vector<T2, VectFull, Allocator2>& X,
-		    const T3& beta, Vector<T4, PETScPar, Allocator4>& Y)
-  {
-#ifdef SELDON_CHECK_DIMENSIONS
-    CheckDim(M, X, Y, "MltAdd(alpha, M, X, beta, Y)");
-#endif
-
-    Vector<T4, PETScPar, Allocator4> X_Petsc;
-     X_Petsc.SetCommunicator(M.GetCommunicator());
-    X_Petsc.Reallocate(X.GetM());
-    for (int i = 0; i < X.GetM(); i++)
-      X_Petsc.SetBuffer(i, X(i));
-    X_Petsc.Flush();
-
-    if (beta == T3(0))
-      {
-	if (alpha == T0(0))
-	  {
-	    Y.Zero();
-	    return;
-	  }
-	else
-	  {
-	    MatMult(M.GetPetscMatrix(), X_Petsc.GetPetscVector(),
-		    Y.GetPetscVector());
-	    if (alpha != T0(1))
-	      VecScale(Y.GetPetscVector(), alpha);
-	    return;
-	  }
-      }
-    if (alpha == T0(1))
-      {
-        if (beta != T3(1))
-          VecScale(Y.GetPetscVector(), beta);
-        MatMultAdd(M.GetPetscMatrix(), X_Petsc.GetPetscVector(),
-                   Y.GetPetscVector(),Y.GetPetscVector());
-        return;
-      }
-    Vector<T2, PETScPar, Allocator2> tmp;
-    tmp.Copy(Y);
-    tmp.SetCommunicator(M.GetCommunicator());
-    MatMult(M.GetPetscMatrix(), X_Petsc.GetPetscVector(),
-            tmp.GetPetscVector());
-    VecAXPBY(Y.GetPetscVector(), alpha, beta, tmp.GetPetscVector());
-    return;
-  }
-
 
 
   /*** Sparse matrices ***/
@@ -794,7 +540,7 @@ namespace Seldon
       }
   }
 
-  
+
   template <class T0,
 	    class T1, class Prop1, class Allocator1,
 	    class T2, class Storage2, class Allocator2,
@@ -823,7 +569,7 @@ namespace Seldon
       }
   }
 
-  
+
   /*** Symmetric sparse matrices ***/
 
 
@@ -868,7 +614,7 @@ namespace Seldon
 	  Y(ind[j]) += alpha * data[j] * X(i);
   }
 
-  
+
   template <class T0,
             class T1, class Prop1, class Allocator1,
 	    class T2, class Storage2, class Allocator2,
@@ -903,7 +649,7 @@ namespace Seldon
 	for (j = ptr[i]; j < ptr[i + 1]; j++)
 	  if (ind[j] != i)
             temp += data[j] * X(ind[j]);
-        
+
 	Y(i) += alpha * temp;
 
         for (j = ptr[i]; j < ptr[i + 1]; j++)
@@ -911,7 +657,7 @@ namespace Seldon
       }
   }
 
-  
+
   template <class T0,
 	    class T1, class Prop1, class Allocator1,
 	    class T2, class Allocator2,
@@ -1018,7 +764,7 @@ namespace Seldon
 	MltAdd(alpha, M, X, beta, Y);
 	return;
       }
-    
+
     int i, j;
 
     int ma = M.GetM();
@@ -1033,7 +779,7 @@ namespace Seldon
     int* ind = M.GetInd();
     typename Matrix<T1, Prop1, RowSparse, Allocator1>::pointer
       data = M.GetData();
-    
+
     if (Trans.Trans())
       {
 	for (i = 0; i < ma; i++)
@@ -1048,7 +794,7 @@ namespace Seldon
       }
   }
 
-  
+
   template <class T0,
 	    class T1, class Prop1, class Allocator1,
 	    class T2, class Storage2, class Allocator2,
@@ -1073,10 +819,10 @@ namespace Seldon
 #endif
 
     Mlt(beta, Y);
-    
+
     T4 temp, zero;
     SetComplexZero(zero);
-    
+
     int* ptr = M.GetPtr();
     int* ind = M.GetInd();
     typename Matrix<T1, Prop1, ColSparse, Allocator1>::pointer
@@ -1089,7 +835,7 @@ namespace Seldon
 	    temp = zero;
 	    for (j = ptr[i]; j < ptr[i + 1]; j++)
 	      temp += data[j] * X(ind[j]);
-	    
+
 	    Y(i) += alpha * temp;
 	  }
       }
@@ -1100,13 +846,13 @@ namespace Seldon
 	    temp = zero;
 	    for (j = ptr[i]; j < ptr[i + 1]; j++)
 	      temp += conjugate(data[j]) * X(ind[j]);
-	    
+
 	    Y(i) += alpha * temp;
 	  }
       }
   }
 
-  
+
   /*** Symmetric sparse matrices, *Trans ***/
 
 
@@ -1138,7 +884,7 @@ namespace Seldon
     int i, j;
     T4 zero, temp;
     SetComplexZero(zero);
-    
+
     int* ptr = M.GetPtr();
     int* ind = M.GetInd();
     T1* data = M.GetData();
@@ -1148,7 +894,7 @@ namespace Seldon
 	temp = zero;
 	for (j = ptr[i]; j < ptr[i + 1]; j++)
 	  temp += conjugate(data[j]) * X(ind[j]);
-	
+
         Y(i) += alpha * temp;
       }
     for (i = 0; i < ma - 1; i++)
@@ -1156,8 +902,8 @@ namespace Seldon
 	if (ind[j] != i)
 	  Y(ind[j]) += alpha * conjugate(data[j]) * X(i);
   }
-  
-  
+
+
   template <class T0,
 	    class T1, class Prop1, class Allocator1,
 	    class T2, class Storage2, class Allocator2,
@@ -1186,7 +932,7 @@ namespace Seldon
     int i, j;
     T4 zero, temp;
     SetComplexZero(zero);
-    
+
     int* ptr = M.GetPtr();
     int* ind = M.GetInd();
     T1* data = M.GetData();
@@ -1196,16 +942,16 @@ namespace Seldon
 	temp = zero;
 	for (j = ptr[i]; j < ptr[i + 1]; j++)
 	  temp += conjugate(data[j]) * X(ind[j]);
-	
+
         Y(i) += alpha * temp;
-        
+
         for (j = ptr[i]; j < ptr[i + 1]; j++)
           if (ind[j] != i)
             Y(ind[j]) += alpha * conjugate(data[j]) * X(i);
       }
   }
 
-  
+
   // MLTADD //
   ////////////
 
@@ -1250,9 +996,9 @@ namespace Seldon
     if (Storage1::Sparse)
       throw WrongArgument("MltAdd", "This function is intended to dense"
                           " matrices only and not to sparse matrices");
-    
+
     Mlt(beta, Y);
-    
+
     T4 zero;
     SetComplexZero(zero);
     T4 temp;
@@ -1302,7 +1048,7 @@ namespace Seldon
     if (Storage1::Sparse)
       throw WrongArgument("MltAdd", "This function is intended to dense"
                           " matrices only and not to sparse matrices");
-    
+
     Mlt(beta, Y);
 
     typename T4::value_type zero;
@@ -1444,7 +1190,7 @@ namespace Seldon
 #ifdef SELDON_CHECK_DIMENSIONS
     CheckDim(Trans, M, X, Y, "MltAdd(alpha, trans, M, X, beta, Y)");
 #endif
-    
+
     if (Storage1::Sparse)
       throw WrongArgument("MltAdd", "This function is intended to dense"
                           " matrices only and not to sparse matrices");
@@ -1453,7 +1199,7 @@ namespace Seldon
     SetComplexZero(zero3);
     T4 zero;
     SetComplexZero(zero);
-    
+
     if (beta == zero3)
       Y.Zero();
     else
@@ -1483,7 +1229,7 @@ namespace Seldon
       }
   }
 
-  
+
   // MLTADD //
   ////////////
 
@@ -1496,7 +1242,7 @@ namespace Seldon
   /*!
     Warning: M is modified. The results are stored in X.
     There is no partial pivoting performed here,
-    the method will fail if a diagonal coefficient 
+    the method will fail if a diagonal coefficient
     generated during the factorisation is equal to 0
     For dense matrices, use rather GetLU/SolveLU
   */
@@ -1563,7 +1309,7 @@ namespace Seldon
   template <class T0, class Prop0, class Storage0, class Allocator0,
 	    class T1, class Storage1, class Allocator1,
 	    class T2, class Storage2, class Allocator2>
-  void GaussSeidel(const Matrix<T0, Prop0, Storage0, Allocator0>& M,			  
+  void GaussSeidel(const Matrix<T0, Prop0, Storage0, Allocator0>& M,
                    Vector<T2, Storage2, Allocator2>& Y,
                    const Vector<T1, Storage1, Allocator1>& X,
                    int iter, int type_algo)
@@ -1586,7 +1332,7 @@ namespace Seldon
     if (Storage0::Sparse)
       throw WrongArgument("GaussSeidel", "This function is intended to dense"
                           " matrices only and not to sparse matrices");
-    
+
     T1 zero;
     SetComplexZero(zero);
     if (type_algo%2 == 0)
@@ -1600,7 +1346,7 @@ namespace Seldon
               temp -= M(j, k) * Y(k);
             Y(j) = (X(j) + temp) / M(j, j);
           }
-    
+
     if (type_algo%3 == 0)
       for (i = 0; i < iter; i++)
         for (j = na-1; j >= 0; j--)
@@ -1611,7 +1357,7 @@ namespace Seldon
             for (k = j + 1; k < na; k++)
               temp -= M(j, k) * Y(k);
             Y(j) = (X(j) + temp) / M(j, j);
-          }    
+          }
   }
 
 
@@ -1659,7 +1405,7 @@ namespace Seldon
     if (Storage0::Sparse)
       throw WrongArgument("SOR", "This function is intended to dense"
                           " matrices only and not to sparse matrices");
-    
+
     SetComplexOne(one);
     if (type_ssor%2 == 0)
       for (i = 0; i < iter; i++)
@@ -1686,7 +1432,7 @@ namespace Seldon
           }
   }
 
-  
+
   //! Solve M^T Y = X with S.O.R. method.
   /*!
     Solving M Y = X by using S.O.R algorithm.
@@ -1724,7 +1470,7 @@ namespace Seldon
     if (Storage0::Sparse)
       throw WrongArgument("SOR", "This function is intended to dense"
                           " matrices only and not to sparse matrices");
-    
+
     SetComplexOne(one);
     if (type_ssor%2 == 0)
       for (i = 0; i < iter; i++)
@@ -1751,7 +1497,7 @@ namespace Seldon
           }
   }
 
-  
+
   // S.O.R. method //
   ///////////////////
 
@@ -1797,7 +1543,7 @@ namespace Seldon
     if (Storage0::Sparse)
       throw WrongArgument("SolveLU", "This function is intended to dense"
                           " matrices only and not to sparse matrices");
-    
+
     // Forward substitution.
     for (i = 0; i < ma; i++)
       {
@@ -1820,7 +1566,7 @@ namespace Seldon
   // SOLVELU //
   /////////////
 
-  
+
   ///////////////////
   // GetAndSolveLU //
 
@@ -1852,11 +1598,11 @@ namespace Seldon
   // GetAndSolveLU //
   ///////////////////
 
-  
+
   ///////////
   // Solve //
-  
-  
+
+
   //! solves by triangular upper part or lower part of A
   template <class T0, class Prop0, class Allocator0,
             class T1, class Allocator1>
@@ -1869,7 +1615,7 @@ namespace Seldon
 		  Vector<T1, VectFull, Allocator1>& Y)
   {
     int ma = A.GetM();
-    
+
 #ifdef SELDON_CHECK_DIMENSIONS
     int na = A.GetN();
     if (na != ma)
@@ -1879,9 +1625,9 @@ namespace Seldon
     CheckDim(A, X, "Solve(UpLo, TransA, DiagA, A, X, Y)");
     CheckDim(A, Y, "Solve(UpLo, TransA, DiagA, A, X, Y)");
 #endif
-    
+
     Copy(X, Y);
-    
+
     T0* data = A.GetData();
     int* ptr = A.GetPtr();
     int* ind = A.GetInd();
@@ -1902,13 +1648,13 @@ namespace Seldon
                         val -= data[j]*Y(ind[j]);
                         j++;
                       }
-                    
+
 #ifdef SELDON_CHECK_BOUNDS
                     if ( (j >= ptr[i+1]) || (ind[j] != i) || (data[j] == zero))
                       throw WrongArgument("Solve", "Matrix must contain"
                                           " a non-null diagonal");
 #endif
-                    
+
                     Y(i) = val/data[j];
                   }
               }
@@ -1923,7 +1669,7 @@ namespace Seldon
                         val -= data[j]*Y(ind[j]);
                         j++;
                       }
-                    
+
                     Y(i) = val;
                   }
               }
@@ -1937,13 +1683,13 @@ namespace Seldon
                     int j = ptr[i+1]-1;
                     while (ind[j] > i)
                       j--;
-                    
+
 #ifdef SELDON_CHECK_BOUNDS
                     if ( (j < ptr[i]) || (ind[j] != i) || (data[j] == zero))
                       throw WrongArgument("Solve", "Matrix must contain"
                                           " a non-null diagonal");
 #endif
-                   
+
                     Y(i) /= data[j];
                     j--;
                     while (j >= ptr[i])
@@ -1975,13 +1721,13 @@ namespace Seldon
                     int j = ptr[i+1]-1;
                     while (ind[j] > i)
                       j--;
-                    
+
 #ifdef SELDON_CHECK_BOUNDS
                     if ( (j < ptr[i]) || (ind[j] != i) || (data[j] == zero))
                       throw WrongArgument("Solve", "Matrix must contain"
                                           " a non-null diagonal");
 #endif
-                   
+
                     Y(i) /= conjugate(data[j]);
                     j--;
                     while (j >= ptr[i])
@@ -2020,13 +1766,13 @@ namespace Seldon
                         val -= data[j]*Y(ind[j]);
                         j--;
                       }
-                    
+
 #ifdef SELDON_CHECK_BOUNDS
                     if ( (j < ptr[i]) || (ind[j] != i) || (data[j] == zero))
                       throw WrongArgument("Solve", "Matrix must contain"
                                           " a non-null diagonal");
 #endif
-                   
+
                     Y(i) = val/data[j];
                   }
               }
@@ -2041,7 +1787,7 @@ namespace Seldon
                         val -= data[j]*Y(ind[j]);
                         j--;
                       }
-                    
+
                     Y(i) = val;
                   }
               }
@@ -2055,13 +1801,13 @@ namespace Seldon
                     int j = ptr[i];
                     while (ind[j] < i)
                       j++;
-                    
+
 #ifdef SELDON_CHECK_BOUNDS
                     if ( (j >= ptr[i+1]) || (ind[j] != i) || (data[j] == zero) )
                       throw WrongArgument("Solve", "Matrix must contain"
                                           " a non-null diagonal");
 #endif
-                    
+
                     Y(i) /= data[j];
                     j++;
                     while (j < ptr[i+1])
@@ -2080,8 +1826,8 @@ namespace Seldon
                       {
                         Y(ind[j]) -= data[j]*Y(i);
                         j--;
-                      }         
-                  }           
+                      }
+                  }
               }
           }
         else
@@ -2093,13 +1839,13 @@ namespace Seldon
                     int j = ptr[i];
                     while (ind[j] < i)
                       j++;
-                    
+
 #ifdef SELDON_CHECK_BOUNDS
                     if ( (j >= ptr[i+1]) || (ind[j] != i) || (data[j] == zero) )
                       throw WrongArgument("Solve", "Matrix must contain"
                                           " a non-null diagonal");
 #endif
-                    
+
                     Y(i) /= conjugate(data[j]);
                     j++;
                     while (j < ptr[i+1])
@@ -2118,17 +1864,17 @@ namespace Seldon
                       {
                         Y(ind[j]) -= conjugate(data[j])*Y(i);
                         j--;
-                      }         
-                  }           
+                      }
+                  }
               }
           }
       }
   }
-  
-  
+
+
   // Solve //
   ///////////
-  
+
 
   //////////////
   // CHECKDIM //
@@ -2154,13 +1900,13 @@ namespace Seldon
   {
     if (X.GetLength() != M.GetN() || Y.GetLength() != M.GetM())
       {
-	
+
 #ifndef SELDON_WITHOUT_TO_STR_CHECKDIM
     string Mchar = to_str(&M), Xchar = to_str(&X), Ychar = to_str(&Y);
 #else
     string Mchar("M"), Xchar("X"), Ychar("Y");
 #endif
-    
+
     throw WrongDim(function,
 		   string("Operation M X + Y -> Y not permitted:")
 		   + string("\n     M (") + Mchar + string(") is a ")
@@ -2199,7 +1945,7 @@ namespace Seldon
 #else
 	string Mchar("M"), Xchar("X"), Ychar("Y");
 #endif
-	
+
 	throw WrongDim(function,
 		       string("Operation M X + Y -> Y not permitted:")
 		       + string("\n     M (") + Mchar + string(") is a ")
@@ -2238,7 +1984,7 @@ namespace Seldon
 #else
 	string Mchar("M"), Xchar("X"), Ychar("Y");
 #endif
-	
+
 	throw WrongDim(function,
 		       string("Operation M X + Y -> Y not permitted:")
 		       + string("\n     M (") + Mchar + string(") is a ")
@@ -2277,7 +2023,7 @@ namespace Seldon
 #else
 	string Mchar("M"), Xchar("X"), Ychar("Y");
 #endif
-	
+
 	throw WrongDim(function,
 		       string("Operation M X + Y -> Y not permitted:")
 		       + string("\n     M (") + Mchar + string(") is a ")
@@ -2324,13 +2070,13 @@ namespace Seldon
       op = string("Operation ") + op + string(" not permitted:");
 
     if (X.GetLength() != M.GetN(trans) || Y.GetLength() != M.GetM(trans))
-      {    
+      {
 #ifndef SELDON_WITHOUT_TO_STR_CHECKDIM
 	string Mchar = to_str(&M), Xchar = to_str(&X), Ychar = to_str(&Y);
 #else
 	string Mchar("M"), Xchar("X"), Ychar("Y");
 #endif
-	
+
 	throw WrongDim(function, op + string("\n     M (") + Mchar
 		       + string(") is a ") + to_str(M.GetM()) + string(" x ")
 		     + to_str(M.GetN()) + string(" matrix;\n     X (")
@@ -2365,7 +2111,7 @@ namespace Seldon
 #else
 	string Mchar("M"), Xchar("X");
 #endif
-	
+
 	throw WrongDim(function, string("Operation ") + op + " not permitted:"
 		       + string("\n     M (") + Mchar + string(") is a ")
 		       + to_str(M.GetM()) + string(" x ") + to_str(M.GetN())

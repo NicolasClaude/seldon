@@ -63,72 +63,58 @@ namespace Seldon
 
   /////////
   // MLT //
-  
-  
+
+
   template <class T0,
 	    class T1, class Storage1, class Allocator1>
   void MltScalar(const T0& alpha,
 		 Vector<T1, Storage1, Allocator1>& X)  throw();
-  
-  
+
+
   // MLT //
   /////////
-  
-  
+
+
   /////////
   // ADD //
-  
-  
+
+
   template <class T0,
 	    class T1, class Storage1, class Allocator1,
 	    class T2, class Storage2, class Allocator2>
   void AddVector(const T0& alpha,
 		 const Vector<T1, Storage1, Allocator1>& X,
 		 Vector<T2, Storage2, Allocator2>& Y);
-  
+
   template <class T0,
 	    class T1, class Storage1, class Allocator1,
 	    class T2, class Storage2, class Allocator2>
   void AddVector(const T0& alpha,
 		 const Vector<T1, Storage1, Allocator1>& X,
 		 const T0& beta,
-		 Vector<T2, Storage2, Allocator2>& Y);  
-  
-  template <class T0,
-            class T1, class Allocator1,
-            class T2, class Allocator2>
-  void AddVector(const T0 alpha,
-		 const Vector<T1, PETScSeq, Allocator1>& X,
-		 Vector<T2, PETScSeq, Allocator2>& Y);
-  
-  template <class T0,
-            class T1, class Allocator1,
-            class T2, class Allocator2>
-  void AddVector(const T0 alpha,
-		 const Vector<T1, PETScPar, Allocator1>& X,
-		 Vector<T2, PETScPar, Allocator2>& Y);
-  
+		 Vector<T2, Storage2, Allocator2>& Y);
+
   template <class T0,
 	    class T1, class Allocator1,
 	    class T2, class Allocator2>
   void AddVector(const T0& alpha,
 		 const Vector<T1, VectSparse, Allocator1>& X,
 		 Vector<T2, VectSparse, Allocator2>& Y);
-  
+
   template <class T0,
 	    class T1, class Allocator1,
 	    class T2, class Allocator2>
   void AddVector(const T0& alpha,
 		 const Vector<T1, VectSparse, Allocator1>& X,
 		 Vector<T2, VectFull, Allocator2>& Y);
-  
+
   template <class T0,
 	    class T1, class Allocator1,
 	    class T2, class Allocator2>
   void AddVector(const T0& alpha,
 		 const Vector<T1, Collection, Allocator1>& X,
 		 Vector<T2, Collection, Allocator2>& Y);
-  
+
   template <class T0,
 	    class T1, template <class U1> class Allocator1,
 	    class T2, template <class U2> class Allocator2>
@@ -136,7 +122,7 @@ namespace Seldon
 		 const
 		 Vector<FloatDouble, DenseSparseCollection, Allocator1<T1> >& X,
 		 Vector<FloatDouble, DenseSparseCollection, Allocator2<T2> >& Y);
-  
+
   template <class T0,
 	    class T1, template <class U1> class Allocator1,
 	    class T2, class Storage2, class Allocator2>
@@ -144,73 +130,65 @@ namespace Seldon
 		 const
 		 Vector<FloatDouble, DenseSparseCollection, Allocator1<T1> >& X,
 		 Vector<T2, Storage2, Allocator2>& Y);
-  
+
   // ADD //
   /////////
-  
-  
+
+
   //////////
   // COPY //
-  
-  
+
+
   template <class T1, class Storage1, class Allocator1,
 	    class T2, class Storage2, class Allocator2>
   void CopyVector(const Vector<T1, Storage1, Allocator1>& X,
 		  Vector<T2, Storage2, Allocator2>& Y);
-  
+
   template <class T1, class Allocator1,
 	    class T2, class Allocator2>
   void CopyVector(const Vector<T1, Collection, Allocator1>& X,
 		  Vector<T2, VectFull, Allocator2>& Y);
-  
-  template<class T, class Alloc1, class Alloc2>
-  void CopyVector(const Vector<T, PETScPar, Alloc1>& A,
-		  Vector<T, VectFull, Alloc2>& B);
 
-  template<class T, class Alloc1, class Alloc2>
-  void CopyVector(const Vector<T, VectFull, Alloc1>& A,
-		  Vector<T, PETScPar, Alloc2>& B);
-  
-  
+
   // COPY //
   //////////
-  
-  
+
+
   //////////
   // SWAP //
-  
-  
+
+
   template <class T, class Storage, class Allocator>
   void Swap(Vector<T, Storage, Allocator>& X,
 	    Vector<T, Storage, Allocator>& Y);
-  
+
   template <class T, class Allocator>
   void Swap(Vector<T, VectSparse, Allocator>& X,
 	    Vector<T, VectSparse, Allocator>& Y);
-  
+
   template<class T>
   void SwapPointer(Vector<T>& X, Vector<T>& Y);
 
 
   // SWAP //
   //////////
-  
-  
+
+
   /////////////
   // DOTPROD //
-  
-  
+
+
   template<class T1, class Storage1, class Allocator1,
 	   class T2, class Storage2, class Allocator2>
   T1 DotProdVector(const Vector<T1, Storage1, Allocator1>& X,
 		   const Vector<T2, Storage2, Allocator2>& Y);
-  
+
   template<class T1, class Allocator1,
 	   class T2, class Allocator2>
   typename T1::value_type
   DotProdVector(const Vector<T1, Collection, Allocator1>& X,
 		const Vector<T2, Collection, Allocator2>& Y);
-  
+
   template<class T1, template <class U1> class Allocator1,
 	   class T2, template <class U2> class Allocator2>
   double
@@ -218,12 +196,12 @@ namespace Seldon
 		Vector<FloatDouble, DenseSparseCollection, Allocator1<T1> >& X,
 		const
 		Vector<FloatDouble, DenseSparseCollection, Allocator2<T2> >& Y);
-  
+
   template<class T1, class Storage1, class Allocator1,
 	   class T2, class Storage2, class Allocator2>
   T1 DotProdConjVector(const Vector<T1, Storage1, Allocator1>& X,
 		       const Vector<T2, Storage2, Allocator2>& Y);
-  
+
   template<class T1, class Allocator1,
 	   class T2, class Allocator2>
   T1 DotProdVector(const Vector<T1, VectSparse, Allocator1>& X,
@@ -233,20 +211,20 @@ namespace Seldon
 	   class T2, class Allocator2>
   T1 DotProdVector(const Vector<T1, VectSparse, Allocator1>& X,
 		   const Vector<T2, VectFull, Allocator2>& Y);
-  
+
   template<class T1, class Allocator1,
 	   class T2, class Allocator2>
   T1
   DotProdConjVector(const Vector<T1, VectSparse, Allocator1>& X,
 		    const Vector<T2, VectSparse, Allocator2>& Y);
-  
+
   template<class T1, class Allocator1,
 	   class T2, class Allocator2>
-  T1 
+  T1
   DotProdConjVector(const Vector<T1, VectSparse, Allocator1>& X,
 		    const Vector<T2, VectFull, Allocator2>& Y);
-  
-  
+
+
   // DOTPROD //
   /////////////
 
@@ -258,11 +236,11 @@ namespace Seldon
   template<class T1, class Storage1, class Allocator1>
   typename ClassComplexType<T1>::Treal
   Norm1(const Vector<T1, Storage1, Allocator1>& X);
-  
+
   template<class T1, class Allocator1>
   typename ClassComplexType<T1>::Treal
   Norm1(const Vector<T1, VectSparse, Allocator1>& X);
-  
+
 
   // NORM1 //
   ///////////
@@ -271,16 +249,16 @@ namespace Seldon
   ///////////
   // NORM2 //
 
-  
+
   template<class T1, class Storage1, class Allocator1>
   T1 Norm2(const Vector<T1, Storage1, Allocator1>& X);
-  
+
   template<class T1, class Storage1, class Allocator1>
   T1 Norm2(const Vector<complex<T1>, Storage1, Allocator1>& X);
-  
+
   template<class T1, class Allocator1>
   T1 Norm2(const Vector<T1, VectSparse, Allocator1>& X);
-  
+
   template<class T1, class Allocator1>
   T1 Norm2(const Vector<complex<T1>, VectSparse, Allocator1>& X);
 
@@ -292,7 +270,7 @@ namespace Seldon
   ////////////////////
   // GETMAXABSINDEX //
 
-  
+
   template<class T, class Storage, class Allocator>
   int GetMaxAbsIndex(const Vector<T, Storage, Allocator>& X);
 
@@ -304,20 +282,20 @@ namespace Seldon
   //////////////
   // APPLYROT //
 
-  
+
   template<class T>
   void GenRot(T& a_in, T& b_in, T& c_, T& s_);
-  
+
   template<class T>
   void GenRot(complex<T>& a_in, complex<T>& b_in, T& c_, complex<T>& s_);
-  
+
   template<class T>
   void ApplyRot(T& x, T& y, const T& c_, const T& s_);
-  
+
   template<class T>
   void ApplyRot(complex<T>& x, complex<T>& y,
 		const T& c_, const complex<T>& s_);
-  
+
   template<class T, class Allocator1, class Allocator2>
   void ApplyRot(Vector<T, VectFull, Allocator1>& X,
 		Vector<T, VectFull, Allocator2>& Y,
@@ -328,7 +306,7 @@ namespace Seldon
 		Vector<T, VectFull, Allocator2>& Y,
 		const T& c, const T& s);
 
-  
+
   // APPLYROT //
   //////////////
 
@@ -382,7 +360,7 @@ namespace Seldon
   // CHECKDIM //
   //////////////
 
-  
+
   ////////////////////
   // GATHER/SCATTER //
 
@@ -394,27 +372,27 @@ namespace Seldon
   template<class T, class Allocator1, class Allocator2>
   void GatherSparseEntryZero(Vector<T, VectFull, Allocator1>& y,
 			     Vector<T, VectSparse, Allocator2>& x);
-  
+
   template<class T, class Allocator1, class Allocator2>
   void ScatterSparseEntry(const Vector<T, VectSparse, Allocator1>& x,
 			  Vector<T, VectFull, Allocator2>& y);
-  
+
 
   // GATHER/SCATTER //
-  ////////////////////  
+  ////////////////////
 
 
   ///////////////
   // CONJUGATE //
 
-  
+
   template<class T, class Prop, class Allocator>
   void Conjugate(Vector<T, Prop, Allocator>& X);
-  
+
   template<class T, class Allocator>
   void Conjugate(Vector<T, VectSparse, Allocator>& X);
-  
-  
+
+
   // CONJUGATE //
   ///////////////
 

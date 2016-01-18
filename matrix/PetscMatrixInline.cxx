@@ -20,13 +20,9 @@
 
 #ifndef SELDON_FILE_MATRIX_PETSCMATRIX_INLINE_CXX
 
-#include "PetscMatrix.hxx"
-
 
 namespace Seldon
 {
-
-
   //! Default constructor.
   /*!
     On exit, the matrix is an empty 0x0 matrix.
@@ -108,6 +104,7 @@ namespace Seldon
   inline void PetscMatrix<T, Prop, Storage, Allocator>
   ::Clear()
   {
+
     if (petsc_matrix_deallocated_)
       return;
     int ierr;
@@ -163,7 +160,7 @@ namespace Seldon
   {
     return 0;
   }
-  
+
 
   //! Reallocates memory to resize the matrix and keeps previous entries.
   /*!
@@ -204,6 +201,31 @@ namespace Seldon
   {
     throw Undefined("void PetscMatrix<T, Prop, Storage, Allocator>"
                     "::SetData(int i, int j, pointer data)");
+  }
+
+
+  //! Give read access to local values.
+  /*!
+    \param[out] data the array where values are copied.
+    \warning 'data' must be allocated beforehand.
+  */
+
+  template <class T, class Prop, class Storage, class Allocator>
+  inline void PetscMatrix<T, Prop, Storage, Allocator>
+  ::GetLocalData(T* data) const
+  {
+    int high,low;
+    this->GetProcessorRowRange(low, high);
+    int nrows = high - low;
+    int rows[nrows];
+    int cols[this->n_];
+
+    for (int i = 0; i < nrows; i++)
+      rows[i] = low + i;
+    for (int i = 0; i < this->n_; i++)
+      cols[i] = i;
+
+    MatGetValues(petsc_matrix_, nrows, rows, this->n_, cols, data);
   }
 
 
@@ -284,7 +306,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline void PetscMatrix<T, Prop, Storage, Allocator>
-  ::SetBuffer(int i, int j, T value, InsertMode insert_mode = INSERT_VALUES)
+  ::SetBuffer(int i, int j, T value, InsertMode insert_mode)
   {
     int ierr;
     ierr = MatSetValues(petsc_matrix_, 1, &i, 1,
@@ -297,6 +319,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   inline void PetscMatrix<T, Prop, Storage, Allocator>::Flush() const
   {
+    MatSetUp(petsc_matrix_);
     int ierr;
     ierr = MatAssemblyBegin(petsc_matrix_, MAT_FINAL_ASSEMBLY);
     CHKERRABORT(mpi_communicator_, ierr);
@@ -382,7 +405,6 @@ namespace Seldon
     Copy(A);
   }
 
-
   //! Reallocates memory to resize the matrix.
   /*!
     On exit, the matrix is a i x i matrix.
@@ -394,11 +416,16 @@ namespace Seldon
   inline void Matrix<T, Prop, PETScSeqDense, Allocator>
   ::Reallocate(int i, int j)
   {
+    if (this->m_ == i && this->n_ == j)
+      return;
     this->Clear();
     int ierr;
     MatCreate(MPI_COMM_SELF, &this->petsc_matrix_);
     MatSetSizes(this->petsc_matrix_, i, j, i, j);
     MatSetType(this->petsc_matrix_, MATSEQDENSE);
+    MatAssemblyBegin(this->petsc_matrix_, MAT_FINAL_ASSEMBLY);
+    MatAssemblyEnd(this->petsc_matrix_, MAT_FINAL_ASSEMBLY);
+
     this->petsc_matrix_deallocated_ = false;
     this->Flush();
   }
@@ -529,6 +556,7 @@ namespace Seldon
   {
     MatSetType(this->petsc_matrix_, MATMPIDENSE);
     MatSetSizes(this->petsc_matrix_, PETSC_DECIDE, PETSC_DECIDE, i, j);
+    this->Flush();
   }
 
 
@@ -567,6 +595,8 @@ namespace Seldon
   inline void Matrix<T, Prop, PETScMPIDense, Allocator>
   ::Reallocate(int i, int j, int local_i, int local_j)
   {
+    if (this->m_ == i && this->n_ == j)
+      return;
     this->Clear();
     int ierr;
     MatCreate(this->mpi_communicator_, &this->petsc_matrix_);
@@ -679,6 +709,43 @@ namespace Seldon
   }
 
 
+  //! Access operator.
+  /*!
+    Returns the value of element (i, j).
+    \param i row index.
+    \param j column index.
+    \return Element (i, j) of the matrix.
+    \note Gather the value even if located on an other process.
+    \warning Read only.
+    \warning This method must be called by all processes at the same time.
+  */
+  template <class T, class Prop, class Allocator>
+  inline typename Matrix<T, Prop, PETScMPIDense, Allocator>::value_type
+  Matrix<T, Prop, PETScMPIDense, Allocator>::GetOnAll
+  (int i, int j) const
+  {
+    int low, high,  ierr;
+    ierr = MatAssemblyBegin(this->petsc_matrix_, MAT_FINAL_ASSEMBLY);
+    CHKERRABORT(this->mpi_communicator_, ierr);
+    ierr = MatAssemblyEnd(this->petsc_matrix_, MAT_FINAL_ASSEMBLY);
+    CHKERRABORT(this->mpi_communicator_, ierr);
+
+    value_type y,x;
+    y = 0;
+    MatGetOwnershipRange(this->petsc_matrix_, &low, &high);
+    if (i < high && i >= low)
+      {
+        PetscInt idxm[1] = {i};
+        PetscInt idxn[1] = {j};
+        PetscScalar v[1];
+        MatGetValues(this->petsc_matrix_, 1, idxm, 1, idxn, v);
+        y = v[0];
+      }
+    MPI_Allreduce(&y, &x, 1, MPI_DOUBLE, MPI_SUM, this->mpi_communicator_);
+    return x;
+  }
+
+
   /////////////////////////
   // Matrix<PETScMPIAIJ> //
   /////////////////////////
@@ -711,6 +778,7 @@ namespace Seldon
   {
     MatSetType(this->petsc_matrix_, MATMPIAIJ);
     MatSetSizes(this->petsc_matrix_, PETSC_DECIDE, PETSC_DECIDE, i, j);
+    this->Flush();
   }
 
 
@@ -749,6 +817,8 @@ namespace Seldon
   inline void Matrix<T, Prop, PETScMPIAIJ, Allocator>
   ::Reallocate(int i, int j, int local_i, int local_j)
   {
+    if (this->m_ == i && this->n_ == j)
+      return;
     this->Clear();
     int ierr;
     MatCreate(this->mpi_communicator_, &this->petsc_matrix_);
@@ -859,7 +929,44 @@ namespace Seldon
     this->Copy(A);
     return *this;
   }
-  
+
+
+  //! Access operator.
+  /*!
+    Returns the value of element (i, j).
+    \param i row index.
+    \param j column index.
+    \return Element (i, j) of the matrix.
+    \note Gather the value even if located on an other process.
+    \warning Read only.
+    \warning This method must be called by all processes at the same time.
+  */
+  template <class T, class Prop, class Allocator>
+  inline typename Matrix<T, Prop, PETScMPIAIJ, Allocator>::value_type
+  Matrix<T, Prop, PETScMPIAIJ, Allocator>::GetOnAll
+  (int i, int j) const
+  {
+    int low, high,  ierr;
+    ierr = MatAssemblyBegin(this->petsc_matrix_, MAT_FINAL_ASSEMBLY);
+    CHKERRABORT(this->mpi_communicator_, ierr);
+    ierr = MatAssemblyEnd(this->petsc_matrix_, MAT_FINAL_ASSEMBLY);
+    CHKERRABORT(this->mpi_communicator_, ierr);
+
+    value_type y,x;
+    y = 0;
+    MatGetOwnershipRange(this->petsc_matrix_, &low, &high);
+    if (i < high && i >= low)
+      {
+        PetscInt idxm[1] = {i};
+        PetscInt idxn[1] = {j};
+        PetscScalar v[1];
+        MatGetValues(this->petsc_matrix_, 1, idxm, 1, idxn, v);
+        y = v[0];
+      }
+    MPI_Allreduce(&y, &x, 1, MPI_DOUBLE, MPI_SUM, this->mpi_communicator_);
+    return x;
+  }
+
 }
 
 

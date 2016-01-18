@@ -40,10 +40,10 @@
 
   A(:, j) = X
   SetCol(X, j, A)
-  
+
 
   (dense storages only)
-  
+
   A = A(row_perm, col_perm)
   ApplyPermutation(A, row_perm, col_perm)
   ApplyPermutation(A, row_perm, col_perm, starting_index)
@@ -51,16 +51,16 @@
   A(row_perm, col_perm) = A
   ApplyInversePermutation(A, row_perm, col_perm)
   ApplyInversePermutation(A, row_perm, col_perm, starting_index)
-  
+
   A = Drow * A * Dcol
   ScaleMatrix(A, Drow, Dcol)
-  
+
   A = Drow * A
   ScaleLeftMatrix(A, Drow)
 
   A = A * Dcol
   ScaleRightMatrix(A, Dcol)
-  
+
   Implementations of ApplyPermutation, ApplyInversePermutation,
   ScaleMatrix, ScaleLeftMatrix and ScaleRightMatrix for sparse storages
   are present in file matrix_sparse/Permutation_ScalingMatrix.cxx
@@ -155,7 +155,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       for (size_t k = ptr[j]; k < ptr[j+1]; k++)
   if (ind[k] == i)
     vec.push_back(make_pair(j, data[k]));
-    
+
     typename list<pair<size_t, T0> >::iterator it;
     X.Reallocate(vec.size());
     size_t j = 0;
@@ -166,7 +166,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   j++;
       }
   }
-  
+
   //! Extracts a row from a sparse matrix
   /*!
     \param M sparse matrix
@@ -194,10 +194,10 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       for (size_t k = ptr[j]; k < ptr[j+1]; k++)
 	if (ind[k] == i)
 	  vec.push_back(make_pair(j, data[k]));
-    
+
     for (size_t k = ptr[i]; k < ptr[i+1]; k++)
       vec.push_back(make_pair(ind[k], data[k]));
-    
+
     typename list<pair<size_t, T0> >::iterator it;
     X.Reallocate(vec.size());
     size_t j = 0;
@@ -209,7 +209,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       }
   }
 
-  
+
   //! Extracts a row from a sparse matrix
   /*!
     \param M sparse matrix
@@ -235,12 +235,12 @@ template <class T0, class Allocator0, class T1, class Allocator1>
     list<pair<size_t, T0> > vec;
     for (size_t k = ptr[i]; k < ptr[i+1]; k++)
       vec.push_back(make_pair(ind[k], data[k]));
-    
+
     for (size_t j = i+1; j < M.GetM(); j++)
       for (size_t k = ptr[j]; k < ptr[j+1]; k++)
 	if (ind[k] == i)
 	  vec.push_back(make_pair(j, data[k]));
-    
+
     typename list<pair<size_t, T0> >::iterator it;
     X.Reallocate(vec.size());
     size_t j = 0;
@@ -251,8 +251,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	j++;
       }
   }
-  
-  
+
+
   //! Extracts a row from a matrix
   /*!
     \param M matrix
@@ -267,13 +267,13 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   {
     if (Storage0::Sparse)
       throw WrongArgument("GetRow", "Function intended to dense matrices");
-    
+
     X.Reallocate(M.GetN());
     for (size_t j = 0; j < M.GetN(); j++)
       X(j) = M(i, j);
   }
 
-  
+
   //! Extracts a column from a sparse matrix
   /*!
     \param M sparse matrix
@@ -307,7 +307,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       }
   }
 
-  
+
   //! Extracts a column from a matrix
   /*!
     \param M matrix
@@ -337,7 +337,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       for (size_t k = ptr[i]; k < ptr[i+1]; k++)
 	if (ind[k] == j)
 	  vec.push_back(make_pair(i, data[k]));
-    
+
     typename list<pair<size_t, T0> >::iterator it;
     X.Reallocate(vec.size());
     size_t i = 0;
@@ -348,7 +348,6 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	i++;
       }
   }
-
 
 
   //! Extracts a column from a matrix
@@ -384,6 +383,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
           X(i) = data[k];
 
   }
+
   
   //! Extracts a column from a sparse matrix
   /*!
@@ -399,8 +399,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
     // symmetric matrix row = col
     GetRow(M, j, X);
   }
-  
-  
+
+
   //! Extracts a column from a sparse matrix
   /*!
     \param M sparse matrix
@@ -415,46 +415,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
     // symmetric matrix row = col
     GetRow(M, j, X);
   }
+
   
-  
-  //! Extracts a column from a matrix.
-  /*!
-    \param[in] M matrix.
-    \param[in] j column index.
-    \param[out] X extracted column.
-  */
-  template <class T0, class Prop0, class Allocator0,
-            class T1, class Allocator1>
-  void GetCol(const Matrix<T0, Prop0, PETScSeqDense, Allocator0>& M,
-              int j, Vector<T1, PETScSeq, Allocator1>& X)
-  {
-    int a, b;
-    M.GetProcessorRowRange(a, b);
-    for (int i = a; i < b; i++)
-      X.SetBuffer(i, M(i, j));
-    X.Flush();
-  }
-
-
-  //! Extracts a column from a matrix.
-  /*!
-    \param[in] M matrix.
-    \param[in] j column index.
-    \param[out] X extracted column.
-  */
-  template <class T0, class Prop0, class Allocator0,
-            class T1, class Allocator1>
-  void GetCol(const Matrix<T0, Prop0, PETScMPIDense, Allocator0>& M,
-              int j, Vector<T1, PETScPar, Allocator1>& X)
-  {
-    int a, b;
-    M.GetProcessorRowRange(a, b);
-    for (int i = a; i < b; i++)
-      X.SetBuffer(i, M(i, j));
-    X.Flush();
-  }
-
-
   //! Extracts a column from a matrix
   /*!
     \param M matrix
@@ -469,13 +431,13 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   {
     if (Storage0::Sparse)
       throw WrongArgument("GetCol", "Function intended to dense matrices");
-    
+
     X.Reallocate(M.GetM());
     for (size_t i = 0; i < M.GetM(); i++)
       X(i) = M(i, j);
   }
 
-  
+
   //! Extracts columns of a matrix.
   /*! Columns [\a begin, \a end[ of \a M_in are returned in \a M_out.
     \param[in] M_in input matrix.
@@ -511,43 +473,9 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   {
     if (Storage0::Sparse)
       throw WrongArgument("SetRow", "Function intended to dense matrices");
-    
+
     for (size_t j = 0; j < M.GetN(); j++)
       M.Set(i, j, X(j));
-  }
-  
-  
-  //! Sets a row of a matrix.
-  /*!
-    \param[in] X new row \a i of \a M.
-    \param[in] i row index.
-    \param[out] M matrix.
-  */
-  template <class T0, class Prop0, class Allocator0,
-            class T1, class Allocator1>
-  void SetRow(const Vector<T1, PETScSeq, Allocator1>& X,
-              int i, Matrix<T0, Prop0, PETScSeqDense, Allocator0>& M)
-  {
-    for (int j = 0; j < M.GetN(); j++)
-      M.SetBuffer(i, j, X(j));
-    M.Flush();
-  }
-
-
-  //! Sets a row of a matrix.
-  /*!
-    \param[in] X new row \a i of \a M.
-    \param[in] i row index.
-    \param[out] M matrix.
-  */
-  template <class T0, class Prop0, class Allocator0,
-            class T1, class Allocator1>
-  void SetRow(const Vector<T1, PETScPar, Allocator1>& X,
-              int i, Matrix<T0, Prop0, PETScMPIDense, Allocator0>& M)
-  {
-    for (int j = 0; j < M.GetN(); j++)
-      M.SetBuffer(i, j, X(j));
-    M.Flush();
   }
 
 
@@ -629,25 +557,25 @@ template <class T0, class Allocator0, class T1, class Allocator1>
     size_t m = M.GetM();
     size_t n = M.GetN();
     size_t nnz = M.GetDataSize();
-    
+
     size_t* ptr = M.GetPtr();
     size_t* ind = M.GetInd();
     T0* data = M.GetData();
-    
+
 #ifdef SELDON_CHECK_BOUNDS
     if (i >= m)
       throw WrongIndex("SetRow(Vector, int, Matrix<ColSparse>)",
                        string("Index should be in [0, ") + to_str(m - 1)
                        + "], but is equal to " + to_str(i) + ".");
 #endif
-    
+
     // we retrieve the current row of matrix M
     Vector<T0, VectSparse, Allocator0> row;
     GetRow(M, i, row);
-    
+
     // counting the new number of new elements
     size_t new_nnz = nnz + X.GetM() - row.GetM();
-    
+
     // if we have the same pattern for old and new row
     // we change only the values
     bool same_pattern = true;
@@ -659,7 +587,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       }
     else
       same_pattern = false;
-    
+
     if (same_pattern)
       {
 	for (size_t k = 0; k < X.GetM(); k++)
@@ -675,7 +603,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	// the pattern has to be modified, reallocating a new matrix
 	Vector<size_t> Ptr(n+1), Ind(new_nnz);
 	Vector<T0, VectFull, Allocator0> Val(new_nnz);
-	
+
 	// loop on first rows
 	size_t kx = 0, kr = 0;
 	size_t nb = 0;
@@ -686,16 +614,16 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	    bool valX = false, val_row = false;
 	    while ( (kx < X.GetM()) && (X.Index(kx) < j))
 	      kx++;
-	    
+
 	    if ( (kx < X.GetM()) && (X.Index(kx) == j))
 	      valX = true;
-	    
+
 	    while ( (kr < row.GetM()) && (row.Index(kr) < j))
 	      kr++;
 
 	    if ( (kr < row.GetM()) && (row.Index(kr) == j))
 	      val_row = true;
-	    
+
 	    // filling matrix until index i
 	    size_t k = ptr[j];
 	    while ((k < ptr[j+1]) && (ind[k] < i))
@@ -705,7 +633,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 		nb++;
 		k++;
 	      }
-	    
+
 	    // if there is a value on X for this index, adding it
 	    if (valX)
 	      {
@@ -714,12 +642,12 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 		nb++;
 		kx++;
 	      }
-	    
+
 	    // if there is a value on row for this index
 	    // we skip this value
 	    if (val_row)
 	      k++;
-	    
+
 	    // last values of column
 	    while (k < ptr[j+1])
 	      {
@@ -728,15 +656,15 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 		nb++;
 		k++;
 	      }
-	    
+
 	    Ptr(j+1) = nb;
 	  }
-	
+
 	M.SetData(m, n, Val, Ptr, Ind);
       }
   }
-  
-  
+
+
   //! Sets a row of a matrix
   /*!
     \param M matrix
@@ -750,11 +678,11 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   {
     size_t n = M.GetN();
     size_t nnz = M.GetDataSize();
-    
+
     size_t* ptr = M.GetPtr();
     size_t* ind = M.GetInd();
     T0* data = M.GetData();
-    
+
 #ifdef SELDON_CHECK_BOUNDS
     if (i < 0 || i >= n)
       throw WrongIndex("SetRow(Vector, int, Matrix<RowSymSparse>)",
@@ -765,10 +693,10 @@ template <class T0, class Allocator0, class T1, class Allocator1>
     // we retrieve the current row of matrix M
     Vector<T0, VectSparse, Allocator0> row;
     GetRow(M, i, row);
-    
+
     // counting the new number of new elements
     size_t new_nnz = nnz + X.GetM() - row.GetM();
-    
+
     // if we have the same pattern for old and new row
     // we change only the values
     bool same_pattern = true;
@@ -780,7 +708,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       }
     else
       same_pattern = false;
-    
+
     if (same_pattern)
       {
 	size_t kdiag = 0;
@@ -792,7 +720,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 		for (size_t k2 = ptr[j]; k2 < ptr[j+1]; k2++)
 		  if (ind[k2] == i)
 		    data[k2] = X.Value(k);
-		
+
 		kdiag = k+1;
 	      }
 	    else
@@ -807,7 +735,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	// the pattern has to be modified, reallocating a new matrix
 	Vector<size_t> Ptr(n+1), Ind(new_nnz);
 	Vector<T0, VectFull, Allocator0> Val(new_nnz);
-	
+
 	// loop on first rows
 	size_t kx = 0, kr = 0;
 	size_t nb = 0;
@@ -818,16 +746,16 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	    bool valX = false, val_row = false;
 	    while ( (kx < X.GetM()) && (X.Index(kx) < j))
 	      kx++;
-	    
+
 	    if ( (kx < X.GetM()) && (X.Index(kx) == j))
 	      valX = true;
-	    
+
 	    while ( (kr < row.GetM()) && (row.Index(kr) < j))
 	      kr++;
 
 	    if ( (kr < row.GetM()) && (row.Index(kr) == j))
 	      val_row = true;
-	    
+
 	    // filling matrix until index i
 	    size_t k = ptr[j];
 	    while ((k < ptr[j+1]) && (ind[k] < i))
@@ -837,7 +765,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 		nb++;
 		k++;
 	      }
-	    
+
 	    // if there is a value on X for this index, adding it
 	    if (valX)
 	      {
@@ -846,12 +774,12 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 		nb++;
 		kx++;
 	      }
-	    
+
 	    // if there is a value on row for this index
 	    // we go to the next value
 	    if (val_row)
 	      k++;
-	    
+
 	    // last values of row
 	    while (k < ptr[j+1])
 	      {
@@ -860,10 +788,10 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 		nb++;
 		k++;
 	      }
-	    
+
 	    Ptr(j+1) = nb;
 	  }
-	
+
 	// then changing row i
 	while (kx < X.GetM())
 	  {
@@ -872,9 +800,9 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	    nb++;
 	    kx++;
 	  }
-	
+
 	Ptr(i+1) = nb;
-	
+
 	// then last rows of M
 	for (size_t j = i+1; j < n; j++)
 	  {
@@ -884,15 +812,15 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 		Val(nb) = data[k];
 		nb++;
 	      }
-	    
+
 	    Ptr(j+1) = nb;
 	  }
-	
+
 	M.SetData(n, n, Val, Ptr, Ind);
       }
   }
-  
-  
+
+
   //! Sets a row of a matrix
   /*!
     \param M matrix
@@ -906,11 +834,11 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   {
     size_t n = M.GetN();
     size_t nnz = M.GetDataSize();
-    
+
     size_t* ptr = M.GetPtr();
     size_t* ind = M.GetInd();
     T0* data = M.GetData();
-    
+
 #ifdef SELDON_CHECK_BOUNDS
     if (i >= n)
       throw WrongIndex("SetRow(Vector, int, Matrix<RowSymSparse>)",
@@ -921,10 +849,10 @@ template <class T0, class Allocator0, class T1, class Allocator1>
     // we retrieve the current row of matrix M
     Vector<T0, VectSparse, Allocator0> row;
     GetRow(M, i, row);
-    
+
     // counting the new number of new elements
     size_t new_nnz = nnz + X.GetM() - row.GetM();
-    
+
     // if we have the same pattern for old and new row
     // we change only the values
     bool same_pattern = true;
@@ -936,7 +864,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       }
     else
       same_pattern = false;
-    
+
     if (same_pattern)
       {
 	for (size_t k = 0; k < X.GetM(); k++)
@@ -960,7 +888,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	// the pattern has to be modified, reallocating a new matrix
 	Vector<size_t> Ptr(n+1), Ind(new_nnz);
 	Vector<T0, VectFull, Allocator0> Val(new_nnz);
-	
+
 	// first columns of M
 	Ptr(0) = 0;
 	size_t nb = 0;
@@ -972,10 +900,10 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 		Val(nb) = data[k];
 		nb++;
 	      }
-	    
+
 	    Ptr(j+1) = nb;
 	  }
-	
+
 	// then changing column i
 	size_t kx = 0;
 	while ( (kx < X.GetM()) && (X.Index(kx) <= i) )
@@ -985,9 +913,9 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	    nb++;
 	    kx++;
 	  }
-	
+
 	Ptr(i+1) = nb;
-	
+
 	// loop on last columns
 	for (size_t j = i+1; j < n; j++)
 	  {
@@ -995,10 +923,10 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	    bool valX = false;
 	    while ( (kx < X.GetM()) && (X.Index(kx) < j))
 	      kx++;
-	    
+
 	    if ( (kx < X.GetM()) && (X.Index(kx) == j))
 	      valX = true;
-	    
+
 	    // filling matrix until index i
 	    size_t k = ptr[j];
 	    while ((k < ptr[j+1]) && (ind[k] < i))
@@ -1008,7 +936,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 		nb++;
 		k++;
 	      }
-	    
+
 	    // if there is a value on X for this index, adding it
 	    if (valX)
 	      {
@@ -1017,12 +945,12 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 		nb++;
 		kx++;
 	      }
-	    
+
 	    // if there is a value on column j for this index
 	    // we go to the next value
 	    if ( (k < ptr[j+1]) && (ind[k] == i))
 	      k++;
-	    
+
 	    // last values of column
 	    while (k < ptr[j+1])
 	      {
@@ -1031,15 +959,15 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 		nb++;
 		k++;
 	      }
-	    
+
 	    Ptr(j+1) = nb;
-	  }	
-	
+	  }
+
 	M.SetData(n, n, Val, Ptr, Ind);
       }
   }
-  
-  
+
+
   //! Sets a row of a matrix
   /*!
     \param M matrix
@@ -1107,7 +1035,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       M.Set(i, j, X(j));
   }
 
-  
+
   //! Sets a row of a matrix
   /*!
     \param M matrix
@@ -1124,7 +1052,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       M.Set(i, j, X(j));
   }
 
-  
+
   //! Sets a row of a matrix
   /*!
     \param M matrix
@@ -1141,7 +1069,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       M.Set(i, j, X(j));
   }
 
-  
+
   //! Sets a row of a matrix
   /*!
     \param M matrix
@@ -1158,7 +1086,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       M.Set(i, j, X(j));
   }
 
-  
+
   //! Sets a row of a matrix
   /*!
     \param M matrix
@@ -1175,7 +1103,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       M.Set(i, j, X(j));
   }
 
-  
+
   //! Sets a column of a matrix
   /*!
     \param[in] X new column \a j of \a M.
@@ -1190,49 +1118,11 @@ template <class T0, class Allocator0, class T1, class Allocator1>
   {
     if (Storage0::Sparse)
       throw WrongArgument("SetCol", "Function intended to dense matrices");
-    
+
     for (size_t i = 0; i < M.GetM(); i++)
       M.Set(i, j, X(i));
   }
-
-
-  //! Sets a column of a matrix.
-  /*!
-    \param[in] X new column \a j of \a M.
-    \param[in] j column index.
-    \param[out] M matrix.
-  */
-  template <class T0, class Prop0, class Allocator0,
-            class T1, class Allocator1>
-  void SetCol(const Vector<T1, PETScSeq, Allocator1>& X,
-              int j, Matrix<T0, Prop0, PETScSeqDense, Allocator0>& M)
-  {
-    int a, b;
-    M.GetProcessorRowRange(a, b);
-    for (int i = a; i < b; i++)
-      M.SetBuffer(i, j, X(i));
-    M.Flush();
-  }
-
-
-  //! Sets a column of a matrix.
-  /*!
-    \param[in] X new column \a j of \a M.
-    \param[in] j column index.
-    \param[out] M matrix.
-  */
-  template <class T0, class Prop0, class Allocator0,
-            class T1, class Allocator1>
-  void SetCol(const Vector<T1, PETScPar, Allocator1>& X,
-              int j, Matrix<T0, Prop0, PETScMPIDense, Allocator0>& M)
-  {
-    int a, b;
-    M.GetProcessorRowRange(a, b);
-    for (int i = a; i < b; i++)
-      M.SetBuffer(i, j, X(i));
-    M.Flush();
-  }
-
+  
 
   //! Sets a column of a matrix.
   /*!
@@ -1423,7 +1313,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
     new_ptr_vector.Nullify();
   }
 
-  
+
   //! Sets a column of a matrix
   /*!
     \param M matrix
@@ -1438,7 +1328,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
     size_t m = M.GetM();
     size_t n = M.GetN();
     size_t nnz = M.GetDataSize();
-    
+
     size_t* ptr = M.GetPtr();
     size_t* ind = M.GetInd();
     T0* data = M.GetData();
@@ -1449,7 +1339,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                        string("Index should be in [0, ") + to_str(n - 1)
                        + "], but is equal to " + to_str(j) + ".");
 #endif
-    
+
     size_t size_col = ptr[j+1] - ptr[j];
     if (size_col == X.GetM())
       {
@@ -1477,7 +1367,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	      }
 	    Ptr(i+1) = ptr[i+1];
 	  }
-	
+
 	new_nnz = Ptr(j);
 	for (size_t k = 0; k < X.GetM(); k++)
 	  {
@@ -1485,7 +1375,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	    Val(new_nnz) = X.Value(k);
 	    new_nnz++;
 	  }
-	
+
 	Ptr(j+1) = new_nnz;
 	for (size_t i = j+1; i < n; i++)
 	  {
@@ -1497,11 +1387,11 @@ template <class T0, class Allocator0, class T1, class Allocator1>
 	      }
 	    Ptr(i+1) = new_nnz;
 	  }
-	
+
 	M.SetData(m, n, Val, Ptr, Ind);
       }
   }
-  
+
 
   //! Sets a column of a matrix
   /*!
@@ -1517,8 +1407,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
     // symmetric matrix, row = col
     SetRow(X, j, M);
   }
-  
-  
+
+
   //! Sets a column of a matrix
   /*!
     \param M matrix
@@ -1533,8 +1423,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
     // symmetric matrix, row = col
     SetRow(X, j, M);
   }
-  
-  
+
+
   //! Sets a column of a matrix
   /*!
     \param M matrix
@@ -1551,7 +1441,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       M.Set(i, j, X(i));
   }
 
-  
+
   //! Sets a column of a matrix
   /*!
     \param M matrix
@@ -1568,7 +1458,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       M.Set(i, j, X(i));
   }
 
-  
+
   //! Sets a column of a matrix
   /*!
     \param M matrix
@@ -1585,7 +1475,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       M.Set(i, j, X(i));
   }
 
-  
+
   //! Sets a column of a matrix
   /*!
     \param M matrix
@@ -1602,7 +1492,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       M.Set(i, j, X(i));
   }
 
-  
+
   //! Sets a column of a matrix
   /*!
     \param M matrix
@@ -1619,7 +1509,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       M.Set(i, j, X(i));
   }
 
-  
+
     //! Sets a column of a matrix
   /*!
     \param M matrix
@@ -1636,7 +1526,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       M.Set(i, j, X(i));
   }
 
-  
+
   //! Sets a column of a matrix
   /*!
     \param M matrix
@@ -1653,7 +1543,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       M.Set(i, j, X(i));
   }
 
-  
+
   //! Sets a column of a matrix
   /*!
     \param M matrix
@@ -1670,7 +1560,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       M.Set(i, j, X(i));
   }
 
-  
+
   //! Permutation of a general matrix stored by rows.
   /*!
     B(i, j) = A(row_perm(i), col_perm(j)) and A = B.
@@ -1708,7 +1598,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                          col_perm(j) - starting_index);
   }
 
-  
+
   //! Permutation of a symmetric matrix stored by rows.
   /*!
     B(i, j) = A(row_perm(i), row_perm(j)) and A = B.
@@ -1746,7 +1636,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                          row_perm(j) - starting_index);
   }
 
-  
+
   //! Permutation of a symmetric matrix stored by rows.
   /*!
     B(i, j) = A(row_perm(i), row_perm(j)) and A = B.
@@ -1784,7 +1674,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                              row_perm(j) - starting_index);
   }
 
-  
+
   //! Permutation of an hermitian matrix stored by rows.
   /*!
     B(i, j) = A(row_perm(i), row_perm(j)) and A = B.
@@ -1822,7 +1712,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
                              row_perm(j) - starting_index);
   }
 
-  
+
   //! Permutation of an hermitian matrix stored by rows.
   /*!
     B(i, j) = A(row_perm(i), row_perm(j)) and A = B.
@@ -1859,8 +1749,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A.Val(i, j) = A_copy(row_perm(i) - starting_index,
                              row_perm(j) - starting_index);
   }
-  
-  
+
+
   //! Inverse permutation of a general matrix stored by rows.
   /*!
     B(row_perm(i), col_perm(j)) = A(i,j) and A = B.
@@ -1902,7 +1792,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
           = A_copy(i, j);
   }
 
-  
+
   //! Inverse permutation of a symmetric matrix stored by rows.
   /*!
     B(row_perm(i), row_perm(j)) = A(i,j) and A = B.
@@ -1943,8 +1833,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A.Set(row_perm(i) - starting_index, row_perm(j) - starting_index,
               A_copy(i, j));
   }
-  
-  
+
+
   //! Inverse permutation of a symmetric matrix stored by rows.
   /*!
     B(row_perm(i), row_perm(j)) = A(i,j) and A = B.
@@ -1985,8 +1875,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A.Set(row_perm(i) - starting_index, row_perm(j) - starting_index,
               A_copy(i, j));
   }
-  
-  
+
+
   //! Inverse permutation of an hermitian matrix stored by rows.
   /*!
     B(row_perm(i), row_perm(j)) = A(i,j) and A = B.
@@ -2027,8 +1917,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A.Set(row_perm(i) - starting_index, row_perm(j) - starting_index,
               A_copy(i, j));
   }
-  
-  
+
+
   //! Inverse permutation of an hermitian matrix stored by rows.
   /*!
     B(row_perm(i), row_perm(j)) = A(i,j) and A = B.
@@ -2069,8 +1959,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A.Set(row_perm(i) - starting_index, row_perm(j) - starting_index,
               A_copy(i, j));
   }
-  
-  
+
+
   //! Scaling of a matrix
   /*!
     A is replaced by Drow A Dcol
@@ -2105,8 +1995,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       for (size_t i = 0; i < A.GetM(); i++)
         A(i, j) *= Drow(i)*Dcol(j);
   }
-  
-  
+
+
   //! Scaling of a matrix
   /*!
     A is replaced by Drow A Drow
@@ -2141,8 +2031,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       for (size_t i = 0; i <= j; i++)
         A(i, j) *= Drow(i)*Drow(j);
   }
-  
-  
+
+
   //! Scaling of a matrix
   /*!
     A is replaced by Drow A Drow
@@ -2177,8 +2067,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       for (size_t i = 0; i <= j; i++)
         A.Val(i, j) *= Drow(i)*Drow(j);
   }
-  
-  
+
+
   //! Scaling of a matrix
   /*!
     A is replaced by Drow A Drow
@@ -2214,7 +2104,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A.Val(i, j) *= Drow(i)*Drow(j);
   }
 
-  
+
   //! Scaling of a matrix
   /*!
     A is replaced by Drow A Drow
@@ -2250,7 +2140,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A.Val(i, j) *= Drow(i)*Drow(j);
   }
 
-  
+
   //! Scaling of a matrix
   /*!
     A is replaced by Drow A Dcol
@@ -2268,7 +2158,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A.Val(i, j) *= Drow(i)*Dcol(j);
   }
 
-  
+
   //! Scaling of a matrix
   /*!
     A is replaced by Drow A Dcol
@@ -2286,7 +2176,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A.Val(i, j) *= Drow(i)*Dcol(j);
   }
 
-  
+
   //! Scaling of a matrix
   /*!
     A is replaced by Drow A Dcol
@@ -2304,7 +2194,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A.Val(i, j) *= Drow(i)*Dcol(j);
   }
 
-  
+
   //! Scaling of a matrix
   /*!
     A is replaced by Drow A Dcol
@@ -2322,7 +2212,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A.Val(i, j) *= Drow(i)*Dcol(j);
   }
 
-  
+
   //! Scaling of a matrix
   /*!
     A is replaced by Drow A Dcol
@@ -2340,7 +2230,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A.Val(i, j) *= Drow(i)*Dcol(j);
   }
 
-  
+
   //! Scaling of a matrix
   /*!
     A is replaced by Drow A Dcol
@@ -2358,7 +2248,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A.Val(i, j) *= Drow(i)*Dcol(j);
   }
 
-  
+
   //! Scaling of a matrix
   /*!
     A is replaced by Drow A Dcol
@@ -2376,7 +2266,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A.Val(i, j) *= Drow(i)*Dcol(j);
   }
 
-  
+
   //! Scaling of a matrix
   /*!
     A is replaced by Drow A Dcol
@@ -2394,7 +2284,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A.Val(i, j) *= Drow(i)*Dcol(j);
   }
 
-  
+
   //! Left-scaling of a matrix
   /*!
     A is replaced by Drow A
@@ -2409,7 +2299,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       for (size_t j = 0; j < A.GetN(); j++)
         A(i, j) *= Drow(i);
   }
-    
+
 
   //! Left-scaling of a matrix
   /*!
@@ -2426,7 +2316,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A(i, j) *= Drow(i);
   }
 
-  
+
   //! Left-scaling of a matrix
   /*!
     A is replaced by Drow A
@@ -2442,7 +2332,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A.Val(i, j) *= Drow(i);
   }
 
-  
+
   //! Left-scaling of a matrix
   /*!
     A is replaced by Drow A
@@ -2458,7 +2348,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A.Val(i, j) *= Drow(i);
   }
 
-  
+
   //! Left-scaling of a matrix
   /*!
     A is replaced by Drow A
@@ -2474,7 +2364,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A.Val(i, j) *= Drow(i);
   }
 
-  
+
   //! Left-scaling of a matrix
   /*!
     A is replaced by Drow A
@@ -2489,8 +2379,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       for (size_t j = 0; j <= i; j++)
         A.Val(i, j) *= Drow(i);
   }
-  
-  
+
+
   //! Left-scaling of a matrix
   /*!
     A is replaced by Drow A
@@ -2506,7 +2396,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A.Val(i, j) *= Drow(i);
   }
 
-  
+
   //! Left-scaling of a matrix
   /*!
     A is replaced by Drow A
@@ -2521,8 +2411,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       for (size_t j = i; j < A.GetN(); j++)
         A.Val(i, j) *= Drow(i);
   }
-  
-  
+
+
   //! Left-scaling of a matrix
   /*!
     A is replaced by Drow A
@@ -2538,7 +2428,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A.Val(i, j) *= Drow(i);
   }
 
-  
+
   //! Left-scaling of a matrix
   /*!
     A is replaced by Drow A
@@ -2553,8 +2443,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       for (size_t j = i; j < A.GetN(); j++)
         A.Val(i, j) *= Drow(i);
   }
-  
-  
+
+
   //! Right-scaling of a matrix
   /*!
     A is replaced by A Dcol
@@ -2570,7 +2460,7 @@ template <class T0, class Allocator0, class T1, class Allocator1>
         A(i, j) *= Dcol(j);
   }
 
-  
+
   //! Right-scaling of a matrix
   /*!
     A is replaced by A Dcol
@@ -2585,8 +2475,8 @@ template <class T0, class Allocator0, class T1, class Allocator1>
       for (size_t j = 0; j < A.GetN(); j++)
         A(i, j) *= Dcol(j);
   }
-  
-  
+
+
   //! Right-scaling of a matrix
   /*!
     A is replaced by A Dcol

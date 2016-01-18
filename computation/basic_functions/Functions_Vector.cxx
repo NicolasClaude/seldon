@@ -68,7 +68,7 @@ namespace Seldon
   /////////
   // MLT //
 
-  
+
   //! Multiplication of a vector by a scalar
   template <class T0,
 	    class T1, class Storage1, class Allocator1>
@@ -86,7 +86,7 @@ namespace Seldon
   /////////
   // ADD //
 
-  
+
   //! Adds two vectors Y = Y + alpha X
   template <class T0,
 	    class T1, class Storage1, class Allocator1,
@@ -133,47 +133,6 @@ namespace Seldon
       }
     else
       Mlt(beta, Y);
-  }
-
-  
-  //! Adds two vectors Y = Y + alpha X
-  template <class T0,
-            class T1, class Allocator1,
-            class T2, class Allocator2>
-  void AddVector(const T0 alpha,
-		 const Vector<T1, PETScSeq, Allocator1>& X,
-		 Vector<T2, PETScSeq, Allocator2>& Y)
-  {
-    if (alpha != T0(0))
-      {
-        T1 alpha_ = alpha;
-	
-#ifdef SELDON_CHECK_DIMENSIONS
-        CheckDim(X, Y, "Add(alpha, X, Y)");
-#endif
-
-        VecAXPY(Y.GetPetscVector(), alpha_, X.GetPetscVector());
-      }
-  }
-
-
-  template <class T0,
-            class T1, class Allocator1,
-            class T2, class Allocator2>
-  void AddVector(const T0 alpha,
-		 const Vector<T1, PETScPar, Allocator1>& X,
-		 Vector<T2, PETScPar, Allocator2>& Y)
-  {
-    if (alpha != T0(0))
-      {
-        T1 alpha_ = alpha;
-	
-#ifdef SELDON_CHECK_DIMENSIONS
-        CheckDim(X, Y, "Add(alpha, X, Y)");
-#endif
-
-        VecAXPY(Y.GetPetscVector(), alpha_, X.GetPetscVector());
-      }
   }
 
 
@@ -286,7 +245,7 @@ namespace Seldon
   //////////
   // COPY //
 
-  
+
   //! Y = X
   template <class T1, class Storage1, class Allocator1,
 	    class T2, class Storage2, class Allocator2>
@@ -307,32 +266,6 @@ namespace Seldon
     for (int i = 0; i < X.GetNvector(); i++)
       Y.PushBack(X.GetVector(i));
   }
-
-
-  template<class T, class Alloc1, class Alloc2>
-  void CopyVector(const Vector<T, PETScPar, Alloc1>& A,
-		  Vector<T, VectFull, Alloc2>& B)
-  {
-    B.Reallocate(A.GetLocalM());
-    T *local_data;
-    VecGetArray(A.GetPetscVector(), &local_data);
-    for (int i = 0; i < A.GetLocalM(); i++)
-      B(i) = local_data[i];
-    VecRestoreArray(A.GetPetscVector(), &local_data);
-  }
-
-
-  template<class T, class Alloc1, class Alloc2>
-  void CopyVector(const Vector<T, VectFull, Alloc1>& A,
-		  Vector<T, PETScPar, Alloc2>& B)
-  {
-    T *local_data;
-    VecGetArray(B.GetPetscVector(), &local_data);
-    for (int i = 0; i < A.GetM(); i++)
-      local_data[i] = A(i);
-    VecRestoreArray(B.GetPetscVector(), &local_data);
-  }
-
 
 
   // COPY //
@@ -383,7 +316,7 @@ namespace Seldon
     Y.Nullify();
     Y.SetData(nx, data);
   }
-  
+
 
   // SWAP //
   //////////
@@ -513,10 +446,10 @@ namespace Seldon
     SetComplexZero(value);
     for (int i = 0; i < X.GetM(); i++)
       value += X.Value(i)*Y(X.Index(i));
-    
+
     return value;
   }
-  
+
 
   //! Scalar product between two sparse vectors conj(X).Y.
   template<class T1, class Allocator1,
@@ -559,7 +492,7 @@ namespace Seldon
 
     for (int i = 0; i < X.GetM(); i++)
       value += conjugate(X.Value(i))*Y(X.Index(i));
-    
+
     return value;
   }
 
@@ -571,7 +504,7 @@ namespace Seldon
   ///////////
   // NORM1 //
 
-  
+
   //! returns 1-norm of X
   /*!
     For complex numbers, we use |z| = |Re(z)| + |Im(z)|
@@ -600,13 +533,13 @@ namespace Seldon
   Norm1(const Vector<T1, VectSparse, Allocator1>& X)
   {
     typename ClassComplexType<T1>::Treal value(0);
-    
+
     for (int i = 0; i < X.GetSize(); i++)
       value += ComplexAbs(X.Value(i));
 
     return value;
   }
-  
+
 
   // NORM1 //
   ///////////
@@ -663,7 +596,7 @@ namespace Seldon
 
     for (int i = 0; i < X.GetSize(); i++)
       value += absSquare(X.Value(i));
-    
+
     return sqrt(value);
   }
 
@@ -780,8 +713,8 @@ namespace Seldon
     y = -conjugate(s_) * x + c_ * y;
     x = temp;
   }
-  
-  
+
+
   //! Rotation of a vector of points in 2-D
   template<class T, class Allocator1, class Allocator2>
   void ApplyRot(Vector<T, VectFull, Allocator1>& X,
@@ -796,8 +729,8 @@ namespace Seldon
 	X(i) = tmp;
       }
   }
-  
-  
+
+
   //! Rotation of a vector of points in 2-D
   template<class T, class Allocator1, class Allocator2>
   void ApplyRot(Vector<T, VectSparse, Allocator1>& X,
@@ -810,9 +743,9 @@ namespace Seldon
 	tmp = c*X.Value(i) + s*Y(X.Index(i));
 	Y(X.Index(i)) = c*Y(X.Index(i)) - s*X.Value(i);
 	X.Value(i) = tmp;
-      }    
+      }
   }
-  
+
 
   // APPLYROT //
   //////////////
@@ -839,20 +772,21 @@ namespace Seldon
 		const Vector<T1, Storage1, Allocator1>& Y,
 		string function, string op)
   {
-#ifndef SELDON_WITHOUT_TO_STR_CHECKDIM
-    string Xchar = to_str(&X), Ychar = to_str(&Y);
-#else
-    string Xchar("X"), Ychar("Y");
-#endif
-
     if (X.GetLength() != Y.GetLength())
-      throw WrongDim(function, string("Operation ") + op
-		     + string(" not permitted:")
-		     + string("\n     X (") + Xchar + string(") is a ")
-		     + string("vector of length ") + to_str(X.GetLength())
-		     + string(";\n     Y (") + Ychar + string(") is a ")
-		     + string("vector of length ") + to_str(Y.GetLength())
-		     + string("."));
+      {
+#ifndef SELDON_WITHOUT_TO_STR_CHECKDIM
+        string Xchar = to_str(&X), Ychar = to_str(&Y);
+#else
+        string Xchar("X"), Ychar("Y");
+#endif
+        throw WrongDim(function, string("Operation ") + op
+          + string(" not permitted:")
+          + string("\n     X (") + Xchar + string(") is a ")
+          + string("vector of length ") + to_str(X.GetLength())
+          + string(";\n     Y (") + Ychar + string(") is a ")
+          + string("vector of length ") + to_str(Y.GetLength())
+          + string("."));
+      }
   }
 
 
@@ -1049,7 +983,7 @@ namespace Seldon
 	Y(X.Index(i)) = zero;
       }
   }
-  
+
 
   template<class T, class Allocator1, class Allocator2>
   void ScatterSparseEntry(const Vector<T, VectSparse, Allocator1>& X,
@@ -1058,12 +992,12 @@ namespace Seldon
     for (int i = 0; i < X.GetM(); i++)
       Y(X.Index(i)) = X.Value(i);
   }
-  
+
 
   // GATHER/SCATTER //
-  ////////////////////  
+  ////////////////////
 
-  
+
   ///////////////
   // CONJUGATE //
 

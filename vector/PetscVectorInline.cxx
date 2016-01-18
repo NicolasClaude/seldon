@@ -21,8 +21,6 @@
 #ifndef SELDON_FILE_VECTOR_PETSCVECTOR_INLINE_CXX
 
 
-#include "PetscVector.hxx"
-
 
 namespace Seldon
 {
@@ -161,7 +159,14 @@ namespace Seldon
   template <class T, class Allocator>
   inline void PETScVector<T, Allocator>::Resize(int n)
   {
-    throw Undefined("PETScVector<T, Allocator>::Resize(int n)");
+    this->Clear();
+    int ierr;
+    this->m_ = n;
+    ierr = VecCreateSeq(PETSC_COMM_SELF, n, &this->petsc_vector_);
+    CHKERRABORT(this->mpi_communicator_, ierr);
+    ierr = VecSet(this->petsc_vector_, 0.);
+    CHKERRABORT(this->mpi_communicator_, ierr);
+    this->Flush();
   }
 
 
@@ -188,6 +193,24 @@ namespace Seldon
   }
 
 
+  //! Lets the current vector point to the data of another vector.
+  /*!
+    \param V vector whose data should be shared with current instance.
+    \warning This is not a real SetData, values from the vector are copied and
+    not duplicated.
+    \note This method should only be used by advanced users.
+  */
+  template <class T, class Allocator>
+  template <class Allocator0>
+  inline void PETScVector<T, Allocator>
+  ::SetData(const PETScVector<T,  Allocator0>& V)
+  {
+    this->Clear();
+    Copy(V);
+  }
+
+
+
   //! Clears the vector without releasing memory.
   /*!
     On exit, the vector is empty and the memory has not been released.
@@ -197,7 +220,7 @@ namespace Seldon
   template <class T, class Allocator>
   inline void PETScVector<T, Allocator>::Nullify()
   {
-    throw Undefined("PETScVector<T, Allocator>::Nullify()");
+    this->Clear();
   }
 
 
@@ -299,6 +322,20 @@ namespace Seldon
   }
 
 
+  template <class T, class Allocator>
+  template <class T0, class Allocator0>
+  inline void PETScVector<T, Allocator>
+  ::Copy(const Vector<T0, VectFull, Allocator0> X)
+  {
+    Clear();
+    this->Reallocate(X.GetM());
+    int ierr;
+    for (int i = 0; i < X.GetM(); i++)
+      this->SetBuffer(i, X(i));
+    this->Flush();
+  }
+
+
   //! Appends an element to the vector.
   /*!
     \param x element to be appended.
@@ -309,6 +346,41 @@ namespace Seldon
   inline void PETScVector<T, Allocator>::Append(const T& x)
   {
     throw Undefined("PETScVector<T, Allocator>::Append(const T& x)");
+  }
+
+
+  //! Access operator.
+  /*!
+    \param i index.
+    \return The value of the vector at 'i'.
+    \warning Read only.
+    \warning This method must be called by all processes at the same time.
+  */
+  template <class T, class Allocator>
+  inline typename PETScVector<T, Allocator>::value_type
+  PETScVector<T, Allocator>::GetOnAll(int i) const
+  {
+    int low, high, ierr;
+
+    ierr = VecAssemblyBegin(petsc_vector_);
+    CHKERRABORT(mpi_communicator_, ierr);
+    ierr = VecAssemblyEnd(petsc_vector_);
+    CHKERRABORT(mpi_communicator_, ierr);
+
+    value_type y,x;
+    y = 0;
+    GetProcessorRange(low, high);
+    if (i < high && i >= low)
+      {
+        T ret[1];
+        int index[1];
+        index[0] = i;
+        ierr = VecGetValues(petsc_vector_, 1, index, ret);
+        CHKERRABORT(mpi_communicator_, ierr);
+        y = ret[0];
+      }
+    MPI_Allreduce(&y, &x, 1, MPI_DOUBLE, MPI_SUM, mpi_communicator_);
+    return x;
   }
 
 
@@ -640,6 +712,7 @@ namespace Seldon
   ::Copy(const Vector<T, PETScPar, Allocator>& X)
   {
     Copy(X.GetPetscVector());
+    this->m_ = X.GetM();
     this->mpi_communicator_ = X.mpi_communicator_;
   }
 
@@ -729,12 +802,12 @@ namespace Seldon
     ierr = VecCreateMPI(this->mpi_communicator_, local_size, i,
                         &this->petsc_vector_);
     CHKERRABORT(this->mpi_communicator_, ierr);
-    Fill(T(0));
+    this->Fill(T(0));
     this->Flush();
     this->petsc_vector_deallocated_ = false;
   }
 
-  
+
 } // namespace Seldon.
 
 

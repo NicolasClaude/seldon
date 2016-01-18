@@ -25,7 +25,7 @@
 
 namespace Seldon
 {
-  
+
   //! Duplicates a matrix.
   /*!
     \param A matrix to be copied.
@@ -40,7 +40,7 @@ namespace Seldon
     int ierr;
     ierr = MatDuplicate(A, MAT_COPY_VALUES, &petsc_matrix_);
     CHKERRABORT(mpi_communicator_, ierr);
-    MatGetSize(A, &this->m_, &this->n_);
+    MatGetSize(A, (int*)&this->m_, (int*)&this->n_);
     mpi_communicator_ = MPI_COMM_WORLD;
     petsc_matrix_deallocated_ = false;
   }
@@ -62,8 +62,8 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   void PetscMatrix<T, Prop, Storage, Allocator>::SetIdentity()
   {
-    throw Undefined("void PetscMatrix<T, Prop, Storage, Allocator>"
-                    "::SetIdentity()");
+    MatScale(petsc_matrix_, T(0));
+    MatShift(petsc_matrix_, T(1));
   }
 
 
@@ -75,8 +75,11 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   void PetscMatrix<T, Prop, Storage, Allocator>::Fill()
   {
-    throw Undefined("void PetscMatrix<T, Prop, Storage, Allocator>"
-                    "::Fill()");
+    for (size_t i = 0; i < this->m_; i++)
+      for (size_t j = 0; j < this->n_; j++)
+        this->SetBuffer(i, j, i*this->m_ + j);
+
+    this->Flush();
   }
 
 
@@ -88,8 +91,11 @@ namespace Seldon
   template <class T0>
   void PetscMatrix<T, Prop, Storage, Allocator>::Fill(const T0& x)
   {
-    throw Undefined("void PetscMatrix<T, Prop, Storage, Allocator>"
-                    "::Fill(const T0& x)");
+    for (size_t i = 0; i < this->m_; i++)
+      for (size_t j = 0; j < this->n_; j++)
+        this->SetBuffer(i, j, x);
+
+    this->Flush();
   }
 
 
@@ -183,13 +189,12 @@ namespace Seldon
     are written, and matrix elements are then written in the same order
     as in memory (e.g. row-major storage).
     \param FileStream output stream.
+    \warning This function is not defined.
   */
   template <class T, class Prop, class Storage, class Allocator>
   void PetscMatrix<T, Prop, Storage, Allocator>
   ::Write(ostream& FileStream, bool with_size) const
   {
-    throw Undefined("void PetscMatrix<T, Prop, Storage, Allocator>"
-                    "::Write(ostream& FileStream, bool with_size) const");
   }
 
 
@@ -346,7 +351,7 @@ namespace Seldon
   // Matrix<PETScMPIDense> //
   ///////////////////////////
 
-  
+
   //! Displays the matrix on the standard output.
   /*!
     Displays elements on the standard output, in text format.
