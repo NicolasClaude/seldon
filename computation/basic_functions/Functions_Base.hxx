@@ -42,7 +42,23 @@ namespace Seldon
 	   class Storage2, class Allocator2>
   void Add(const T& alpha, const Vector<T, Storage1, Allocator1>& X,
 	   const T& beta, Vector<T, Storage2, Allocator2>& Y);
-  
+
+  template<class T, class T0,
+  class Storage1, class Storage2, class Allocator1, class Allocator2>
+  void Add(const T0& alpha, const Vector<T, Storage1, Allocator1>& X,
+	    Vector<T, Storage2, Allocator2>& Y);
+
+  template<class T, class Allocator1, class Allocator2>
+  void Add(const T& alpha,
+     const Vector<FloatDouble, DenseSparseCollection, Allocator1>& X,
+     Vector<FloatDouble, DenseSparseCollection, Allocator2>& Y);
+
+  template<class T0, class T, class Allocator1, class Storage2,
+    class Allocator2>
+  void Add(const T0& alpha,
+     const Vector<FloatDouble, DenseSparseCollection, Allocator1>& X,
+     Vector<T, Storage2, Allocator2>& Y);
+
   // Copy of two vectors
   template<class T, class Storage1, class Allocator1,
 	   class Storage2, class Allocator2>
@@ -55,6 +71,11 @@ namespace Seldon
   T DotProd(const Vector<T, Storage1, Allocator1>& X,
 	    const Vector<T, Storage2, Allocator2>& Y);
   
+  // Scalar product between vectors
+  template<class T, class Allocator1, class Allocator2>
+  T DotProd(const Vector<FloatDouble, DenseSparseCollection, Allocator1>& X,
+	    const Vector<FloatDouble, DenseSparseCollection, Allocator2>& Y);
+
   template<class T, class Storage1, class Allocator1,
 	   class Storage2, class Allocator2>
   T DotProdConj(const Vector<T, Storage1, Allocator1>& X,

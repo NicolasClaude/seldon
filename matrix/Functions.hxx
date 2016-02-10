@@ -26,6 +26,11 @@ namespace Seldon
   void GetRow(const Matrix<T0, General, RowSparse, Allocator0>& M,
 	      int i, Vector<T1, VectSparse, Allocator1>& X);
 
+  template <class T0, class Allocator0, class T1, class Allocator1,
+            class Storage1>
+  void GetRow(const Matrix<T0, General, RowSparse, Allocator0>& M,
+        size_t i, Vector<T1, Storage1, Allocator1>& X);
+
   template <class T0, class Allocator0, class T1, class Allocator1>
   void GetRow(const Matrix<T0, General, ColSparse, Allocator0>& M,
 	      int i, Vector<T1, VectSparse, Allocator1>& X);
@@ -46,6 +51,11 @@ namespace Seldon
   template <class T0, class Allocator0, class T1, class Allocator1>
   void GetCol(const Matrix<T0, General, RowSparse, Allocator0>& M,
 	      int j, Vector<T1, VectSparse, Allocator1>& X);
+
+  template <class T0, class Allocator0, class T1, class Allocator1,
+            class Storage1>
+  void GetCol(const Matrix<T0, General, RowSparse, Allocator0>& M,
+        size_t j, Vector<T1, Storage1, Allocator1>& X);
 
   template <class T0, class Allocator0, class T1, class Allocator1>
   void GetCol(const Matrix<T0, General, ColSparse, Allocator0>& M,

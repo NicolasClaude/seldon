@@ -110,7 +110,32 @@ namespace Seldon
     \param X row extracted
     X = M(i, :)
   */
-  template <class T0, class Allocator0, class T1, class Allocator1>
+  template <class T0, class Allocator0, class T1, class Allocator1, class Storage1>
+  void GetRow(const Matrix<T0, General, RowSparse, Allocator0>& M,
+	      size_t i, Vector<T1, Storage1, Allocator1>& X)
+  {
+#ifdef SELDON_CHECK_BOUNDS
+    size_t m = M.GetM();
+    if (i >= m)
+      throw WrongIndex("GetRow()",
+                       string("Index should be in [0, ") + to_str(m - 1)
+                       + "], but is equal to " + to_str(i) + ".");
+#endif
+    X.Reallocate(M.GetN());
+    size_t* ptr = M.GetPtr();
+    size_t* ind = M.GetInd();
+    T0* data = M.GetData();
+    size_t size_row = ptr[i+1] - ptr[i];
+    size_t shift = ptr[i];
+    X.Zero();
+    for (size_t j = 0; j < size_row; j++)
+      {
+        X(ind[shift + j]) = data[shift + j];
+      }
+  }
+
+
+template <class T0, class Allocator0, class T1, class Allocator1>
   void GetRow(const Matrix<T0, General, ColSparse, Allocator0>& M,
 	      int i, Vector<T1, VectSparse, Allocator1>& X)
   {
@@ -325,6 +350,41 @@ namespace Seldon
       }
   }
 
+
+
+  //! Extracts a column from a matrix
+  /*!
+    \param M matrix
+    \param j column index
+    \param X column extracted
+    X = M(:, j)
+  */
+  template <class T0, class Allocator0, class T1, class Allocator1, class Storage1>
+  void GetCol(const Matrix<T0, General, RowSparse, Allocator0>& M,
+        size_t j, Vector<T1, Storage1, Allocator1>& X)
+  {
+#ifdef SELDON_CHECK_BOUNDS
+    size_t n = M.GetN();
+    if (j >= n)
+      throw WrongIndex("GetCol()",
+                       string("Index should be in [0, ") + to_str(n - 1)
+                       + "], but is equal to " + to_str(j) + ".");
+#endif
+
+
+    size_t* ptr = M.GetPtr();
+    size_t* ind = M.GetInd();
+    T0* data = M.GetData();
+    size_t m = M.GetM();
+
+    X.Reallocate(m);
+    X.Zero();
+    for (size_t i = 0; i < m; i++)
+      for (size_t k = ptr[i]; k < ptr[i+1]; k++)
+        if (ind[k] == j)
+          X(i) = data[k];
+
+  }
   
   //! Extracts a column from a sparse matrix
   /*!
