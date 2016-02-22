@@ -24,7 +24,7 @@
 
 namespace Seldon
 {
-  
+
 
   //! Main constructor.
   /*! Builds a i x j full matrix.
@@ -33,7 +33,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   Matrix_Pointers<T, Prop, Storage, Allocator>
-  ::Matrix_Pointers(int i, int j): Matrix_Base<T, Allocator>(i, j)
+  ::Matrix_Pointers(size_t i, size_t j): Matrix_Base<T, Allocator>(i, j)
   {
 
 #ifdef SELDON_CHECK_MEMORY
@@ -91,8 +91,8 @@ namespace Seldon
 #endif
 
     pointer ptr = this->data_;
-    int lgth = Storage::GetSecond(i, j);
-    for (int k = 0; k < Storage::GetFirst(i, j); k++, ptr += lgth)
+    size_t lgth = Storage::GetSecond(i, j);
+    for (size_t k = 0; k < Storage::GetFirst(i, j); k++, ptr += lgth)
       me_[k] = ptr;
 
   }
@@ -160,7 +160,7 @@ namespace Seldon
 	me_ = NULL;
       }
 #endif
-    
+
     this->m_ = 0;
     this->n_ = 0;
   }
@@ -249,8 +249,8 @@ namespace Seldon
 #endif
 
 	pointer ptr = this->data_;
-	int lgth = Storage::GetSecond(i, j);
-	for (int k = 0; k < Storage::GetFirst(i, j); k++, ptr += lgth)
+	size_t lgth = Storage::GetSecond(i, j);
+	for (size_t k = 0; k < Storage::GetFirst(i, j); k++, ptr += lgth)
 	  me_[k] = ptr;
       }
   }
@@ -274,7 +274,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Pointers<T, Prop, Storage, Allocator>
-  ::SetData(int i, int j,
+  ::SetData(size_t i, size_t j,
 	    typename Matrix_Pointers<T, Prop, Storage, Allocator>
 	    ::pointer data)
   {
@@ -313,8 +313,8 @@ namespace Seldon
     this->data_ = data;
 
     pointer ptr = this->data_;
-    int lgth = Storage::GetSecond(i, j);
-    for (int k = 0; k < Storage::GetFirst(i, j); k++, ptr += lgth)
+    size_t lgth = Storage::GetSecond(i, j);
+    for (size_t k = 0; k < Storage::GetFirst(i, j); k++, ptr += lgth)
       me_[k] = ptr;
   }
 
@@ -355,7 +355,7 @@ namespace Seldon
     this->data_ = NULL;
   }
 
-  
+
   //! Reallocates memory to resize the matrix and keeps previous entries.
   /*!
     On exit, the matrix is a i x j matrix.
@@ -391,7 +391,7 @@ namespace Seldon
 	this->data_[k*jnew+l] = xold(l+jold*k);
   }
 
-  
+
   /************************
    * CONVENIENT FUNCTIONS *
    ************************/
@@ -417,9 +417,9 @@ namespace Seldon
     T zero, one;
     SetComplexZero(zero);
     SetComplexOne(one);
-    
+
     Fill(zero);
-    
+
     for (size_t i = 0; i < min(this->m_, this->n_); i++)
       (*this)(i,i) = one;
   }
@@ -442,7 +442,7 @@ namespace Seldon
   /*!
     \param x the value to fill the matrix with.
   */
-  template <class T, class Prop, class Storage, class Allocator> 
+  template <class T, class Prop, class Storage, class Allocator>
   template <class T0>
   void Matrix_Pointers<T, Prop, Storage, Allocator>::Fill(const T0& x)
   {
@@ -490,9 +490,9 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Pointers<T, Prop, Storage, Allocator>::Print() const
   {
-    for (int i = 0; i < this->m_; i++)
+    for (size_t i = 0; i < this->m_; i++)
       {
-	for (int j = 0; j < this->n_; j++)
+	for (size_t j = 0; j < this->n_; j++)
 	  cout << (*this)(i, j) << "\t";
 	cout << endl;
       }
@@ -512,12 +512,12 @@ namespace Seldon
     \param n column index of the bottom-right corner.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  void Matrix_Pointers<T, Prop, Storage, Allocator>::Print(int a, int b,
-							   int m, int n) const
+  void Matrix_Pointers<T, Prop, Storage, Allocator>::Print(size_t a, size_t b,
+							   size_t m, size_t n) const
   {
-    for (int i = a; i < min(this->m_, a+m); i++)
+    for (size_t i = a; i < min(this->m_, a+m); i++)
       {
-	for (int j = b; j < min(this->n_, b+n); j++)
+	for (size_t j = b; j < min(this->n_, b+n); j++)
 	  cout << (*this)(i, j) << "\t";
 	cout << endl;
       }
@@ -534,7 +534,7 @@ namespace Seldon
     \param l dimension of the square matrix to be displayed.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  void Matrix_Pointers<T, Prop, Storage, Allocator>::Print(int l) const
+  void Matrix_Pointers<T, Prop, Storage, Allocator>::Print(size_t l) const
   {
     Print(0, 0, l, l);
   }
@@ -564,7 +564,7 @@ namespace Seldon
 
 
   //! Appends the matrix in a file.
-  /*!  
+  /*!
     Appends the matrix in a file in binary format. The matrix elements are
     appended in the same order as in memory (e.g. row-major storage).
     \param FileName output file name.
@@ -786,9 +786,9 @@ namespace Seldon
 
     if (with_size)
       {
-        int new_m, new_n;
-        FileStream.read(reinterpret_cast<char*>(&new_m), sizeof(int));
-        FileStream.read(reinterpret_cast<char*>(&new_n), sizeof(int));
+        size_t new_m, new_n;
+        FileStream.read(reinterpret_cast<char*>(&new_m), sizeof(size_t));
+        FileStream.read(reinterpret_cast<char*>(&new_n), sizeof(size_t));
         this->Reallocate(new_m, new_n);
       }
 
@@ -863,10 +863,10 @@ namespace Seldon
     // Now reads all other rows, and puts them in a single vector.
     Vector<T> other_row;
     other_row.ReadText(FileStream);
-    
+
     // Number of rows and columns.
-    int n = first_row.GetM();
-    int m = 1 + other_row.GetM() / n;
+    size_t n = first_row.GetM();
+    size_t m = 1 + other_row.GetM() / n;
 
 #ifdef SELDON_CHECK_IO
     // Checks that enough elements were read.
@@ -877,12 +877,12 @@ namespace Seldon
 
     this->Reallocate(m, n);
     // Fills the matrix.
-    for (int j = 0; j < n; j++)
+    for (size_t j = 0; j < n; j++)
       this->Val(0, j) = first_row(j);
 
-    int k = 0;
-    for (int i = 1; i < m; i++)
-      for (int j = 0; j < n; j++)
+    size_t k = 0;
+    for (size_t i = 1; i < m; i++)
+      for (size_t j = 0; j < n; j++)
 	this->Val(i, j) = other_row(k++);
   }
 
@@ -906,7 +906,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Allocator>
   void Matrix<T, Prop, ColMajor, Allocator>
-  ::WriteColumn(string FileName, int col) const
+  ::WriteColumn(string FileName, size_t col) const
   {
     ofstream FileStream;
     FileStream.open(FileName.c_str());
@@ -933,7 +933,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Allocator>
   void Matrix<T, Prop, ColMajor, Allocator>
-  ::WriteColumn(ostream& FileStream, int col) const
+  ::WriteColumn(ostream& FileStream, size_t col) const
   {
 #ifdef SELDON_CHECK_BOUNDS
     if (col < 0 || col >= this->n_)
@@ -982,7 +982,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Allocator>
   void Matrix<T, Prop, RowMajor, Allocator>
-  ::WriteRow(string FileName, int row) const
+  ::WriteRow(string FileName, size_t row) const
   {
     ofstream FileStream;
     FileStream.open(FileName.c_str());
@@ -1009,7 +1009,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Allocator>
   void Matrix<T, Prop, RowMajor, Allocator>
-  ::WriteRow(ostream& FileStream, int row) const
+  ::WriteRow(ostream& FileStream, size_t row) const
   {
 #ifdef SELDON_CHECK_BOUNDS
     if (row < 0 || row >= this->m_)
@@ -1032,13 +1032,13 @@ namespace Seldon
 #ifdef SELDON_CHECK_IO
     // Checks if data was written.
     if (!FileStream.good())
-      throw IOError("Matrix::WriteRow(ostream& FileStream, int row)",
+      throw IOError("Matrix::WriteRow(ostream& FileStream, int nrow)",
                     "Output operation failed.");
 #endif
 
   }
-  
-  
+
+
 } // namespace Seldon.
 
 #define SELDON_FILE_MATRIX_POINTERS_CXX

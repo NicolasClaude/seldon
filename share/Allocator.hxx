@@ -37,16 +37,16 @@ namespace Seldon
     typedef const T* const_pointer;
     typedef T& reference;
     typedef const T& const_reference;
-    
+
     //! true if the allocator keeps previous elements when
     //! calling reallocate
     static const bool KeepDataReallocate = true;
 
   public:
 
-    static pointer allocate(int num, void* h = 0);
-    static void deallocate(pointer data, int num, void* h = 0);
-    static void* reallocate(pointer data, int num, void* h = 0);
+    static pointer allocate(size_t num, void* h = 0);
+    static void deallocate(pointer data, size_t num, void* h = 0);
+    static void* reallocate(pointer data, size_t num, void* h = 0);
     static void memoryset(pointer data, char c, size_t num);
     static void memorycpy(pointer datat, pointer datas, size_t num);
   };
@@ -73,9 +73,9 @@ namespace Seldon
 
   public:
 
-    static pointer allocate(int num, void* h = 0);
-    static void deallocate(pointer data, int num, void* h = 0);
-    static void* reallocate(pointer data, int num, void* h = 0);
+    static pointer allocate(size_t num, void* h = 0);
+    static void deallocate(pointer data, size_t num, void* h = 0);
+    static void* reallocate(pointer data, size_t num, void* h = 0);
     static void memoryset(pointer data, char c, size_t num);
     static void memorycpy(pointer datat, pointer datas, size_t num);
   };
@@ -102,13 +102,13 @@ namespace Seldon
 
   public:
 
-    static pointer allocate(int num, void* h = 0);
-    static void deallocate(pointer data, int num, void* h = 0);
-    static void* reallocate(pointer data, int num, void* h = 0);
+    static pointer allocate(size_t num, void* h = 0);
+    static void deallocate(pointer data, size_t num, void* h = 0);
+    static void* reallocate(pointer data, size_t num, void* h = 0);
     static void memoryset(pointer data, char c, size_t num);
     static void memorycpy(pointer datat, pointer datas, size_t num);
   };
-  
+
 
   //////////////////
   // MallocObject //
@@ -128,17 +128,17 @@ namespace Seldon
     //! true if the allocator keeps previous elements when
     //! calling reallocate
     static const bool KeepDataReallocate = false;
-    
+
   public:
 
-    static pointer allocate(int num, void* h = 0);
-    static void deallocate(pointer data, int num, void* h = 0);
-    static void* reallocate(pointer data, int num, void* h = 0);
+    static pointer allocate(size_t num, void* h = 0);
+    static void deallocate(pointer data, size_t num, void* h = 0);
+    static void* reallocate(pointer data, size_t num, void* h = 0);
     static void memoryset(pointer data, char c, size_t num);
     static void memorycpy(pointer datat, pointer datas, size_t num);
   };
-  
-  
+
+
   //////////////
   // NANALLOC //
   //////////////
@@ -160,14 +160,14 @@ namespace Seldon
 
   public:
 
-    static pointer allocate(int num, void* h = 0);
-    static void deallocate(pointer data, int num, void* h = 0);
-    static void* reallocate(pointer data, int num, void* h = 0);
+    static pointer allocate(size_t num, void* h = 0);
+    static void deallocate(pointer data, size_t num, void* h = 0);
+    static void* reallocate(pointer data, size_t num, void* h = 0);
     static void memoryset(pointer data, char c, size_t num);
     static void memorycpy(pointer datat, pointer datas, size_t num);
   };
 
-  
+
   //! Selection of default allocator depending on storage and value type
   template<class Storage, class T>
   class SeldonDefaultAllocator
@@ -175,7 +175,7 @@ namespace Seldon
   public :
     // default choice : SELDON_DEFAULT_ALLOCATOR
     typedef SELDON_DEFAULT_ALLOCATOR<T> allocator;
-    
+
   };
 
 } // namespace Seldon.

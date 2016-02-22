@@ -33,7 +33,7 @@ namespace Seldon
 
   template <class T>
   typename MallocObject<T>::pointer
-  MallocObject<T>::allocate(int num, void* h)
+  MallocObject<T>::allocate(size_t num, void* h)
   {
     // The cast from char* to T* may lead to a memory shift (because of
     // alignment issues) under MS Windows. It requires that one allocates more
@@ -56,19 +56,19 @@ namespace Seldon
 
 
   template <class T>
-  void MallocObject<T>::deallocate(pointer data, int num, void* h)
+  void MallocObject<T>::deallocate(pointer data, size_t num, void* h)
   {
     void * memory_block;
     memcpy(&memory_block,
            reinterpret_cast<char *>(data) - sizeof(char*), sizeof(char*));
-    for (int i = 0; i < num; i++)
+    for (size_t i = 0; i < num; i++)
       data[i].~T();
     free(memory_block);
   }
 
 
   template <class T>
-  void* MallocObject<T>::reallocate(pointer data, int num, void* h)
+  void* MallocObject<T>::reallocate(pointer data, size_t num, void* h)
   {
     if (data == NULL)
       return allocate(num, h);
@@ -76,7 +76,7 @@ namespace Seldon
     void * memory_block;
     memcpy(&memory_block,
            reinterpret_cast<char *>(data) - sizeof(char*), sizeof(char*));
-    int initial_num = *reinterpret_cast<int*>(memory_block);
+    size_t initial_num = *reinterpret_cast<size_t*>(memory_block);
 
     if (initial_num < num)
       {
@@ -88,7 +88,7 @@ namespace Seldon
       }
     else if (initial_num > num)
       {
-	for (int i = num; i < initial_num; i++)
+	for (size_t i = num; i < initial_num; i++)
 	  data[i].~T();
 
 	memory_block = realloc(memory_block, sizeof(int) + sizeof(char*) +
@@ -133,34 +133,34 @@ namespace Seldon
 
   template <class T>
   typename NaNAlloc<T>::pointer
-  NaNAlloc<T>::allocate(int num, void* h)
+  NaNAlloc<T>::allocate(size_t num, void* h)
   {
     pointer data = static_cast<pointer>( malloc(num * sizeof(T)) );
     if (numeric_limits<value_type>::has_signaling_NaN)
-      for (int i = 0; i < num; i++)
+      for (size_t i = 0; i < num; i++)
 	data[i] = numeric_limits<value_type>::signaling_NaN();
     else if (numeric_limits<value_type>::has_quiet_NaN)
-      for (int i = 0; i < num; i++)
+      for (size_t i = 0; i < num; i++)
 	data[i] = numeric_limits<value_type>::quiet_NaN();
     else if  (numeric_limits<value_type>::has_infinity)
-      for (int i = 0; i < num; i++)
+      for (size_t i = 0; i < num; i++)
 	data[i] = numeric_limits<value_type>::infinity();
     return data;
   }
 
   template <class T>
-  void* NaNAlloc<T>::reallocate(pointer data, int num, void* h)
+  void* NaNAlloc<T>::reallocate(pointer data, size_t num, void* h)
   {
     void* datav = realloc(reinterpret_cast<void*>(data), num * sizeof(T));
     pointer datap = reinterpret_cast<pointer>(datav);
     if (numeric_limits<value_type>::has_signaling_NaN)
-      for (int i = 0; i < num; i++)
+      for (size_t i = 0; i < num; i++)
 	datap[i] = numeric_limits<value_type>::signaling_NaN();
     else if (numeric_limits<value_type>::has_quiet_NaN)
-      for (int i = 0; i < num; i++)
+      for (size_t i = 0; i < num; i++)
 	datap[i] = numeric_limits<value_type>::quiet_NaN();
     else if  (numeric_limits<value_type>::has_infinity)
-      for (int i = 0; i < num; i++)
+      for (size_t i = 0; i < num; i++)
 	datap[i] = numeric_limits<value_type>::infinity();
     return datav;
   }

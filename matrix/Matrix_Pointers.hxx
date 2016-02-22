@@ -55,7 +55,7 @@ namespace Seldon
   public:
     // Constructor.
     Matrix_Pointers();
-    explicit Matrix_Pointers(int i, int j);
+    explicit Matrix_Pointers(size_t i, size_t j);
     Matrix_Pointers(const Matrix_Pointers<T, Prop, Storage, Allocator>& A);
 
     // Destructor.
@@ -69,33 +69,33 @@ namespace Seldon
 
     // Memory management.
     void Reallocate(size_t i, size_t j);
-    void SetData(int i, int j, pointer data);
+    void SetData(size_t i, size_t j, pointer data);
     void Nullify();
     void Resize(size_t i, size_t j);
 
     // Element access and affectation.
-    pointer GetDataPointer(int i, int j) const;
-    reference operator() (int i, int j);
+    pointer GetDataPointer(size_t i, size_t j) const;
+    reference operator() (size_t i, size_t j);
 #ifndef SWIG
-    const_reference operator() (int i, int j) const;
+    const_reference operator() (size_t i, size_t j) const;
 #endif
-    reference Val(int i, int j);
-    reference Get(int i, int j);
+    reference Val(size_t i, size_t j);
+    reference Get(size_t i, size_t j);
 #ifndef SWIG
-    const_reference Val(int i, int j) const;
-    const_reference Get(int i, int j) const;
-    reference operator[] (int i);
-    const_reference operator[] (int i) const;
-    
+    const_reference Val(size_t i, size_t j) const;
+    const_reference Get(size_t i, size_t j) const;
+    reference operator[] (size_t i);
+    const_reference operator[] (size_t i) const;
+
     Matrix_Pointers<T, Prop, Storage, Allocator>&
     operator= (const Matrix_Pointers<T, Prop, Storage, Allocator>& A);
 #endif
 
-    void Set(int i, int j, const T& val);
+    void Set(size_t i, size_t j, const T& val);
     void Copy(const Matrix_Pointers<T, Prop, Storage, Allocator>& A);
 
     // Convenient functions.
-    int GetLD() const;
+    size_t GetLD() const;
     void Zero();
     void SetIdentity();
     void Fill();
@@ -107,8 +107,8 @@ namespace Seldon
 #endif
     void FillRand();
     void Print() const;
-    void Print(int a, int b, int m, int n) const;
-    void Print(int l) const;
+    void Print(size_t a, size_t b, size_t m, size_t n) const;
+    void Print(size_t l) const;
 
     // Input/output functions.
     void Append(string FileName) const;
@@ -149,11 +149,11 @@ namespace Seldon
 
   public:
     Matrix();
-    explicit Matrix(int i, int j);
+    explicit Matrix(size_t i, size_t j);
     Matrix(const Matrix<T, Prop, ColMajor, Allocator>& A);
 
-    void WriteColumn(string FileName, int col) const;
-    void WriteColumn(ostream& FileStream, int col) const;
+    void WriteColumn(string FileName, size_t col) const;
+    void WriteColumn(ostream& FileStream, size_t col) const;
 
 #ifndef SWIG
     template <class T0>
@@ -180,11 +180,11 @@ namespace Seldon
 
   public:
     Matrix();
-    explicit Matrix(int i, int j);
+    explicit Matrix(size_t i, size_t j);
     Matrix(const Matrix<T, Prop, RowMajor, Allocator>& A);
 
-    void WriteRow(string FileName, int row) const;
-    void WriteRow(ostream& FileStream, int row) const;
+    void WriteRow(string FileName, size_t row) const;
+    void WriteRow(ostream& FileStream, size_t row) const;
 
 #ifndef SWIG
 

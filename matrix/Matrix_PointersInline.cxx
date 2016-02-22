@@ -83,7 +83,7 @@ namespace Seldon
     taille += int64_t(Storage::GetFirst(this->m_, this->n_))*sizeof(pointer);
     return taille;
   }
-  
+
 
   //! Returns the pointer 'me_'.
   /*! Returns the pointer 'me_' that defines an array pointing to the first
@@ -105,7 +105,7 @@ namespace Seldon
     \return The leading dimension.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline int Matrix_Pointers<T, Prop, Storage, Allocator>::GetLD() const
+  inline size_t Matrix_Pointers<T, Prop, Storage, Allocator>::GetLD() const
   {
     return Storage::GetSecond(this->m_, this->n_);
   }
@@ -124,10 +124,10 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_Pointers<T, Prop, Storage, Allocator>::pointer
-  Matrix_Pointers<T, Prop, Storage, Allocator>::GetDataPointer(int i, int j)
+  Matrix_Pointers<T, Prop, Storage, Allocator>::GetDataPointer(size_t i, size_t j)
     const
   {
-    int lgth = Storage::GetSecond(this->m_, this->n_);
+    size_t lgth = Storage::GetSecond(this->m_, this->n_);
     return this->data_ + Storage::GetFirst(i, j) * lgth
       + Storage::GetSecond(i, j);
   }
@@ -142,7 +142,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_Pointers<T, Prop, Storage, Allocator>::reference
-  Matrix_Pointers<T, Prop, Storage, Allocator>::operator() (int i, int j)
+  Matrix_Pointers<T, Prop, Storage, Allocator>::operator() (size_t i, size_t j)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -163,7 +163,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_Pointers<T, Prop, Storage, Allocator>
   ::const_reference Matrix_Pointers<T, Prop, Storage, Allocator>
-  ::operator() (int i, int j) const
+  ::operator() (size_t i, size_t j) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -183,7 +183,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_Pointers<T, Prop, Storage, Allocator>::reference
-  Matrix_Pointers<T, Prop, Storage, Allocator>::Val(int i, int j)
+  Matrix_Pointers<T, Prop, Storage, Allocator>::Val(size_t i, size_t j)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -193,7 +193,7 @@ namespace Seldon
     return me_[Storage::GetFirst(i, j)][Storage::GetSecond(i, j)];
   }
 
-  
+
   //! Access operator.
   /*!
     Returns the value of element (i, j).
@@ -203,12 +203,12 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_Pointers<T, Prop, Storage, Allocator>::reference
-  Matrix_Pointers<T, Prop, Storage, Allocator>::Get(int i, int j)
+  Matrix_Pointers<T, Prop, Storage, Allocator>::Get(size_t i, size_t j)
   {
     return Val(i, j);
   }
-  
-  
+
+
   //! Access operator.
   /*!
     Returns the value of element (i, j).
@@ -219,7 +219,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_Pointers<T, Prop, Storage, Allocator>
   ::const_reference
-  Matrix_Pointers<T, Prop, Storage, Allocator>::Val(int i, int j) const
+  Matrix_Pointers<T, Prop, Storage, Allocator>::Val(size_t i, size_t j) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -240,7 +240,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_Pointers<T, Prop, Storage, Allocator>
   ::const_reference
-  Matrix_Pointers<T, Prop, Storage, Allocator>::Get(int i, int j) const
+  Matrix_Pointers<T, Prop, Storage, Allocator>::Get(size_t i, size_t j) const
   {
     return Val(i, j);
   }
@@ -254,7 +254,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_Pointers<T, Prop, Storage, Allocator>::reference
-  Matrix_Pointers<T, Prop, Storage, Allocator>::operator[] (int i)
+  Matrix_Pointers<T, Prop, Storage, Allocator>::operator[] (size_t i)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -274,7 +274,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_Pointers<T, Prop, Storage, Allocator>
   ::const_reference
-  Matrix_Pointers<T, Prop, Storage, Allocator>::operator[] (int i) const
+  Matrix_Pointers<T, Prop, Storage, Allocator>::operator[] (size_t i) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -293,7 +293,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Pointers<T, Prop, Storage, Allocator>
-  ::Set(int i, int j, const T& val)
+  ::Set(size_t i, size_t j, const T& val)
   {
     this->Val(i, j) = val;
   }
@@ -334,7 +334,7 @@ namespace Seldon
 
 #ifdef SELDON_WITH_VIRTUAL
   template <class T, class Prop, class Storage, class Allocator>
-  inline bool Matrix_Pointers<T, Prop, Storage, Allocator>  
+  inline bool Matrix_Pointers<T, Prop, Storage, Allocator>
   ::IsSymmetric() const
   {
     return false;
@@ -369,7 +369,7 @@ namespace Seldon
     \param j number of columns.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, ColMajor, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, ColMajor, Allocator>::Matrix(size_t i, size_t j):
     Matrix_Pointers<T, Prop, ColMajor, Allocator>(i, j)
   {
   }
@@ -398,7 +398,7 @@ namespace Seldon
     return *this;
   }
 
-  
+
   //! Duplicates a matrix (assignment operator).
   /*!
     \param A matrix to be copied.
@@ -458,7 +458,7 @@ namespace Seldon
     \param j number of columns.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, RowMajor, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, RowMajor, Allocator>::Matrix(size_t i, size_t j):
     Matrix_Pointers<T, Prop, RowMajor, Allocator>(i, j)
   {
   }
@@ -491,8 +491,8 @@ namespace Seldon
 
     return *this;
   }
-  
-  
+
+
   //! Duplicates a matrix (assignment operator).
   /*!
     \param A matrix to be copied.
@@ -518,7 +518,7 @@ namespace Seldon
   inline Matrix<T, Prop, RowMajor, Allocator>&
   Matrix<T, Prop, RowMajor, Allocator>::operator*= (const T0& alpha)
   {
-    for (int i = 0; i < this->m_*this->n_; i++)
+    for (size_t i = 0; i < this->m_*this->n_; i++)
       this->data_[i] *= alpha;
 
     return *this;

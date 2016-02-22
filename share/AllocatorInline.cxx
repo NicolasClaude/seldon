@@ -33,19 +33,19 @@ namespace Seldon
 
   template <class T>
   inline typename MallocAlloc<T>::pointer
-  MallocAlloc<T>::allocate(int num, void* h)
+  MallocAlloc<T>::allocate(size_t num, void* h)
   {
     return static_cast<pointer>( malloc(num * sizeof(T)) );
   }
 
   template <class T>
-  inline void MallocAlloc<T>::deallocate(pointer data, int num, void* h)
+  inline void MallocAlloc<T>::deallocate(pointer data, size_t num, void* h)
   {
     free(data);
   }
 
   template <class T>
-  inline void* MallocAlloc<T>::reallocate(pointer data, int num, void* h)
+  inline void* MallocAlloc<T>::reallocate(pointer data, size_t num, void* h)
   {
     return realloc(reinterpret_cast<void*>(data), num * sizeof(T));
   }
@@ -72,19 +72,19 @@ namespace Seldon
 
   template <class T>
   inline typename CallocAlloc<T>::pointer
-  CallocAlloc<T>::allocate(int num, void* h)
+  CallocAlloc<T>::allocate(size_t num, void* h)
   {
     return static_cast<pointer>( calloc(num, sizeof(T)) );
   }
 
   template <class T>
-  inline void CallocAlloc<T>::deallocate(pointer data, int num, void* h)
+  inline void CallocAlloc<T>::deallocate(pointer data, size_t num, void* h)
   {
     free(data);
   }
 
   template <class T>
-  inline void* CallocAlloc<T>::reallocate(pointer data, int num, void* h)
+  inline void* CallocAlloc<T>::reallocate(pointer data, size_t num, void* h)
   {
     return realloc(reinterpret_cast<void*>(data), num * sizeof(T));
   }
@@ -111,19 +111,19 @@ namespace Seldon
 
   template <class T>
   inline typename NewAlloc<T>::pointer
-  NewAlloc<T>::allocate(int num, void* h)
+  NewAlloc<T>::allocate(size_t num, void* h)
   {
     return static_cast<pointer>(new T[num]);
   }
 
   template <class T>
-  inline void NewAlloc<T>::deallocate(pointer data, int num, void* h)
+  inline void NewAlloc<T>::deallocate(pointer data, size_t num, void* h)
   {
     delete [] data;
   }
 
   template <class T>
-  inline void* NewAlloc<T>::reallocate(pointer data, int num, void* h)
+  inline void* NewAlloc<T>::reallocate(pointer data, size_t num, void* h)
   {
     if (data != NULL)
       delete [] data;
@@ -151,7 +151,7 @@ namespace Seldon
 
 
   template <class T>
-  inline void NaNAlloc<T>::deallocate(pointer data, int num, void* h)
+  inline void NaNAlloc<T>::deallocate(pointer data, size_t num, void* h)
   {
     free(data);
   }
