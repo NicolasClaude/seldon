@@ -989,7 +989,7 @@ namespace Seldon
   void ScatterSparseEntry(const Vector<T, VectSparse, Allocator1>& X,
 			  Vector<T, VectFull, Allocator2>& Y)
   {
-    for (int i = 0; i < X.GetM(); i++)
+    for (size_t i = 0; i < X.GetM(); i++)
       Y(X.Index(i)) = X.Value(i);
   }
 
@@ -1006,7 +1006,7 @@ namespace Seldon
   template<class T, class Prop, class Allocator>
   void Conjugate(Vector<T, Prop, Allocator>& X)
   {
-    for (int i = 0; i < X.GetM(); i++)
+    for (size_t i = 0; i < X.GetM(); i++)
       X(i) = conjugate(X(i));
   }
 
@@ -1015,7 +1015,7 @@ namespace Seldon
   template<class T, class Allocator>
   void Conjugate(Vector<T, VectSparse, Allocator>& X)
   {
-    for (int i = 0; i < X.GetSize(); i++)
+    for (size_t i = 0; i < X.GetSize(); i++)
       X.Value(i) = conjugate(X.Value(i));
   }
 

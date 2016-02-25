@@ -56,7 +56,7 @@ namespace Seldon
   public:
     // Constructor.
     Matrix_Symmetric();
-    explicit Matrix_Symmetric(int i, int j);
+    explicit Matrix_Symmetric(size_t i, size_t j);
     Matrix_Symmetric(const Matrix_Symmetric<T, Prop, Storage, Allocator>& A);
 
     // Destructor.
@@ -64,27 +64,27 @@ namespace Seldon
     void Clear();
 
     // Basic methods.
-    int GetDataSize() const;
+    size_t GetDataSize() const;
     int64_t GetMemorySize() const;
-    
+
     // Memory management.
     void Reallocate(size_t i, size_t j);
-    void SetData(int i, int j, pointer data);
+    void SetData(size_t i, size_t j, pointer data);
     void Nullify();
-    void Resize(int i, int j);
+    void Resize(size_t i, size_t j);
 
     // Element access and affectation.
-    reference operator() (int i, int j);
-    const_reference operator() (int i, int j) const;
-    const_reference Val(int i, int j) const;
-    reference Val(int i, int j);
-    reference Get(int i, int j);
-    const_reference Get(int i, int j) const;
-    reference operator[] (int i);
-    const_reference operator[] (int i) const;
+    reference operator() (size_t i, size_t j);
+    const_reference operator() (size_t i, size_t j) const;
+    const_reference Val(size_t i, size_t j) const;
+    reference Val(size_t i, size_t j);
+    reference Get(size_t i, size_t j);
+    const_reference Get(size_t i, size_t j) const;
+    reference operator[] (size_t i);
+    const_reference operator[] (size_t i) const;
     Matrix_Symmetric<T, Prop, Storage, Allocator>&
     operator= (const Matrix_Symmetric<T, Prop, Storage, Allocator>& A);
-    void Set(int i, int j, const T& x);
+    void Set(size_t i, size_t j, const T& x);
     void Copy(const Matrix_Symmetric<T, Prop, Storage, Allocator>& A);
 
     // Convenient functions.
@@ -97,8 +97,8 @@ namespace Seldon
     Matrix_Symmetric<T, Prop, Storage, Allocator>& operator= (const T0& x);
     void FillRand();
     void Print() const;
-    void Print(int a, int b, int m, int n) const;
-    void Print(int l) const;
+    void Print(size_t a, size_t b, size_t m, size_t n) const;
+    void Print(size_t l) const;
 
     // Input/output functions.
     void Write(string FileName) const;
@@ -121,7 +121,7 @@ namespace Seldon
     virtual void ApplySor(const class_SeldonTrans&, Vector<T>& x, const Vector<T>& r,
 			  const typename ClassComplexType<T>::Treal& omega,
 			  int nb_iter, int stage_ssor) const;
-        
+
     virtual void MltAddVector(const Treal& alpha, const Vector<Treal>& x,
 			      const Treal& beta, Vector<Treal>& y) const;
 
@@ -135,16 +135,16 @@ namespace Seldon
     virtual void MltAddVector(const Tcplx& alpha, const SeldonTranspose&,
 			      const Vector<Tcplx>& x,
 			      const Tcplx& beta, Vector<Tcplx>& y) const;
-    
+
     virtual void MltVector(const Vector<Treal>& x, Vector<Treal>& y) const;
     virtual void MltVector(const Vector<Tcplx>& x, Vector<Tcplx>& y) const;
-    
+
     virtual void MltVector(const SeldonTranspose&,
 			   const Vector<Treal>& x, Vector<Treal>& y) const;
 
     virtual void MltVector(const SeldonTranspose&,
 			   const Vector<Tcplx>& x, Vector<Tcplx>& y) const;
-    
+
     virtual bool IsSymmetric() const;
 #endif
 
@@ -165,7 +165,7 @@ namespace Seldon
 
   public:
     Matrix();
-    explicit Matrix(int i, int j);
+    explicit Matrix(size_t i, size_t j);
 
     template <class T0>
     Matrix<T, Prop, ColSym, Allocator>& operator= (const T0& x);
@@ -192,7 +192,7 @@ namespace Seldon
 
   public:
     Matrix();
-    explicit Matrix(int i, int j);
+    explicit Matrix(size_t i, size_t j);
 
     template <class T0>
     Matrix<T, Prop, RowSym, Allocator>& operator= (const T0& x);

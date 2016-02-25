@@ -30,37 +30,37 @@ namespace Seldon
   //////////////////////
 
 
-  inline int ColMajor::GetFirst(int i, int j)
+  inline size_t ColMajor::GetFirst(size_t i, size_t j)
   {
     return j;
   }
-  inline int ColMajor::GetSecond(int i, int j)
+  inline size_t ColMajor::GetSecond(size_t i, size_t j)
   {
     return i;
   }
-  inline int ColMajor::GetBeginLoop(int i)
+  inline size_t ColMajor::GetBeginLoop(size_t i)
   {
     return 0;
   }
-  inline int ColMajor::GetEndLoop(int m, int n, int i)
+  inline size_t ColMajor::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return m;
   }
 
 
-  inline int RowMajor::GetFirst(int i, int j)
+  inline size_t RowMajor::GetFirst(size_t i, size_t j)
   {
     return i;
   }
-  inline int RowMajor::GetSecond(int i, int j)
+  inline size_t RowMajor::GetSecond(size_t i, size_t j)
   {
     return j;
   }
-  inline int RowMajor::GetBeginLoop(int i)
+  inline size_t RowMajor::GetBeginLoop(size_t i)
   {
     return 0;
   }
-  inline int RowMajor::GetEndLoop(int m, int n, int i)
+  inline size_t RowMajor::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return n;
   }
@@ -157,114 +157,114 @@ namespace Seldon
   }
 
 
-  inline int ColSymSparse::GetFirst(int i, int j)
+  inline size_t ColSymSparse::GetFirst(size_t i, size_t j)
   {
     return j;
   }
-  inline int ColSymSparse::GetSecond(int i, int j)
+  inline size_t ColSymSparse::GetSecond(size_t i, size_t j)
   {
     return i;
   }
-  inline int ColSymSparse::GetBeginLoop(int i)
+  inline size_t ColSymSparse::GetBeginLoop(size_t i)
   {
     return i;
   }
-  inline int ColSymSparse::GetEndLoop(int m, int n, int i)
+  inline size_t ColSymSparse::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return m;
   }
 
 
-  inline int RowSymSparse::GetFirst(int i, int j)
+  inline size_t RowSymSparse::GetFirst(size_t i, size_t j)
   {
     return i;
   }
-  inline int RowSymSparse::GetSecond(int i, int j)
+  inline size_t RowSymSparse::GetSecond(size_t i, size_t j)
   {
     return j;
   }
-  inline int RowSymSparse::GetBeginLoop(int i)
+  inline size_t RowSymSparse::GetBeginLoop(size_t i)
   {
     return i;
   }
-  inline int RowSymSparse::GetEndLoop(int m, int n, int i)
+  inline size_t RowSymSparse::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return n;
   }
 
-  
+
   ///////////////
   // SYMMETRIC //
   ///////////////
 
 
-  inline int ColSymPacked::GetFirst(int i, int j)
+  inline size_t ColSymPacked::GetFirst(size_t i, size_t j)
   {
     return j;
   }
-  inline int ColSymPacked::GetSecond(int i, int j)
+  inline size_t ColSymPacked::GetSecond(size_t i, size_t j)
   {
     return i;
   }
-  inline int ColSymPacked::GetBeginLoop(int i)
+  inline size_t ColSymPacked::GetBeginLoop(size_t i)
   {
     return i;
   }
-  inline int ColSymPacked::GetEndLoop(int m, int n, int i)
+  inline size_t ColSymPacked::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return m;
   }
 
 
-  inline int RowSymPacked::GetFirst(int i, int j)
+  inline size_t RowSymPacked::GetFirst(size_t i, size_t j)
   {
     return i;
   }
-  inline int RowSymPacked::GetSecond(int i, int j)
+  inline size_t RowSymPacked::GetSecond(size_t i, size_t j)
   {
     return j;
   }
-  inline int RowSymPacked::GetBeginLoop(int i)
+  inline size_t RowSymPacked::GetBeginLoop(size_t i)
   {
     return i;
   }
-  inline int RowSymPacked::GetEndLoop(int m, int n, int i)
+  inline size_t RowSymPacked::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return n;
   }
 
 
-  inline int ColSym::GetFirst(int i, int j)
+  inline size_t ColSym::GetFirst(size_t i, size_t j)
   {
     return j;
   }
-  inline int ColSym::GetSecond(int i, int j)
+  inline size_t ColSym::GetSecond(size_t i, size_t j)
   {
     return i;
   }
-  inline int ColSym::GetBeginLoop(int i)
+  inline size_t ColSym::GetBeginLoop(size_t i)
   {
     return i;
   }
-  inline int ColSym::GetEndLoop(int m, int n, int i)
+  inline size_t ColSym::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return m;
   }
 
 
-  inline int RowSym::GetFirst(int i, int j)
+  inline size_t RowSym::GetFirst(size_t i, size_t j)
   {
     return i;
   }
-  inline int RowSym::GetSecond(int i, int j)
+  inline size_t RowSym::GetSecond(size_t i, size_t j)
   {
     return j;
   }
-  inline int RowSym::GetBeginLoop(int i)
+  inline size_t RowSym::GetBeginLoop(size_t i)
   {
     return i;
   }
-  inline int RowSym::GetEndLoop(int m, int n, int i)
+  inline size_t RowSym::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return n;
   }
@@ -275,73 +275,73 @@ namespace Seldon
   ///////////////
 
 
-  inline int ColHerm::GetFirst(int i, int j)
+  inline size_t ColHerm::GetFirst(size_t i, size_t j)
   {
     return j;
   }
-  inline int ColHerm::GetSecond(int i, int j)
+  inline size_t ColHerm::GetSecond(size_t i, size_t j)
   {
     return i;
   }
-  inline int ColHerm::GetBeginLoop(int i)
+  inline size_t ColHerm::GetBeginLoop(size_t i)
   {
     return 0;
   }
-  inline int ColHerm::GetEndLoop(int m, int n, int i)
+  inline size_t ColHerm::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return i+1;
   }
 
 
-  inline int RowHerm::GetFirst(int i, int j)
+  inline size_t RowHerm::GetFirst(size_t i, size_t j)
   {
     return i;
   }
-  inline int RowHerm::GetSecond(int i, int j)
+  inline size_t RowHerm::GetSecond(size_t i, size_t j)
   {
     return j;
   }
-  inline int RowHerm::GetBeginLoop(int i)
+  inline size_t RowHerm::GetBeginLoop(size_t i)
   {
     return i;
   }
-  inline int RowHerm::GetEndLoop(int m, int n, int i)
+  inline size_t RowHerm::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return n;
   }
 
 
-  inline int ColHermPacked::GetFirst(int i, int j)
+  inline size_t ColHermPacked::GetFirst(size_t i, size_t j)
   {
     return j;
   }
-  inline int ColHermPacked::GetSecond(int i, int j)
+  inline size_t ColHermPacked::GetSecond(size_t i, size_t j)
   {
     return i;
   }
-  inline int ColHermPacked::GetBeginLoop(int i)
+  inline size_t ColHermPacked::GetBeginLoop(size_t i)
   {
     return 0;
   }
-  inline int ColHermPacked::GetEndLoop(int m, int n, int i)
+  inline size_t ColHermPacked::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return i+1;
   }
 
 
-  inline int RowHermPacked::GetFirst(int i, int j)
+  inline size_t RowHermPacked::GetFirst(size_t i, size_t j)
   {
     return i;
   }
-  inline int RowHermPacked::GetSecond(int i, int j)
+  inline size_t RowHermPacked::GetSecond(size_t i, size_t j)
   {
     return j;
   }
-  inline int RowHermPacked::GetBeginLoop(int i)
+  inline size_t RowHermPacked::GetBeginLoop(size_t i)
   {
     return i;
   }
-  inline int RowHermPacked::GetEndLoop(int m, int n, int i)
+  inline size_t RowHermPacked::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return n;
   }
@@ -440,19 +440,19 @@ namespace Seldon
   }
 
 
-  inline int ColUpTriangPacked::GetFirst(int i, int j)
+  inline size_t ColUpTriangPacked::GetFirst(size_t i, size_t j)
   {
     return j;
   }
-  inline int ColUpTriangPacked::GetSecond(int i, int j)
+  inline size_t ColUpTriangPacked::GetSecond(size_t i, size_t j)
   {
     return i;
   }
-  inline int ColUpTriangPacked::GetBeginLoop(int i)
+  inline size_t ColUpTriangPacked::GetBeginLoop(size_t i)
   {
     return 0;
   }
-  inline int ColUpTriangPacked::GetEndLoop(int m, int n, int i)
+  inline size_t ColUpTriangPacked::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return i+1;
   }
@@ -462,19 +462,19 @@ namespace Seldon
   }
 
 
-  inline int ColLoTriangPacked::GetFirst(int i, int j)
+  inline size_t ColLoTriangPacked::GetFirst(size_t i, size_t j)
   {
     return j;
   }
-  inline int ColLoTriangPacked::GetSecond(int i, int j)
+  inline size_t ColLoTriangPacked::GetSecond(size_t i, size_t j)
   {
     return i;
   }
-  inline int ColLoTriangPacked::GetBeginLoop(int i)
+  inline size_t ColLoTriangPacked::GetBeginLoop(size_t i)
   {
     return i;
   }
-  inline int ColLoTriangPacked::GetEndLoop(int m, int n, int i)
+  inline size_t ColLoTriangPacked::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return m;
   }
@@ -484,19 +484,19 @@ namespace Seldon
   }
 
 
-  inline int RowUpTriangPacked::GetFirst(int i, int j)
+  inline size_t RowUpTriangPacked::GetFirst(size_t i, size_t j)
   {
     return i;
   }
-  inline int RowUpTriangPacked::GetSecond(int i, int j)
+  inline size_t RowUpTriangPacked::GetSecond(size_t i, size_t j)
   {
     return j;
   }
-  inline int RowUpTriangPacked::GetBeginLoop(int i)
+  inline size_t RowUpTriangPacked::GetBeginLoop(size_t i)
   {
     return i;
   }
-  inline int RowUpTriangPacked::GetEndLoop(int m, int n, int i)
+  inline size_t RowUpTriangPacked::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return n;
   }
@@ -506,19 +506,19 @@ namespace Seldon
   }
 
 
-  inline int RowLoTriangPacked::GetFirst(int i, int j)
+  inline size_t RowLoTriangPacked::GetFirst(size_t i, size_t j)
   {
     return i;
   }
-  inline int RowLoTriangPacked::GetSecond(int i, int j)
+  inline size_t RowLoTriangPacked::GetSecond(size_t i, size_t j)
   {
     return j;
   }
-  inline int RowLoTriangPacked::GetBeginLoop(int i)
+  inline size_t RowLoTriangPacked::GetBeginLoop(size_t i)
   {
     return 0;
   }
-  inline int RowLoTriangPacked::GetEndLoop(int m, int n, int i)
+  inline size_t RowLoTriangPacked::GetEndLoop(size_t m, size_t n, size_t i)
   {
     return i+1;
   }
@@ -528,61 +528,61 @@ namespace Seldon
   }
 
 
-  inline int ColComplexSparse::GetFirst(int i, int j)
+  inline size_t ColComplexSparse::GetFirst(size_t i, size_t j)
   {
     return j;
   }
-  inline int ColComplexSparse::GetSecond(int i, int j)
+  inline size_t ColComplexSparse::GetSecond(size_t i, size_t j)
   {
     return i;
   }
-  inline int ColComplexSparse::GetBeginLoop(int i)
+  inline size_t ColComplexSparse::GetBeginLoop(size_t i)
   {
     return 0;
   }
 
 
-  inline int RowComplexSparse::GetFirst(int i, int j)
+  inline size_t RowComplexSparse::GetFirst(size_t i, size_t j)
   {
     return i;
   }
-  inline int RowComplexSparse::GetSecond(int i, int j)
+  inline size_t RowComplexSparse::GetSecond(size_t i, size_t j)
   {
     return j;
   }
-  inline int RowComplexSparse::GetBeginLoop(int i)
+  inline size_t RowComplexSparse::GetBeginLoop(size_t i)
   {
     return 0;
   }
 
 
-  inline int ColSymComplexSparse::GetFirst(int i, int j)
+  inline size_t ColSymComplexSparse::GetFirst(size_t i, size_t j)
   {
     return j;
   }
-  inline int ColSymComplexSparse::GetSecond(int i, int j)
+  inline size_t ColSymComplexSparse::GetSecond(size_t i, size_t j)
   {
     return i;
   }
-  inline int ColSymComplexSparse::GetBeginLoop(int i)
+  inline size_t ColSymComplexSparse::GetBeginLoop(size_t i)
   {
     return i;
   }
 
 
-  inline int RowSymComplexSparse::GetFirst(int i, int j)
+  inline size_t RowSymComplexSparse::GetFirst(size_t i, size_t j)
   {
     return i;
   }
-  inline int RowSymComplexSparse::GetSecond(int i, int j)
+  inline size_t RowSymComplexSparse::GetSecond(size_t i, size_t j)
   {
     return j;
   }
-  inline int RowSymComplexSparse::GetBeginLoop(int i)
+  inline size_t RowSymComplexSparse::GetBeginLoop(size_t i)
   {
     return i;
   }
-  
+
 } // namespace Seldon.
 
 #define SELDON_FILE_STORAGE_INLINE_CXX

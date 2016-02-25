@@ -65,7 +65,7 @@ namespace Seldon
     \return The number of elements stored in memory.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline int Matrix_SymPacked<T, Prop, Storage, Allocator>::GetDataSize() const
+  inline size_t Matrix_SymPacked<T, Prop, Storage, Allocator>::GetDataSize() const
   {
     return (this->m_ * (this->m_ + 1)) / 2;
   }
@@ -94,7 +94,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_SymPacked<T, Prop, Storage, Allocator>::reference
-  Matrix_SymPacked<T, Prop, Storage, Allocator>::operator() (int i, int j)
+  Matrix_SymPacked<T, Prop, Storage, Allocator>::operator() (size_t i, size_t j)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -121,8 +121,8 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_SymPacked<T, Prop, Storage, Allocator>
   ::const_reference
-  Matrix_SymPacked<T, Prop, Storage, Allocator>::operator() (int i,
-							     int j) const
+  Matrix_SymPacked<T, Prop, Storage, Allocator>::operator() (size_t i,
+							     size_t j) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -149,7 +149,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_SymPacked<T, Prop, Storage, Allocator>::reference
-  Matrix_SymPacked<T, Prop, Storage, Allocator>::Val(int i, int j)
+  Matrix_SymPacked<T, Prop, Storage, Allocator>::Val(size_t i, size_t j)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -177,7 +177,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_SymPacked<T, Prop, Storage, Allocator>
   ::const_reference
-  Matrix_SymPacked<T, Prop, Storage, Allocator>::Val(int i, int j) const
+  Matrix_SymPacked<T, Prop, Storage, Allocator>::Val(size_t i, size_t j) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -204,7 +204,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_SymPacked<T, Prop, Storage, Allocator>
   ::const_reference
-  Matrix_SymPacked<T, Prop, Storage, Allocator>::Get(int i, int j) const
+  Matrix_SymPacked<T, Prop, Storage, Allocator>::Get(size_t i, size_t j) const
   {
     return this->Val(i, j);
   }
@@ -219,7 +219,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_SymPacked<T, Prop, Storage, Allocator>
-  ::reference Matrix_SymPacked<T, Prop, Storage, Allocator>::Get(int i, int j)
+  ::reference Matrix_SymPacked<T, Prop, Storage, Allocator>::Get(size_t i, size_t j)
   {
     return this->Val(i, j);
   }
@@ -233,7 +233,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_SymPacked<T, Prop, Storage, Allocator>::reference
-  Matrix_SymPacked<T, Prop, Storage, Allocator>::operator[] (int i)
+  Matrix_SymPacked<T, Prop, Storage, Allocator>::operator[] (size_t i)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -253,7 +253,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_SymPacked<T, Prop, Storage, Allocator>
   ::const_reference
-  Matrix_SymPacked<T, Prop, Storage, Allocator>::operator[] (int i) const
+  Matrix_SymPacked<T, Prop, Storage, Allocator>::operator[] (size_t i) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -280,7 +280,7 @@ namespace Seldon
     return *this;
   }
 
-  
+
   //! Sets an element of the matrix
   /*!
     \param i row index
@@ -289,11 +289,11 @@ namespace Seldon
    */
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_SymPacked<T, Prop, Storage, Allocator>
-  ::Set(int i, int j, const T& x)
+  ::Set(size_t i, size_t j, const T& x)
   {
     this->Val(i, j) = x;
   }
-  
+
 
   //! Duplicates a matrix.
   /*!
@@ -309,7 +309,7 @@ namespace Seldon
 
     Allocator::memorycpy(this->data_, A.GetData(), this->GetDataSize());
   }
-  
+
 
 #ifdef SELDON_WITH_VIRTUAL
   template <class T, class Prop, class Storage, class Allocator>
@@ -321,7 +321,7 @@ namespace Seldon
     SOR(static_cast<const Matrix<T, Prop, Storage, Allocator>& >(*this),
 	x, r, omega, nb_iter, stage_ssor);
   }
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_SymPacked<T, Prop, Storage, Allocator>
   ::ApplySor(const class_SeldonTrans& trans, Vector<T>& x, const Vector<T>& r,
@@ -332,7 +332,7 @@ namespace Seldon
 	static_cast<const Matrix<T, Prop, Storage, Allocator>& >(*this),
 	x, r, omega, nb_iter, stage_ssor);
   }
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_SymPacked<T, Prop, Storage, Allocator>
   ::MltAddVector(const Treal& alpha, const Vector<Treal>& x,
@@ -374,7 +374,7 @@ namespace Seldon
 	   static_cast<const Matrix<T, Prop, Storage, Allocator>& >(*this),
 	   x, beta, y);
   }
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_SymPacked<T, Prop, Storage, Allocator>
   ::MltVector(const Vector<Treal>& x, Vector<Treal>& y) const
@@ -390,7 +390,7 @@ namespace Seldon
   }
 
   template <class T, class Prop, class Storage, class Allocator>
-  inline void Matrix_SymPacked<T, Prop, Storage, Allocator>  
+  inline void Matrix_SymPacked<T, Prop, Storage, Allocator>
   ::MltVector(const SeldonTranspose& trans,
 	      const Vector<Treal>& x, Vector<Treal>& y) const
   {
@@ -399,7 +399,7 @@ namespace Seldon
   }
 
   template <class T, class Prop, class Storage, class Allocator>
-  inline void Matrix_SymPacked<T, Prop, Storage, Allocator>  
+  inline void Matrix_SymPacked<T, Prop, Storage, Allocator>
   ::MltVector(const SeldonTranspose& trans,
 	      const Vector<Tcplx>& x, Vector<Tcplx>& y) const
   {
@@ -408,13 +408,13 @@ namespace Seldon
   }
 
   template <class T, class Prop, class Storage, class Allocator>
-  inline bool Matrix_SymPacked<T, Prop, Storage, Allocator>  
+  inline bool Matrix_SymPacked<T, Prop, Storage, Allocator>
   ::IsSymmetric() const
   {
     return true;
   }
 #endif
-  
+
   //////////////////////////
   // MATRIX<COLSYMPACKED> //
   //////////////////////////
@@ -443,7 +443,7 @@ namespace Seldon
     \note 'j' is assumed to be equal to 'i' and is therefore discarded.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, ColSymPacked, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, ColSymPacked, Allocator>::Matrix(size_t i, size_t j):
     Matrix_SymPacked<T, Prop, ColSymPacked, Allocator>(i, i)
   {
   }
@@ -494,7 +494,7 @@ namespace Seldon
   inline Matrix<T, Prop, ColSymPacked, Allocator>&
   Matrix<T, Prop, ColSymPacked, Allocator>::operator*= (const T0& x)
   {
-    for (int i = 0; i < this->GetDataSize();i++)
+    for (size_t i = 0; i < this->GetDataSize();i++)
       this->data_[i] *= x;
 
     return *this;
@@ -529,7 +529,7 @@ namespace Seldon
     \note 'j' is assumed to be equal to 'i' and is therefore discarded.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, RowSymPacked, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, RowSymPacked, Allocator>::Matrix(size_t i, size_t j):
     Matrix_SymPacked<T, Prop, RowSymPacked, Allocator>(i, i)
   {
   }
@@ -552,8 +552,8 @@ namespace Seldon
     this->Fill(x);
     return *this;
   }
-  
-  
+
+
   //! Duplicates a matrix (assignment operator).
   /*!
     \param A matrix to be copied.
@@ -580,13 +580,13 @@ namespace Seldon
   inline Matrix<T, Prop, RowSymPacked, Allocator>&
   Matrix<T, Prop, RowSymPacked, Allocator>::operator*= (const T0& x)
   {
-    for (int i = 0; i < this->GetDataSize();i++)
+    for (size_t i = 0; i < this->GetDataSize();i++)
       this->data_[i] *= x;
 
     return *this;
   }
 
-  
+
 } // namespace Seldon.
 
 #define SELDON_FILE_MATRIX_SYMPACKED_INLINE_CXX

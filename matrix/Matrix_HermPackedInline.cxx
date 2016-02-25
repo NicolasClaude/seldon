@@ -65,7 +65,7 @@ namespace Seldon
     \return The number of elements stored in memory.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline int Matrix_HermPacked<T, Prop, Storage, Allocator>::GetDataSize() const
+  inline size_t Matrix_HermPacked<T, Prop, Storage, Allocator>::GetDataSize() const
   {
     return (this->m_ * (this->m_ + 1)) / 2;
   }
@@ -78,13 +78,13 @@ namespace Seldon
     int64_t taille = sizeof(*this) + int64_t(GetDataSize())*sizeof(T);
     return taille;
   }
-  
+
 
   /**********************************
    * ELEMENT ACCESS AND AFFECTATION *
    **********************************/
-  
-  
+
+
   //! Access operator.
   /*!
     Returns the value of element (i, j).
@@ -93,10 +93,10 @@ namespace Seldon
     \return Element (i, j) of the matrix.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline const typename 
+  inline const typename
   Matrix_HermPacked<T, Prop, Storage, Allocator>::value_type
   Matrix_HermPacked<T, Prop, Storage, Allocator>
-  ::operator() (int i, int j) const
+  ::operator() (size_t i, size_t j) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -123,7 +123,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_HermPacked<T, Prop, Storage, Allocator>::reference
-  Matrix_HermPacked<T, Prop, Storage, Allocator>::Val(int i, int j)
+  Matrix_HermPacked<T, Prop, Storage, Allocator>::Val(size_t i, size_t j)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -146,7 +146,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_HermPacked<T, Prop, Storage, Allocator>
   ::const_reference
-  Matrix_HermPacked<T, Prop, Storage, Allocator>::Val(int i, int j) const
+  Matrix_HermPacked<T, Prop, Storage, Allocator>::Val(size_t i, size_t j) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -166,7 +166,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_HermPacked<T, Prop, Storage, Allocator>::reference
-  Matrix_HermPacked<T, Prop, Storage, Allocator>::Get(int i, int j)
+  Matrix_HermPacked<T, Prop, Storage, Allocator>::Get(size_t i, size_t j)
   {
     return this->Val(i, j);
   }
@@ -181,7 +181,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_HermPacked<T, Prop, Storage, Allocator>
   ::const_reference
-  Matrix_HermPacked<T, Prop, Storage, Allocator>::Get(int i, int j) const
+  Matrix_HermPacked<T, Prop, Storage, Allocator>::Get(size_t i, size_t j) const
   {
     return this->Val(i, j);
   }
@@ -195,7 +195,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_HermPacked<T, Prop, Storage, Allocator>::reference
-  Matrix_HermPacked<T, Prop, Storage, Allocator>::operator[] (int i)
+  Matrix_HermPacked<T, Prop, Storage, Allocator>::operator[] (size_t i)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -215,7 +215,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_HermPacked<T, Prop, Storage, Allocator>
   ::const_reference
-  Matrix_HermPacked<T, Prop, Storage, Allocator>::operator[] (int i) const
+  Matrix_HermPacked<T, Prop, Storage, Allocator>::operator[] (size_t i) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -251,7 +251,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_HermPacked<T, Prop, Storage, Allocator>
-  ::Set(int i, int j, const T& x)
+  ::Set(size_t i, size_t j, const T& x)
   {
     if (i > j)
       this->Val(j, i) = conj(x);
@@ -274,7 +274,7 @@ namespace Seldon
 
     Allocator::memorycpy(this->data_, A.GetData(), this->GetDataSize());
   }
-  
+
 
 #ifdef SELDON_WITH_VIRTUAL
   template <class T, class Prop, class Storage, class Allocator>
@@ -286,7 +286,7 @@ namespace Seldon
     SOR(static_cast<const Matrix<T, Prop, Storage, Allocator>& >(*this),
 	x, r, omega, nb_iter, stage_ssor);
   }
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_HermPacked<T, Prop, Storage, Allocator>
   ::ApplySor(const class_SeldonTrans& trans, Vector<T>& x, const Vector<T>& r,
@@ -297,7 +297,7 @@ namespace Seldon
 	static_cast<const Matrix<T, Prop, Storage, Allocator>& >(*this),
 	x, r, omega, nb_iter, stage_ssor);
   }
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_HermPacked<T, Prop, Storage, Allocator>
   ::MltAddVector(const T& alpha, const Vector<T>& x,
@@ -318,7 +318,7 @@ namespace Seldon
 	   static_cast<const Matrix<T, Prop, Storage, Allocator>& >(*this),
 	   x, beta, y);
   }
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_HermPacked<T, Prop, Storage, Allocator>
   ::MltVector(const Vector<T>& x, Vector<T>& y) const
@@ -327,7 +327,7 @@ namespace Seldon
   }
 
   template <class T, class Prop, class Storage, class Allocator>
-  inline void Matrix_HermPacked<T, Prop, Storage, Allocator>  
+  inline void Matrix_HermPacked<T, Prop, Storage, Allocator>
   ::MltVector(const SeldonTranspose& trans,
 	      const Vector<T>& x, Vector<T>& y) const
   {
@@ -336,14 +336,14 @@ namespace Seldon
   }
 
   template <class T, class Prop, class Storage, class Allocator>
-  inline bool Matrix_HermPacked<T, Prop, Storage, Allocator>  
+  inline bool Matrix_HermPacked<T, Prop, Storage, Allocator>
   ::IsSymmetric() const
   {
     return false;
   }
 #endif
 
-  
+
   ///////////////////////////
   // MATRIX<COLHERMPACKED> //
   ///////////////////////////
@@ -372,7 +372,7 @@ namespace Seldon
     \note 'j' is assumed to be equal to 'i' and is therefore discarded.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, ColHermPacked, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, ColHermPacked, Allocator>::Matrix(size_t i, size_t j):
     Matrix_HermPacked<T, Prop, ColHermPacked, Allocator>(i, j)
   {
   }
@@ -415,8 +415,8 @@ namespace Seldon
     return *this;
   }
 
-  
-  
+
+
   ///////////////////////////
   // MATRIX<ROWHERMPACKED> //
   ///////////////////////////
@@ -445,7 +445,7 @@ namespace Seldon
     \note 'j' is assumed to be equal to 'i' and is therefore discarded.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, RowHermPacked, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, RowHermPacked, Allocator>::Matrix(size_t i, size_t j):
     Matrix_HermPacked<T, Prop, RowHermPacked, Allocator>(i, j)
   {
   }
@@ -488,7 +488,7 @@ namespace Seldon
     return *this;
   }
 
-  
+
 } // namespace Seldon.
 
 #define SELDON_FILE_MATRIX_HERMPACKED_INLINE_CXX

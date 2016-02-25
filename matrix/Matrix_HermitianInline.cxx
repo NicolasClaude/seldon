@@ -69,7 +69,7 @@ namespace Seldon
     \return The number of elements stored in memory.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline int Matrix_Hermitian<T, Prop, Storage, Allocator>::GetDataSize() const
+  inline size_t Matrix_Hermitian<T, Prop, Storage, Allocator>::GetDataSize() const
   {
     return this->m_ * this->n_;
   }
@@ -84,7 +84,7 @@ namespace Seldon
     return taille;
   }
 
-  
+
   /**********************************
    * ELEMENT ACCESS AND AFFECTATION *
    **********************************/
@@ -101,7 +101,7 @@ namespace Seldon
   inline const typename
   Matrix_Hermitian<T, Prop, Storage, Allocator>::value_type
   Matrix_Hermitian<T, Prop, Storage, Allocator>
-  ::operator() (int i, int j) const
+  ::operator() (size_t i, size_t j) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -126,7 +126,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_Hermitian<T, Prop, Storage, Allocator>
   ::const_reference
-  Matrix_Hermitian<T, Prop, Storage, Allocator>::Val(int i, int j) const
+  Matrix_Hermitian<T, Prop, Storage, Allocator>::Val(size_t i, size_t j) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -146,7 +146,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_Hermitian<T, Prop, Storage, Allocator>::reference
-  Matrix_Hermitian<T, Prop, Storage, Allocator>::Val(int i, int j)
+  Matrix_Hermitian<T, Prop, Storage, Allocator>::Val(size_t i, size_t j)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -156,7 +156,7 @@ namespace Seldon
     return me_[Storage::GetFirst(i, j)][Storage::GetSecond(i, j)];
   }
 
-  
+
   //! Returns access to an element (i, j)
   /*!
     Returns the value of element (i, j).
@@ -167,7 +167,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_Hermitian<T, Prop, Storage, Allocator>
   ::const_reference
-  Matrix_Hermitian<T, Prop, Storage, Allocator>::Get(int i, int j) const
+  Matrix_Hermitian<T, Prop, Storage, Allocator>::Get(size_t i, size_t j) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -187,17 +187,17 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_Hermitian<T, Prop, Storage, Allocator>::reference
-  Matrix_Hermitian<T, Prop, Storage, Allocator>::Get(int i, int j)
+  Matrix_Hermitian<T, Prop, Storage, Allocator>::Get(size_t i, size_t j)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
     CheckBoundsSym(i, j, this->m_, this->n_, "Matrix_Hermitian");
 #endif
-    
+
     return me_[Storage::GetFirst(i, j)][Storage::GetSecond(i, j)];
   }
-  
-  
+
+
   //! Access to elements of the data array.
   /*!
     Provides a direct access to the data array.
@@ -206,7 +206,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_Hermitian<T, Prop, Storage, Allocator>::reference
-  Matrix_Hermitian<T, Prop, Storage, Allocator>::operator[] (int i)
+  Matrix_Hermitian<T, Prop, Storage, Allocator>::operator[] (size_t i)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -226,7 +226,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_Hermitian<T, Prop, Storage, Allocator>
   ::const_reference
-  Matrix_Hermitian<T, Prop, Storage, Allocator>::operator[] (int i) const
+  Matrix_Hermitian<T, Prop, Storage, Allocator>::operator[] (size_t i) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -236,7 +236,7 @@ namespace Seldon
     return this->data_[i];
   }
 
-  
+
   //! Sets an element of the matrix
   /*!
     \param i row index
@@ -245,14 +245,14 @@ namespace Seldon
    */
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Hermitian<T, Prop, Storage, Allocator>
-  ::Set(int i, int j, const T& x)
+  ::Set(size_t i, size_t j, const T& x)
   {
     if (i > j)
       this->Val(j, i) = conj(x);
     else
       this->Val(i, j) = x;
   }
-  
+
 
   //! Duplicates a matrix (assignement operator).
   /*!
@@ -297,7 +297,7 @@ namespace Seldon
     SOR(static_cast<const Matrix<T, Prop, Storage, Allocator>& >(*this),
 	x, r, omega, nb_iter, stage_ssor);
   }
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Hermitian<T, Prop, Storage, Allocator>
   ::ApplySor(const class_SeldonTrans& trans, Vector<T>& x, const Vector<T>& r,
@@ -308,7 +308,7 @@ namespace Seldon
 	static_cast<const Matrix<T, Prop, Storage, Allocator>& >(*this),
 	x, r, omega, nb_iter, stage_ssor);
   }
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Hermitian<T, Prop, Storage, Allocator>
   ::MltAddVector(const T& alpha, const Vector<T>& x,
@@ -329,7 +329,7 @@ namespace Seldon
 	   static_cast<const Matrix<T, Prop, Storage, Allocator>& >(*this),
 	   x, beta, y);
   }
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Hermitian<T, Prop, Storage, Allocator>
   ::MltVector(const Vector<T>& x, Vector<T>& y) const
@@ -338,7 +338,7 @@ namespace Seldon
   }
 
   template <class T, class Prop, class Storage, class Allocator>
-  inline void Matrix_Hermitian<T, Prop, Storage, Allocator>  
+  inline void Matrix_Hermitian<T, Prop, Storage, Allocator>
   ::MltVector(const SeldonTranspose& trans,
 	      const Vector<T>& x, Vector<T>& y) const
   {
@@ -347,14 +347,14 @@ namespace Seldon
   }
 
   template <class T, class Prop, class Storage, class Allocator>
-  inline bool Matrix_Hermitian<T, Prop, Storage, Allocator>  
+  inline bool Matrix_Hermitian<T, Prop, Storage, Allocator>
   ::IsSymmetric() const
   {
     return false;
   }
 #endif
 
-  
+
   ////////////////////
   // MATRIX<COLHERM> //
   ////////////////////
@@ -382,7 +382,7 @@ namespace Seldon
     \param j number of columns.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, ColHerm, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, ColHerm, Allocator>::Matrix(size_t i, size_t j):
     Matrix_Hermitian<T, Prop, ColHerm, Allocator>(i, j)
   {
   }
@@ -435,7 +435,7 @@ namespace Seldon
   inline Matrix<T, Prop, ColHerm, Allocator>&
   Matrix<T, Prop, ColHerm, Allocator>::operator*= (const T0& x)
   {
-    for (int i = 0; i < this->GetDataSize();i++)
+    for (size_t i = 0; i < this->GetDataSize();i++)
       this->data_[i] *= x;
 
     return *this;
@@ -470,7 +470,7 @@ namespace Seldon
     \param j number of columns.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, RowHerm, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, RowHerm, Allocator>::Matrix(size_t i, size_t j):
     Matrix_Hermitian<T, Prop, RowHerm, Allocator>(i, j)
   {
   }
@@ -521,7 +521,7 @@ namespace Seldon
   inline Matrix<T, Prop, RowHerm, Allocator>&
   Matrix<T, Prop, RowHerm, Allocator>::operator*= (const T0& x)
   {
-    for (int i = 0; i < this->GetDataSize();i++)
+    for (size_t i = 0; i < this->GetDataSize();i++)
       this->data_[i] *= x;
 
     return *this;

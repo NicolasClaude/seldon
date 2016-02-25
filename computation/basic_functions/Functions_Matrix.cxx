@@ -2856,7 +2856,7 @@ namespace Seldon
   template<class T, class Prop, class Storage, class Allocator>
   void Conjugate(Matrix<T, Prop, Storage, Allocator>& A)
   {
-    for (int i = 0; i < A.GetDataSize(); i++)
+    for (size_t i = 0; i < A.GetDataSize(); i++)
       A.GetData()[i] = conjugate(A.GetData()[i]);
   }
 

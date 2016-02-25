@@ -56,7 +56,7 @@ namespace Seldon
   public:
     // Constructor.
     Matrix_Hermitian();
-    explicit Matrix_Hermitian(int i, int j = 0);
+    explicit Matrix_Hermitian(size_t i, size_t j = 0);
     Matrix_Hermitian(const Matrix_Hermitian<T, Prop, Storage, Allocator>& A);
 
     // Destructor.
@@ -64,28 +64,28 @@ namespace Seldon
     void Clear();
 
     // Basic methods.
-    int GetDataSize() const;
+    size_t GetDataSize() const;
     int64_t GetMemorySize() const;
-    
+
     // Memory management.
     void Reallocate(size_t i, size_t j);
-    void SetData(int i, int j, pointer data);
+    void SetData(size_t i, size_t j, pointer data);
     void Nullify();
-    void Resize(int i, int j);
+    void Resize(size_t i, size_t j);
 
     // Element access and affectation.
-    const value_type operator() (int i, int j) const;
-    const_reference Val(int i, int j) const;
-    reference Val(int i, int j);
-    const_reference Get(int i, int j) const;
-    reference Get(int i, int j);    
-    reference operator[] (int i);
-    const_reference operator[] (int i) const;
-    
+    const value_type operator() (size_t i, size_t j) const;
+    const_reference Val(size_t i, size_t j) const;
+    reference Val(size_t i, size_t j);
+    const_reference Get(size_t i, size_t j) const;
+    reference Get(size_t i, size_t j);
+    reference operator[] (size_t i);
+    const_reference operator[] (size_t i) const;
+
     Matrix_Hermitian<T, Prop, Storage, Allocator>&
     operator= (const Matrix_Hermitian<T, Prop, Storage, Allocator>& A);
-    
-    void Set(int i, int j, const T& x);
+
+    void Set(size_t i, size_t j, const T& x);
     void Copy(const Matrix_Hermitian<T, Prop, Storage, Allocator>& A);
 
     // Convenient functions.
@@ -99,8 +99,8 @@ namespace Seldon
     operator= (const T0& x);
     void FillRand();
     void Print() const;
-    void Print(int a, int b, int m, int n) const;
-    void Print(int l) const;
+    void Print(size_t a, size_t b, size_t m, size_t n) const;
+    void Print(size_t l) const;
 
     // Input/output functions.
     void Write(string FileName) const;
@@ -120,16 +120,16 @@ namespace Seldon
     virtual void ApplySor(const class_SeldonTrans&, Vector<T>& x, const Vector<T>& r,
 			  const typename ClassComplexType<T>::Treal& omega,
 			  int nb_iter, int stage_ssor) const;
-    
+
     virtual void MltAddVector(const T& alpha, const Vector<T>& x,
 			      const T& beta, Vector<T>& y) const;
 
     virtual void MltAddVector(const T& alpha, const SeldonTranspose&,
 			      const Vector<T>& x,
 			      const T& beta, Vector<T>& y) const;
-    
+
     virtual void MltVector(const Vector<T>& x, Vector<T>& y) const;
-    
+
     virtual void MltVector(const SeldonTranspose&,
 			   const Vector<T>& x, Vector<T>& y) const;
 
@@ -153,7 +153,7 @@ namespace Seldon
 
   public:
     Matrix();
-    explicit Matrix(int i, int j = 0);
+    explicit Matrix(size_t i, size_t j = 0);
 
     template <class T0>
     Matrix<T, Prop, ColHerm, Allocator>& operator= (const T0& x);
@@ -180,7 +180,7 @@ namespace Seldon
 
   public:
     Matrix();
-    explicit Matrix(int i, int j = 0);
+    explicit Matrix(size_t i, size_t j = 0);
 
     template <class T0>
     Matrix<T, Prop, RowHerm, Allocator>& operator= (const T0& x);

@@ -108,15 +108,15 @@ namespace Seldon
 
   SELDON_EXTERN template void Sort(Vector<@real, VectFull, NewAlloc<@real> >&, Vector<@real, VectFull, NewAlloc<@real> >&, Vector<@real, VectFull, NewAlloc<@real> >&);
 
-  SELDON_EXTERN template void Assemble(int&, Vector<int, VectFull, NewAlloc<int> >&, Vector<@real, VectFull, NewAlloc<@real> >&);
+  SELDON_EXTERN template void Assemble(size_t&, Vector<size_t, VectFull, NewAlloc<int> >&, Vector<@real, VectFull, NewAlloc<@real> >&);
 
-  SELDON_EXTERN template void Assemble(int&, Vector<int, VectFull, NewAlloc<int> >&);
+  SELDON_EXTERN template void Assemble(size_t&, Vector<int, VectFull, NewAlloc<int> >&);
 
   SELDON_EXTERN template void Assemble(Vector<int, VectFull, NewAlloc<int> >&);
 
-  SELDON_EXTERN template void RemoveDuplicate(int&, Vector<int, VectFull, NewAlloc<int> >&, Vector<@real, VectFull, NewAlloc<@real> >&);
+  SELDON_EXTERN template void RemoveDuplicate(size_t&, Vector<int, VectFull, NewAlloc<int> >&, Vector<@real, VectFull, NewAlloc<@real> >&);
 
-  SELDON_EXTERN template void RemoveDuplicate(int&, Vector<int, VectFull, NewAlloc<int> >&);
+  SELDON_EXTERN template void RemoveDuplicate(size_t&, Vector<int, VectFull, NewAlloc<int> >&);
 
   SELDON_EXTERN template void RemoveDuplicate(Vector<int, VectFull, NewAlloc<int> >&);
 }

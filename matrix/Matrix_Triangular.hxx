@@ -67,7 +67,7 @@ namespace Seldon
     // Basic methods.
     size_t GetDataSize() const;
     int64_t GetMemorySize() const;
-    
+
     // Memory management.
     void Reallocate(size_t i, size_t j);
     void Resize(size_t i, size_t j);
@@ -75,16 +75,16 @@ namespace Seldon
     void Nullify();
 
     // Element access and affectation.
-    const value_type operator() (int i, int j) const;
-    const_reference Val(int i, int j) const;
-    reference Val(int i, int j);
-    const_reference Get(int i, int j) const;
-    reference Get(int i, int j);
-    reference operator[] (int i);
-    const_reference operator[] (int i) const;
+    const value_type operator() (size_t i, size_t j) const;
+    const_reference Val(size_t i, size_t j) const;
+    reference Val(size_t i, size_t j);
+    const_reference Get(size_t i, size_t j) const;
+    reference Get(size_t i, size_t j);
+    reference operator[] (size_t i);
+    const_reference operator[] (size_t i) const;
     Matrix_Triangular<T, Prop, Storage, Allocator>&
     operator= (const Matrix_Triangular<T, Prop, Storage, Allocator>& A);
-    void Set(int i, int j, const T& x);
+    void Set(size_t i, size_t j, const T& x);
     void Copy(const Matrix_Triangular<T, Prop, Storage, Allocator>& A);
 
     // Convenient functions.
@@ -97,8 +97,8 @@ namespace Seldon
     Matrix_Triangular<T, Prop, Storage, Allocator>& operator= (const T0& x);
     void FillRand();
     void Print() const;
-    void Print(int a, int b, int m, int n) const;
-    void Print(int l) const;
+    void Print(size_t a, size_t b, size_t m, size_t n) const;
+    void Print(size_t l) const;
 
     // Input/output functions.
     void Write(string FileName) const;
@@ -127,16 +127,16 @@ namespace Seldon
     virtual void MltAddVector(const Tcplx& alpha, const SeldonTranspose&,
 			      const Vector<Tcplx>& x,
 			      const Tcplx& beta, Vector<Tcplx>& y) const;
-    
+
     virtual void MltVector(const Vector<Treal>& x, Vector<Treal>& y) const;
     virtual void MltVector(const Vector<Tcplx>& x, Vector<Tcplx>& y) const;
-    
+
     virtual void MltVector(const SeldonTranspose&,
 			   const Vector<Treal>& x, Vector<Treal>& y) const;
 
     virtual void MltVector(const SeldonTranspose&,
 			   const Vector<Tcplx>& x, Vector<Tcplx>& y) const;
-    
+
     virtual bool IsSymmetric() const;
 #endif
 

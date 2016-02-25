@@ -69,7 +69,7 @@ namespace Seldon
     \return The number of elements stored in memory.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline int Matrix_Symmetric<T, Prop, Storage, Allocator>::GetDataSize() const
+  inline size_t Matrix_Symmetric<T, Prop, Storage, Allocator>::GetDataSize() const
   {
     return this->m_ * this->n_;
   }
@@ -99,7 +99,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_Symmetric<T, Prop, Storage, Allocator>::reference
-  Matrix_Symmetric<T, Prop, Storage, Allocator>::operator() (int i, int j)
+  Matrix_Symmetric<T, Prop, Storage, Allocator>::operator() (size_t i, size_t j)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -124,7 +124,7 @@ namespace Seldon
   inline typename Matrix_Symmetric<T, Prop, Storage, Allocator>
   ::const_reference
   Matrix_Symmetric<T, Prop, Storage, Allocator>
-  ::operator() (int i, int j) const
+  ::operator() (size_t i, size_t j) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -148,7 +148,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_Symmetric<T, Prop, Storage, Allocator>
   ::const_reference
-  Matrix_Symmetric<T, Prop, Storage, Allocator>::Val(int i, int j) const
+  Matrix_Symmetric<T, Prop, Storage, Allocator>::Val(size_t i, size_t j) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -168,7 +168,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_Symmetric<T, Prop, Storage, Allocator>::reference
-  Matrix_Symmetric<T, Prop, Storage, Allocator>::Val(int i, int j)
+  Matrix_Symmetric<T, Prop, Storage, Allocator>::Val(size_t i, size_t j)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -178,7 +178,7 @@ namespace Seldon
     return me_[Storage::GetFirst(i, j)][Storage::GetSecond(i, j)];
   }
 
-  
+
   //! Returns the element (\a i, \a j)
   /*!
     Returns the value of element (i, j).
@@ -188,7 +188,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_Symmetric<T, Prop, Storage, Allocator>::reference
-  Matrix_Symmetric<T, Prop, Storage, Allocator>::Get(int i, int j)
+  Matrix_Symmetric<T, Prop, Storage, Allocator>::Get(size_t i, size_t j)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -213,7 +213,7 @@ namespace Seldon
   inline typename Matrix_Symmetric<T, Prop, Storage, Allocator>
   ::const_reference
   Matrix_Symmetric<T, Prop, Storage, Allocator>
-  ::Get(int i, int j) const
+  ::Get(size_t i, size_t j) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -235,7 +235,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_Symmetric<T, Prop, Storage, Allocator>::reference
-  Matrix_Symmetric<T, Prop, Storage, Allocator>::operator[] (int i)
+  Matrix_Symmetric<T, Prop, Storage, Allocator>::operator[] (size_t i)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -255,7 +255,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_Symmetric<T, Prop, Storage, Allocator>
   ::const_reference
-  Matrix_Symmetric<T, Prop, Storage, Allocator>::operator[] (int i) const
+  Matrix_Symmetric<T, Prop, Storage, Allocator>::operator[] (size_t i) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -291,7 +291,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Symmetric<T, Prop, Storage, Allocator>
-  ::Set(int i, int j, const T& x)
+  ::Set(size_t i, size_t j, const T& x)
   {
     this->Get(i, j) = x;
   }
@@ -311,7 +311,7 @@ namespace Seldon
 
     Allocator::memorycpy(this->data_, A.GetData(), this->GetDataSize());
   }
-  
+
 
 #ifdef SELDON_WITH_VIRTUAL
   template <class T, class Prop, class Storage, class Allocator>
@@ -323,7 +323,7 @@ namespace Seldon
     SOR(static_cast<const Matrix<T, Prop, Storage, Allocator>& >(*this),
 	x, r, omega, nb_iter, stage_ssor);
   }
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Symmetric<T, Prop, Storage, Allocator>
   ::ApplySor(const class_SeldonTrans& trans, Vector<T>& x, const Vector<T>& r,
@@ -334,7 +334,7 @@ namespace Seldon
 	static_cast<const Matrix<T, Prop, Storage, Allocator>& >(*this),
 	x, r, omega, nb_iter, stage_ssor);
   }
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Symmetric<T, Prop, Storage, Allocator>
   ::MltAddVector(const Treal& alpha, const Vector<Treal>& x,
@@ -376,7 +376,7 @@ namespace Seldon
 	   static_cast<const Matrix<T, Prop, Storage, Allocator>& >(*this),
 	   x, beta, y);
   }
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Symmetric<T, Prop, Storage, Allocator>
   ::MltVector(const Vector<Treal>& x, Vector<Treal>& y) const
@@ -392,7 +392,7 @@ namespace Seldon
   }
 
   template <class T, class Prop, class Storage, class Allocator>
-  inline void Matrix_Symmetric<T, Prop, Storage, Allocator>  
+  inline void Matrix_Symmetric<T, Prop, Storage, Allocator>
   ::MltVector(const SeldonTranspose& trans,
 	      const Vector<Treal>& x, Vector<Treal>& y) const
   {
@@ -401,7 +401,7 @@ namespace Seldon
   }
 
   template <class T, class Prop, class Storage, class Allocator>
-  inline void Matrix_Symmetric<T, Prop, Storage, Allocator>  
+  inline void Matrix_Symmetric<T, Prop, Storage, Allocator>
   ::MltVector(const SeldonTranspose& trans,
 	      const Vector<Tcplx>& x, Vector<Tcplx>& y) const
   {
@@ -410,13 +410,13 @@ namespace Seldon
   }
 
   template <class T, class Prop, class Storage, class Allocator>
-  inline bool Matrix_Symmetric<T, Prop, Storage, Allocator>  
+  inline bool Matrix_Symmetric<T, Prop, Storage, Allocator>
   ::IsSymmetric() const
   {
     return true;
   }
 #endif
-  
+
   ////////////////////
   // MATRIX<COLSYM> //
   ////////////////////
@@ -444,7 +444,7 @@ namespace Seldon
     \param j number of columns.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, ColSym, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, ColSym, Allocator>::Matrix(size_t i, size_t j):
     Matrix_Symmetric<T, Prop, ColSym, Allocator>(i, j)
   {
   }
@@ -496,7 +496,7 @@ namespace Seldon
   Matrix<T, Prop, ColSym, Allocator>&
   Matrix<T, Prop, ColSym, Allocator>::operator*= (const T0& x)
   {
-    for (int i = 0; i < this->GetDataSize();i++)
+    for (size_t i = 0; i < this->GetDataSize();i++)
       this->data_[i] *= x;
 
     return *this;
@@ -530,7 +530,7 @@ namespace Seldon
     \param j number of columns.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, RowSym, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, RowSym, Allocator>::Matrix(size_t i, size_t j):
     Matrix_Symmetric<T, Prop, RowSym, Allocator>(i, j)
   {
   }
@@ -555,7 +555,7 @@ namespace Seldon
     return *this;
   }
 
-  
+
   //! Duplicates a matrix (assignment operator).
   /*!
     \param A matrix to be copied.
@@ -582,7 +582,7 @@ namespace Seldon
   inline Matrix<T, Prop, RowSym, Allocator>&
   Matrix<T, Prop, RowSym, Allocator>::operator*= (const T0& x)
   {
-    for (int i = 0; i < this->GetDataSize();i++)
+    for (size_t i = 0; i < this->GetDataSize();i++)
       this->data_[i] *= x;
 
     return *this;

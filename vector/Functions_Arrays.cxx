@@ -557,7 +557,7 @@ namespace Seldon
   template<class T, class Storage1, class Allocator1>
   void Assemble(Vector<T, Storage1, Allocator1>& Node)
   {
-    int nb = Node.GetM();
+    size_t nb = Node.GetM();
     Assemble(nb, Node);
     Node.Resize(nb);
   }
@@ -569,7 +569,7 @@ namespace Seldon
   */
   template<class T, class Storage1, class Allocator1,
 	   class T2, class Storage2, class Allocator2>
-  void RemoveDuplicate(int& n, Vector<T, Storage1, Allocator1>& Node,
+  void RemoveDuplicate(size_t& n, Vector<T, Storage1, Allocator1>& Node,
 		       Vector<T2, Storage2, Allocator2>& Node2)
   {
     if (n <= 1)
@@ -577,8 +577,8 @@ namespace Seldon
 
     Sort(n, Node, Node2);
     T prec = Node(0);
-    int nb = 1;
-    for (int i = 1; i < n; i++)
+    size_t nb = 1;
+    for (size_t i = 1; i < n; i++)
       if (Node(i) != prec)
 	{
 	  Node(nb) = Node(i);
@@ -592,7 +592,7 @@ namespace Seldon
 
   //! Sorts and removes duplicate entries of a vector.
   template<class T, class Storage1, class Allocator1>
-  void RemoveDuplicate(int& n, Vector<T, Storage1, Allocator1>& Node)
+  void RemoveDuplicate(size_t& n, Vector<T, Storage1, Allocator1>& Node)
   {
     Assemble(n, Node);
   }
@@ -607,7 +607,7 @@ namespace Seldon
   void RemoveDuplicate(Vector<T, Storage1, Allocator1>& Node,
 		       Vector<T2, Storage2, Allocator2>& Node2)
   {
-    int n = Node.GetM();
+    size_t n = Node.GetM();
     if (n <= 1)
       return;
 
@@ -621,7 +621,7 @@ namespace Seldon
   template<class T, class Storage1, class Allocator1>
   void RemoveDuplicate(Vector<T, Storage1, Allocator1>& Node)
   {
-    int n = Node.GetM();
+    size_t n = Node.GetM();
     if (n <= 1)
       return;
 

@@ -36,7 +36,7 @@ namespace Seldon
   int PartitionQuickSort(int m, int n,
 			 Vector<T1, Storage1, Allocator1>& t1,
 			 Vector<T2, Storage2, Allocator2>& t2);
-  
+
   template<class T1, class Storage1, class Allocator1,
 	   class T2, class Storage2, class Allocator2>
   void QuickSort(int m, int n,
@@ -50,7 +50,7 @@ namespace Seldon
 			 Vector<T1, Storage1, Allocator1>& t1,
 			 Vector<T2, Storage2, Allocator2>& t2,
 			 Vector<T3, Storage3, Allocator3>& t3);
-  
+
   template<class T1, class Storage1, class Allocator1,
 	   class T2, class Storage2, class Allocator2,
 	   class T3, class Storage3, class Allocator3>
@@ -58,40 +58,40 @@ namespace Seldon
 		 Vector<T1, Storage1, Allocator1>& t1,
 		 Vector<T2, Storage2, Allocator2>& t2,
 		 Vector<T3, Storage3, Allocator3>& t3);
-  
+
   template<class T, class Storage, class Allocator>
   void MergeSort(int m, int n, Vector<T, Storage, Allocator>& tab1);
-  
+
   template<class T1, class Storage1, class Allocator1,
 	   class T2, class Storage2, class Allocator2>
   void MergeSort(int m, int n, Vector<T1, Storage1, Allocator1>& tab1,
 		 Vector<T2, Storage2, Allocator2>& tab2);
-  
+
   template<class T1, class Storage1, class Allocator1,
 	   class T2, class Storage2, class Allocator2,
 	   class T3, class Storage3, class Allocator3>
   void MergeSort(int m, int n, Vector<T1, Storage1, Allocator1>& tab1,
 		 Vector<T2, Storage2, Allocator2>& tab2,
 		 Vector<T3, Storage3, Allocator3>& tab3);
-  
+
   template<class Storage1, class Allocator1,
 	   class T2, class Storage2, class Allocator2 >
-  void Assemble(int& n, Vector<int, Storage1, Allocator1>& Node,
+  void Assemble(size_t& n, Vector<size_t, Storage1, Allocator1>& Node,
 		Vector<T2, Storage2, Allocator2>& Vect);
-  
+
   template<class T, class Storage1, class Allocator1>
   void Assemble(size_t& n, Vector<T, Storage1, Allocator1>& Node);
-  
+
   template<class T, class Storage1, class Allocator1>
   void Assemble(Vector<T, Storage1, Allocator1>& Node);
 
   template<class T, class Storage1, class Allocator1,
 	   class T2, class Storage2, class Allocator2>
-  void RemoveDuplicate(int& n, Vector<T, Storage1, Allocator1>& Node,
+  void RemoveDuplicate(size_t& n, Vector<T, Storage1, Allocator1>& Node,
 		       Vector<T2, Storage2, Allocator2>& Node2);
 
   template<class T, class Storage1, class Allocator1>
-  void RemoveDuplicate(int& n, Vector<T, Storage1, Allocator1>& Node);
+  void RemoveDuplicate(size_t& n, Vector<T, Storage1, Allocator1>& Node);
 
   template<class T, class Storage1, class Allocator1,
 	   class T2, class Storage2, class Allocator2>
@@ -130,7 +130,7 @@ namespace Seldon
   void Sort(int n, Vector<T1, Storage1, Allocator1>& V,
 	    Vector<T2, Storage2, Allocator2>& V2,
 	    Vector<T3, Storage3, Allocator3>& V3);
-  
+
   template<class T, class Storage, class Allocator>
   void Sort(Vector<T, Storage, Allocator>& V);
 
@@ -148,7 +148,7 @@ namespace Seldon
 
   template<class T, class Storage, class Allocator>
   bool HasElement(Vector<T, Storage, Allocator>& X, T& a);
-  
+
 } // namespace Seldon
 
 #define SELDON_FILE_FUNCTIONS_ARRAYS_HXX

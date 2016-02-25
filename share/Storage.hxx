@@ -33,10 +33,10 @@ namespace Seldon
   class ColMajor
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static const bool Sparse = false;
   };
 #endif
@@ -45,10 +45,10 @@ namespace Seldon
   class RowMajor
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static const bool Sparse = false;
   };
 
@@ -103,10 +103,10 @@ namespace Seldon
   class ColSymSparse
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static const bool Sparse = true;
   };
 
@@ -114,10 +114,10 @@ namespace Seldon
   class RowSymSparse
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static const bool Sparse = true;
   };
 
@@ -137,7 +137,7 @@ namespace Seldon
   {
   };
 
-  
+
   ///////////////
   // SYMMETRIC //
   ///////////////
@@ -146,10 +146,10 @@ namespace Seldon
   class ColSymPacked
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static const bool Sparse = false;
   };
 
@@ -157,10 +157,10 @@ namespace Seldon
   class RowSymPacked
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static const bool Sparse = false;
   };
 
@@ -168,10 +168,10 @@ namespace Seldon
   class ColSym
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static const bool Sparse = false;
   };
 
@@ -179,10 +179,10 @@ namespace Seldon
   class RowSym
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static const bool Sparse = false;
   };
 
@@ -196,10 +196,10 @@ namespace Seldon
   class ColHerm
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static const bool Sparse = false;
   };
 
@@ -207,10 +207,10 @@ namespace Seldon
   class RowHerm
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static const bool Sparse = false;
   };
 
@@ -218,10 +218,10 @@ namespace Seldon
   class ColHermPacked
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static const bool Sparse = false;
   };
 
@@ -229,10 +229,10 @@ namespace Seldon
   class RowHermPacked
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static const bool Sparse = false;
   };
 
@@ -294,10 +294,10 @@ namespace Seldon
   class ColUpTriangPacked
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static bool UpLo();
     static const bool Sparse = false;
   };
@@ -306,10 +306,10 @@ namespace Seldon
   class ColLoTriangPacked
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static bool UpLo();
     static const bool Sparse = false;
   };
@@ -318,10 +318,10 @@ namespace Seldon
   class RowUpTriangPacked
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static bool UpLo();
     static const bool Sparse = false;
   };
@@ -330,10 +330,10 @@ namespace Seldon
   class RowLoTriangPacked
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
     static bool UpLo();
     static const bool Sparse = false;
   };
@@ -350,10 +350,10 @@ namespace Seldon
   {
   public:
     static const bool Sparse = false;
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
-    static int GetEndLoop(int m, int n, int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
+    static size_t GetEndLoop(size_t m, size_t n, size_t i);
   };
 
 
@@ -406,9 +406,9 @@ namespace Seldon
   class ColComplexSparse
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
     static const bool Sparse = true;
   };
 
@@ -416,9 +416,9 @@ namespace Seldon
   class RowComplexSparse
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
     static const bool Sparse = true;
   };
 
@@ -426,9 +426,9 @@ namespace Seldon
   class ColSymComplexSparse
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
     static const bool Sparse = true;
   };
 
@@ -436,9 +436,9 @@ namespace Seldon
   class RowSymComplexSparse
   {
   public:
-    static int GetFirst(int i, int j);
-    static int GetSecond(int i, int j);
-    static int GetBeginLoop(int i);
+    static size_t GetFirst(size_t i, size_t j);
+    static size_t GetSecond(size_t i, size_t j);
+    static size_t GetBeginLoop(size_t i);
     static const bool Sparse = true;
   };
 

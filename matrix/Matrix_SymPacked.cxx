@@ -34,7 +34,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   Matrix_SymPacked<T, Prop, Storage, Allocator>
-  ::Matrix_SymPacked(int i, int j): Matrix_Base<T, Allocator>(i, i)
+  ::Matrix_SymPacked(size_t i, size_t j): Matrix_Base<T, Allocator>(i, i)
   {
 
 #ifdef SELDON_CHECK_MEMORY
@@ -77,7 +77,7 @@ namespace Seldon
     this->Copy(A);
   }
 
-  
+
   //! Clears the matrix.
   /*!
     Destructs the matrix.
@@ -107,7 +107,7 @@ namespace Seldon
 	this->data_ = NULL;
       }
 #endif
-    
+
     this->m_ = 0;
     this->n_ = 0;
   }
@@ -186,7 +186,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_SymPacked<T, Prop, Storage, Allocator>
-  ::SetData(int i, int j,
+  ::SetData(size_t i, size_t j,
 	    typename Matrix_SymPacked<T, Prop, Storage, Allocator>
 	    ::pointer data)
   {
@@ -238,10 +238,10 @@ namespace Seldon
     T one, zero;
     SetComplexOne(one);
     SetComplexZero(zero);
-    
+
     this->Fill(zero);
 
-    for (int i = 0; i < min(this->m_, this->n_); i++)
+    for (size_t i = 0; i < min(this->m_, this->n_); i++)
       (*this)(i, i) = one;
   }
 
@@ -254,7 +254,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_SymPacked<T, Prop, Storage, Allocator>::Fill()
   {
-    for (int i = 0; i < this->GetDataSize(); i++)
+    for (size_t i = 0; i < this->GetDataSize(); i++)
       SetComplexReal(i, this->data_[i]);
   }
 
@@ -269,7 +269,7 @@ namespace Seldon
   {
     T x_;
     SetComplexReal(x, x_);
-    for (int i = 0; i < this->GetDataSize(); i++)
+    for (size_t i = 0; i < this->GetDataSize(); i++)
       this->data_[i] = x_;
   }
 
@@ -299,7 +299,7 @@ namespace Seldon
 #ifndef SELDON_WITHOUT_REINIT_RANDOM
     srand(time(NULL));
 #endif
-    for (int i = 0; i < this->GetDataSize(); i++)
+    for (size_t i = 0; i < this->GetDataSize(); i++)
       SetComplexReal(rand(), this->data_[i]);
   }
 
@@ -313,9 +313,9 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_SymPacked<T, Prop, Storage, Allocator>::Print() const
   {
-    for (int i = 0; i < this->m_; i++)
+    for (size_t i = 0; i < this->m_; i++)
       {
-	for (int j = 0; j < this->n_; j++)
+	for (size_t j = 0; j < this->n_; j++)
 	  cout << (*this)(i, j) << "\t";
 	cout << endl;
       }
@@ -336,11 +336,11 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_SymPacked<T, Prop, Storage, Allocator>
-  ::Print(int a, int b, int m, int n) const
+  ::Print(size_t a, size_t b, size_t m, size_t n) const
   {
-    for (int i = a; i < min(this->m_, a + m); i++)
+    for (size_t i = a; i < min(this->m_, a + m); i++)
       {
-	for (int j = b; j < min(this->n_, b + n); j++)
+	for (size_t j = b; j < min(this->n_, b + n); j++)
 	  cout << (*this)(i, j) << "\t";
 	cout << endl;
       }
@@ -357,7 +357,7 @@ namespace Seldon
     \param l dimension of the square matrix to be displayed.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  void Matrix_SymPacked<T, Prop, Storage, Allocator>::Print(int l) const
+  void Matrix_SymPacked<T, Prop, Storage, Allocator>::Print(size_t l) const
   {
     Print(0, 0, l, l);
   }
@@ -416,10 +416,10 @@ namespace Seldon
                     "The stream is not ready.");
 #endif
 
-    FileStream.write(reinterpret_cast<char*>(const_cast<int*>(&this->m_)),
-		     sizeof(int));
-    FileStream.write(reinterpret_cast<char*>(const_cast<int*>(&this->n_)),
-		     sizeof(int));
+    FileStream.write(reinterpret_cast<char*>(const_cast<size_t*>(&this->m_)),
+		     sizeof(size_t));
+    FileStream.write(reinterpret_cast<char*>(const_cast<size_t*>(&this->n_)),
+		     sizeof(size_t));
 
     FileStream.write(reinterpret_cast<char*>(this->data_),
 		     this->GetDataSize() * sizeof(value_type));
@@ -484,7 +484,7 @@ namespace Seldon
                     "The stream is not ready.");
 #endif
 
-    int i, j;
+    size_t i, j;
     for (i = 0; i < this->GetM(); i++)
       {
 	for (j = 0; j < this->GetN(); j++)
@@ -549,9 +549,9 @@ namespace Seldon
                     "The stream is not ready.");
 #endif
 
-    int new_m, new_n;
-    FileStream.read(reinterpret_cast<char*>(&new_m), sizeof(int));
-    FileStream.read(reinterpret_cast<char*>(&new_n), sizeof(int));
+    size_t new_m, new_n;
+    FileStream.read(reinterpret_cast<char*>(&new_m), sizeof(size_t));
+    FileStream.read(reinterpret_cast<char*>(&new_n), sizeof(size_t));
     this->Reallocate(new_m, new_n);
 
     FileStream.read(reinterpret_cast<char*>(this->data_),
@@ -628,8 +628,8 @@ namespace Seldon
     other_row.ReadText(FileStream);
 
     // Number of rows and columns.
-    int n = first_row.GetM();
-    int m = 1 + other_row.GetM() / n;
+    size_t n = first_row.GetM();
+    size_t m = 1 + other_row.GetM() / n;
 
 #ifdef SELDON_CHECK_IO
     // Checks that enough elements were read.
@@ -641,13 +641,13 @@ namespace Seldon
     this->Reallocate(m,n);
 
     // Fills the matrix.
-    for (int j = 0; j < n; j++)
+    for (size_t j = 0; j < n; j++)
       this->Val(0, j) = first_row(j);
-    int k = 0;
-    for (int i = 1; i < m; i++)
+    size_t k = 0;
+    for (size_t i = 1; i < m; i++)
       {
 	k += i;
-	for (int j = i; j < n; j++)
+	for (size_t j = i; j < n; j++)
 	  this->Val(i, j) = other_row(k++);
       }
   }
@@ -672,21 +672,21 @@ namespace Seldon
     initialized (depending of the allocator).
   */
   template <class T, class Prop, class Allocator>
-  void Matrix<T, Prop, ColSymPacked, Allocator>::Resize(int i, int j)
+  void Matrix<T, Prop, ColSymPacked, Allocator>::Resize(size_t i, size_t j)
   {
 
     // Storing the old values of the matrix.
-    int nold = this->GetDataSize();
+    size_t nold = this->GetDataSize();
     Vector<T, VectFull, Allocator> xold(nold);
-    for (int k = 0; k < nold; k++)
+    for (size_t k = 0; k < nold; k++)
       xold(k) = this->data_[k];
 
     // Reallocation.
     this->Reallocate(i,j);
 
     // Filling the matrix with its old values.
-    int nmin = min(nold, this->GetDataSize());
-    for (int k = 0; k < nmin; k++)
+    size_t nmin = min(nold, this->GetDataSize());
+    for (size_t k = 0; k < nmin; k++)
       this->data_[k] = xold(k);
   }
 
@@ -699,8 +699,8 @@ namespace Seldon
   /*****************
    * OTHER METHODS *
    *****************/
-  
-  
+
+
   //! Reallocates memory to resize the matrix and keeps previous entries.
   /*!
     On exit, the matrix is a i x j matrix.
@@ -710,25 +710,25 @@ namespace Seldon
     initialized (depending of the allocator).
   */
   template <class T, class Prop, class Allocator>
-  void Matrix<T, Prop, RowSymPacked, Allocator>::Resize(int i, int j)
+  void Matrix<T, Prop, RowSymPacked, Allocator>::Resize(size_t i, size_t j)
   {
 
     // Storing the old values of the matrix.
-    int nold = this->GetDataSize(), iold = this->m_;
+    size_t nold = this->GetDataSize(), iold = this->m_;
     Vector<T, VectFull, Allocator> xold(nold);
-    for (int k = 0; k < nold; k++)
+    for (size_t k = 0; k < nold; k++)
       xold(k) = this->data_[k];
 
     // Reallocation.
     this->Reallocate(i,j);
 
     // Filling the matrix with its old values.
-    int imin = min(iold, i);
+    size_t imin = min(iold, i);
     nold = 0;
-    int n = 0;
-    for (int k = 0; k < imin; k++)
+    size_t n = 0;
+    for (size_t k = 0; k < imin; k++)
       {
-	for (int l = k; l < imin; l++)
+	for (size_t l = k; l < imin; l++)
 	  this->data_[n+l-k] = xold(nold+l-k);
 
 	n += i - k;

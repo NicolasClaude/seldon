@@ -173,7 +173,7 @@ namespace Seldon
 	me_ = NULL;
       }
 #endif
-    
+
     this->m_ = 0;
     this->n_ = 0;
   }
@@ -337,8 +337,8 @@ namespace Seldon
     this->data_ = data;
 
     pointer ptr = this->data_;
-    int lgth = i;
-    for (int k = 0; k < i; k++, ptr += lgth)
+    size_t lgth = i;
+    for (size_t k = 0; k < i; k++, ptr += lgth)
       me_[k] = ptr;
   }
 
@@ -378,8 +378,8 @@ namespace Seldon
 
     this->data_ = NULL;
   }
-  
-  
+
+
   //! Reallocates memory to resize the matrix and keeps previous entries.
   /*!
     On exit, the matrix is a i x i matrix.
@@ -438,10 +438,10 @@ namespace Seldon
     T zero, one;
     SetComplexZero(zero);
     SetComplexOne(one);
-    
+
     this->Fill(zero);
 
-    for (int i = 0; i < min(this->m_, this->n_); i++)
+    for (size_t i = 0; i < min(this->m_, this->n_); i++)
       this->Val(i, i) = one;
   }
 
@@ -454,7 +454,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Triangular<T, Prop, Storage, Allocator>::Fill()
   {
-    for (int i = 0; i < this->GetDataSize(); i++)
+    for (size_t i = 0; i < this->GetDataSize(); i++)
       SetComplexReal(i, this->data_[i]);
   }
 
@@ -501,7 +501,7 @@ namespace Seldon
 #ifndef SELDON_WITHOUT_REINIT_RANDOM
     srand(time(NULL));
 #endif
-    for (int i = 0; i < this->GetDataSize(); i++)
+    for (size_t i = 0; i < this->GetDataSize(); i++)
       SetComplexReal(rand(), this->data_[i]);
   }
 
@@ -515,9 +515,9 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Triangular<T, Prop, Storage, Allocator>::Print() const
   {
-    for (int i = 0; i < this->m_; i++)
+    for (size_t i = 0; i < this->m_; i++)
       {
-	for (int j = 0; j < this->n_; j++)
+	for (size_t j = 0; j < this->n_; j++)
 	  cout << (*this)(i, j) << "\t";
 	cout << endl;
       }
@@ -538,11 +538,11 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Triangular<T, Prop, Storage, Allocator>
-  ::Print(int a, int b, int m, int n) const
+  ::Print(size_t a, size_t b, size_t m, size_t n) const
   {
-    for (int i = a; i < min(this->m_, a + m); i++)
+    for (size_t i = a; i < min(this->m_, a + m); i++)
       {
-	for (int j = b; j < min(this->n_, b + n); j++)
+	for (size_t j = b; j < min(this->n_, b + n); j++)
 	  cout << (*this)(i, j) << "\t";
 	cout << endl;
       }
@@ -559,7 +559,7 @@ namespace Seldon
     \param l dimension of the square matrix to be displayed.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  void Matrix_Triangular<T, Prop, Storage, Allocator>::Print(int l) const
+  void Matrix_Triangular<T, Prop, Storage, Allocator>::Print(size_t l) const
   {
     Print(0, 0, l, l);
   }
@@ -618,10 +618,10 @@ namespace Seldon
 		    "Stream is not ready.");
 #endif
 
-    FileStream.write(reinterpret_cast<char*>(const_cast<int*>(&this->m_)),
-		     sizeof(int));
-    FileStream.write(reinterpret_cast<char*>(const_cast<int*>(&this->n_)),
-		     sizeof(int));
+    FileStream.write(reinterpret_cast<char*>(const_cast<size_t*>(&this->m_)),
+		     sizeof(size_t));
+    FileStream.write(reinterpret_cast<char*>(const_cast<size_t*>(&this->n_)),
+		     sizeof(size_t));
 
     FileStream.write(reinterpret_cast<char*>(this->data_),
 		     this->m_ * this->n_ * sizeof(value_type));
@@ -688,7 +688,7 @@ namespace Seldon
                     "Stream is not ready.");
 #endif
 
-    int i, j;
+    size_t i, j;
     for (i = 0; i < this->GetM(); i++)
       {
 	for (j = 0; j < this->GetN(); j++)
@@ -755,9 +755,9 @@ namespace Seldon
                     "Stream is not ready.");
 #endif
 
-    int new_m, new_n;
-    FileStream.read(reinterpret_cast<char*>(&new_m), sizeof(int));
-    FileStream.read(reinterpret_cast<char*>(&new_n), sizeof(int));
+    size_t new_m, new_n;
+    FileStream.read(reinterpret_cast<char*>(&new_m), sizeof(size_t));
+    FileStream.read(reinterpret_cast<char*>(&new_n), sizeof(size_t));
     this->Reallocate(new_m, new_n);
 
     FileStream.read(reinterpret_cast<char*>(this->data_),
@@ -838,8 +838,8 @@ namespace Seldon
     other_rows.ReadText(FileStream);
 
     // number of rows and columns
-    int n = first_row.GetM();
-    int m = 1 + other_rows.GetM()/n;
+    size_t n = first_row.GetM();
+    size_t m = 1 + other_rows.GetM()/n;
 
 #ifdef SELDON_CHECK_IO
     // Checking number of elements
@@ -851,33 +851,33 @@ namespace Seldon
     this->Reallocate(m,n);
     // filling matrix
     if (Storage::UpLo())
-      for (int j = 0; j < n; j++)
+      for (size_t j = 0; j < n; j++)
         this->Val(0, j) = first_row(j);
     else
       this->Val(0, 0) = first_row(0);
 
-    int nb = 0;
+    size_t nb = 0;
     if (Storage::UpLo())
-      for (int i = 1; i < m; i++)
+      for (size_t i = 1; i < m; i++)
 	{
-	  for (int j = 0; j < i; j++)
+	  for (size_t j = 0; j < i; j++)
 	    nb++;
 
-	  for (int j = i; j < n; j++)
+	  for (size_t j = i; j < n; j++)
 	    this->Val(i, j) = other_rows(nb++);
 	}
     else
-      for (int i = 1; i < m; i++)
+      for (size_t i = 1; i < m; i++)
 	{
-	  for (int j = 0; j <= i; j++)
+	  for (size_t j = 0; j <= i; j++)
 	    this->Val(i, j) = other_rows(nb++);
 
-	  for (int j = i+1; j < n; j++)
+	  for (size_t j = i+1; j < n; j++)
 	    nb++;
 	}
   }
 
-  
+
 } // namespace Seldon.
 
 #define SELDON_FILE_MATRIX_TRIANGULAR_CXX

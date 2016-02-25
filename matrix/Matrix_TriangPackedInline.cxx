@@ -66,7 +66,7 @@ namespace Seldon
     \return The number of elements stored in memory.
   */
   template <class T, class Prop, class Storage, class Allocator>
-  inline int Matrix_TriangPacked<T, Prop, Storage, Allocator>::GetDataSize() const
+  inline size_t Matrix_TriangPacked<T, Prop, Storage, Allocator>::GetDataSize() const
   {
     return (this->m_ * (this->m_ + 1)) / 2;
   }
@@ -85,7 +85,7 @@ namespace Seldon
    * ELEMENT ACCESS AND AFFECTATION *
    **********************************/
 
-  
+
   //! Access operator.
   /*!
     Returns the value of element (i, j).
@@ -97,16 +97,16 @@ namespace Seldon
   inline const typename
   Matrix_TriangPacked<T, Prop, Storage, Allocator>::value_type
   Matrix_TriangPacked<T, Prop, Storage, Allocator>
-  ::operator() (int i, int j) const
+  ::operator() (size_t i, size_t j) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
     CheckBounds(i, j, this->m_, this->n_, "Matrix_TriangPacked");
 #endif
-    
+
     T zero;
     SetComplexZero(zero);
-    
+
     if (Storage::UpLo())
       if (i > j)
 	return zero;
@@ -134,7 +134,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_TriangPacked<T, Prop, Storage, Allocator>::reference
-  Matrix_TriangPacked<T, Prop, Storage, Allocator>::Val(int i, int j)
+  Matrix_TriangPacked<T, Prop, Storage, Allocator>::Val(size_t i, size_t j)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -164,7 +164,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_TriangPacked<T, Prop, Storage, Allocator>
   ::const_reference
-  Matrix_TriangPacked<T, Prop, Storage, Allocator>::Val(int i, int j) const
+  Matrix_TriangPacked<T, Prop, Storage, Allocator>::Val(size_t i, size_t j) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -192,7 +192,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_TriangPacked<T, Prop, Storage, Allocator>::reference
-  Matrix_TriangPacked<T, Prop, Storage, Allocator>::Get(int i, int j)
+  Matrix_TriangPacked<T, Prop, Storage, Allocator>::Get(size_t i, size_t j)
   {
     return this->Val(i, j);
   }
@@ -208,7 +208,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_TriangPacked<T, Prop, Storage, Allocator>
   ::const_reference
-  Matrix_TriangPacked<T, Prop, Storage, Allocator>::Get(int i, int j) const
+  Matrix_TriangPacked<T, Prop, Storage, Allocator>::Get(size_t i, size_t j) const
   {
     return this->Val(i, j);
   }
@@ -222,7 +222,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_TriangPacked<T, Prop, Storage, Allocator>::reference
-  Matrix_TriangPacked<T, Prop, Storage, Allocator>::operator[] (int i)
+  Matrix_TriangPacked<T, Prop, Storage, Allocator>::operator[] (size_t i)
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -242,7 +242,7 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   inline typename Matrix_TriangPacked<T, Prop, Storage, Allocator>
   ::const_reference
-  Matrix_TriangPacked<T, Prop, Storage, Allocator>::operator[] (int i) const
+  Matrix_TriangPacked<T, Prop, Storage, Allocator>::operator[] (size_t i) const
   {
 
 #ifdef SELDON_CHECK_BOUNDS
@@ -278,7 +278,7 @@ namespace Seldon
   */
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_TriangPacked<T, Prop, Storage, Allocator>
-  ::Set(int i, int j, const T& x)
+  ::Set(size_t i, size_t j, const T& x)
   {
     this->Val(i, j) = x;
   }
@@ -342,7 +342,7 @@ namespace Seldon
 	   static_cast<const Matrix<T, Prop, Storage, Allocator>& >(*this),
 	   x, beta, y);
   }
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_TriangPacked<T, Prop, Storage, Allocator>
   ::MltVector(const Vector<Treal>& x, Vector<Treal>& y) const
@@ -358,7 +358,7 @@ namespace Seldon
   }
 
   template <class T, class Prop, class Storage, class Allocator>
-  inline void Matrix_TriangPacked<T, Prop, Storage, Allocator>  
+  inline void Matrix_TriangPacked<T, Prop, Storage, Allocator>
   ::MltVector(const SeldonTranspose& trans,
 	      const Vector<Treal>& x, Vector<Treal>& y) const
   {
@@ -367,7 +367,7 @@ namespace Seldon
   }
 
   template <class T, class Prop, class Storage, class Allocator>
-  inline void Matrix_TriangPacked<T, Prop, Storage, Allocator>  
+  inline void Matrix_TriangPacked<T, Prop, Storage, Allocator>
   ::MltVector(const SeldonTranspose& trans,
 	      const Vector<Tcplx>& x, Vector<Tcplx>& y) const
   {
@@ -376,14 +376,14 @@ namespace Seldon
   }
 
   template <class T, class Prop, class Storage, class Allocator>
-  inline bool Matrix_TriangPacked<T, Prop, Storage, Allocator>  
+  inline bool Matrix_TriangPacked<T, Prop, Storage, Allocator>
   ::IsSymmetric() const
   {
     return false;
   }
 #endif
 
-  
+
   ///////////////////////////////
   // MATRIX<COLUPTRIANGPACKED> //
   ///////////////////////////////
@@ -412,7 +412,7 @@ namespace Seldon
     \note 'j' is assumed to be equal to 'i' and is therefore discarded.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, ColUpTriangPacked, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, ColUpTriangPacked, Allocator>::Matrix(size_t i, size_t j):
     Matrix_TriangPacked<T, Prop, ColUpTriangPacked, Allocator>(i, i)
   {
   }
@@ -463,7 +463,7 @@ namespace Seldon
   inline Matrix<T, Prop, ColUpTriangPacked, Allocator>&
   Matrix<T, Prop, ColUpTriangPacked, Allocator>::operator*= (const T0& x)
   {
-    for (int i = 0; i < this->GetDataSize();i++)
+    for (size_t i = 0; i < this->GetDataSize();i++)
       this->data_[i] *= x;
 
     return *this;
@@ -499,7 +499,7 @@ namespace Seldon
     \note 'j' is assumed to be equal to 'i' and is therefore discarded.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, ColLoTriangPacked, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, ColLoTriangPacked, Allocator>::Matrix(size_t i, size_t j):
     Matrix_TriangPacked<T, Prop, ColLoTriangPacked, Allocator>(i, i)
   {
   }
@@ -550,7 +550,7 @@ namespace Seldon
   inline Matrix<T, Prop, ColLoTriangPacked, Allocator>&
   Matrix<T, Prop, ColLoTriangPacked, Allocator>::operator*= (const T0& x)
   {
-    for (int i = 0; i < this->GetDataSize();i++)
+    for (size_t i = 0; i < this->GetDataSize();i++)
       this->data_[i] *= x;
 
     return *this;
@@ -586,7 +586,7 @@ namespace Seldon
     \note 'j' is assumed to be equal to 'i' and is therefore discarded.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, RowUpTriangPacked, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, RowUpTriangPacked, Allocator>::Matrix(size_t i, size_t j):
     Matrix_TriangPacked<T, Prop, RowUpTriangPacked, Allocator>(i, i)
   {
   }
@@ -637,7 +637,7 @@ namespace Seldon
   inline Matrix<T, Prop, RowUpTriangPacked, Allocator>&
   Matrix<T, Prop, RowUpTriangPacked, Allocator>::operator*= (const T0& x)
   {
-    for (int i = 0; i < this->GetDataSize();i++)
+    for (size_t i = 0; i < this->GetDataSize();i++)
       this->data_[i] *= x;
 
     return *this;
@@ -673,7 +673,7 @@ namespace Seldon
     \note 'j' is assumed to be equal to 'i' and is therefore discarded.
   */
   template <class T, class Prop, class Allocator>
-  inline Matrix<T, Prop, RowLoTriangPacked, Allocator>::Matrix(int i, int j):
+  inline Matrix<T, Prop, RowLoTriangPacked, Allocator>::Matrix(size_t i, size_t j):
     Matrix_TriangPacked<T, Prop, RowLoTriangPacked, Allocator>(i, i)
   {
   }
@@ -724,13 +724,13 @@ namespace Seldon
   inline Matrix<T, Prop, RowLoTriangPacked, Allocator>&
   Matrix<T, Prop, RowLoTriangPacked, Allocator>::operator*= (const T0& x)
   {
-    for (int i = 0; i < this->GetDataSize();i++)
+    for (size_t i = 0; i < this->GetDataSize();i++)
       this->data_[i] *= x;
 
     return *this;
   }
 
-  
+
 } // namespace Seldon.
 
 #define SELDON_FILE_MATRIX_TRIANGPACKED_INLINE_CXX

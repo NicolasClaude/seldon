@@ -52,7 +52,7 @@ namespace Seldon
   public:
     // Constructor.
     Matrix_HermPacked();
-    explicit Matrix_HermPacked(int i, int j = 0);
+    explicit Matrix_HermPacked(size_t i, size_t j = 0);
     Matrix_HermPacked(const Matrix_HermPacked<T, Prop,
 		      Storage, Allocator>& A);
 
@@ -61,25 +61,25 @@ namespace Seldon
     void Clear();
 
     // Basic methods.
-    int GetDataSize() const;
+    size_t GetDataSize() const;
     int64_t GetMemorySize() const;
 
     // Memory management.
-    void Reallocate(int i, int j);
-    void SetData(int i, int j, pointer data);
+    void Reallocate(size_t i, size_t j);
+    void SetData(size_t i, size_t j, pointer data);
     void Nullify();
 
     // Element access and affectation.
-    const value_type operator() (int i, int j) const;
-    reference Val(int i, int j);
-    const_reference Val(int i, int j) const;
-    reference Get(int i, int j);
-    const_reference Get(int i, int j) const;
-    reference operator[] (int i);
-    const_reference operator[] (int i) const;
+    const value_type operator() (size_t i, size_t j) const;
+    reference Val(size_t i, size_t j);
+    const_reference Val(size_t i, size_t j) const;
+    reference Get(size_t i, size_t j);
+    const_reference Get(size_t i, size_t j) const;
+    reference operator[] (size_t i);
+    const_reference operator[] (size_t i) const;
     Matrix_HermPacked<T, Prop, Storage, Allocator>&
     operator= (const Matrix_HermPacked<T, Prop, Storage, Allocator>& A);
-    void Set(int i, int j, const T& val);
+    void Set(size_t i, size_t j, const T& val);
     void Copy(const Matrix_HermPacked<T, Prop, Storage, Allocator>& A);
 
     // Convenient functions.
@@ -92,8 +92,8 @@ namespace Seldon
     Matrix_HermPacked<T, Prop, Storage, Allocator>& operator= (const T0& x);
     void FillRand();
     void Print() const;
-    void Print(int a, int b, int m, int n) const;
-    void Print(int l) const;
+    void Print(size_t a, size_t b, size_t m, size_t n) const;
+    void Print(size_t l) const;
 
     // Input/output functions.
     void Write(string FileName) const;
@@ -113,16 +113,16 @@ namespace Seldon
     virtual void ApplySor(const class_SeldonTrans&, Vector<T>& x, const Vector<T>& r,
 			  const typename ClassComplexType<T>::Treal& omega,
 			  int nb_iter, int stage_ssor) const;
-    
+
     virtual void MltAddVector(const T& alpha, const Vector<T>& x,
 			      const T& beta, Vector<T>& y) const;
 
     virtual void MltAddVector(const T& alpha, const SeldonTranspose&,
 			      const Vector<T>& x,
 			      const T& beta, Vector<T>& y) const;
-    
+
     virtual void MltVector(const Vector<T>& x, Vector<T>& y) const;
-    
+
     virtual void MltVector(const SeldonTranspose&,
 			   const Vector<T>& x, Vector<T>& y) const;
 
@@ -146,7 +146,7 @@ namespace Seldon
 
   public:
     Matrix();
-    explicit Matrix(int i, int j = 0);
+    explicit Matrix(size_t i, size_t j = 0);
 
     template <class T0>
     Matrix<T, Prop, ColHermPacked, Allocator>& operator= (const T0& x);
@@ -156,7 +156,7 @@ namespace Seldon
     template<class T0>
     Matrix<T, Prop, ColHermPacked, Allocator>& operator*= (const T0& x);
 
-    void Resize(int i, int j);
+    void Resize(size_t i, size_t j);
 
   };
 
@@ -175,7 +175,7 @@ namespace Seldon
 
   public:
     Matrix();
-    explicit Matrix(int i, int j = 0);
+    explicit Matrix(size_t i, size_t j = 0);
 
     template <class T0>
     Matrix<T, Prop, RowHermPacked, Allocator>& operator= (const T0& x);
@@ -185,7 +185,7 @@ namespace Seldon
     template<class T0>
     Matrix<T, Prop, RowHermPacked, Allocator>& operator*= (const T0& x);
 
-    void Resize(int i, int j);
+    void Resize(size_t i, size_t j);
 
   };
 
