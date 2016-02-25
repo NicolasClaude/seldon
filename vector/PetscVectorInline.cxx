@@ -353,6 +353,7 @@ namespace Seldon
   /*!
     \param i index.
     \return The value of the vector at 'i'.
+    \note Gather the value even if located on an other process.
     \warning Read only.
     \warning This method must be called by all processes at the same time.
   */
