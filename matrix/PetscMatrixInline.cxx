@@ -290,7 +290,8 @@ namespace Seldon
   template <class T, class Prop, class Storage, class Allocator>
   inline void PetscMatrix<T, Prop, Storage, Allocator>::Set(int i, int j, T value)
   {
-    throw Undefined("PetscMatrix::Set(int i, int j, T value)");
+    this->SetBuffer(i, j , value);
+    this->Flush();
   }
 
 
