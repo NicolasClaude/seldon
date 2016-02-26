@@ -392,9 +392,9 @@ namespace Seldon
     int ma = A.GetM();
     int na = A.GetN();
     int nnz = A.GetDataSize();
-    double *value = A.GetData();
-    int *column = A.GetInd();
-    int *ptr = A.GetPtr();
+    double *value =A.GetData();
+    int *column =(int*) A.GetInd();
+    int *ptr = (int*)A.GetPtr();
 
     this->m_ = ma;
     this->n_ = na;

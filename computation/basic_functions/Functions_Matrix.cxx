@@ -1566,8 +1566,8 @@ namespace Seldon
       throw WrongArgument("Add", "This function is intended to dense"
                           " matrices only and not to sparse matrices");
 
-    int i, j;
-    int mb = B.GetM(), nb = B.GetN();
+    size_t i, j;
+    size_t mb = B.GetM(), nb = B.GetN();
     for (i = 0; i < Storage2::GetFirst(mb, nb); i++)
       for (j = Storage2::GetBeginLoop(i);
            j < Storage2::GetEndLoop(mb, nb, i); j++)
