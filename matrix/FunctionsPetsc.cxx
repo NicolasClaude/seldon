@@ -393,8 +393,7 @@ namespace Seldon
     int nrows = high - low;
     int rows[nrows];
     int cols[n];
-    T values[n*m] = {0};
-
+    T values[m * n] = {0};
 
     for (int i = 0; i < nrows; i++)
       rows[i] = low + i;
@@ -404,10 +403,12 @@ namespace Seldon
     MatGetValues(A.GetPetscMatrix(), nrows, rows, n,
                  cols, &values[low * n]);
 
-    T* reduced = new T[m * n];
+    typename Alloc2::pointer reduced = Alloc2::allocate(n * m);
+
 
     MPI_Allreduce(values, reduced, m * n ,
                   MPI_DOUBLE, MPI_SUM, A.GetCommunicator());
+
 
     B.SetData(m, n , reduced);
   }
