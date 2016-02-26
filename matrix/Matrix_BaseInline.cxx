@@ -28,7 +28,7 @@ namespace Seldon
    * VirtualMatrix *
    *****************/
 
-  
+
   //! Default constructor.
   /*!
     On exit, the matrix is an empty 0x0 matrix.
@@ -49,17 +49,10 @@ namespace Seldon
   template <class T>
   inline VirtualMatrix<T>::VirtualMatrix(size_t i, size_t j)
   {
-#ifdef SELDON_CHECK_DIMENSIONS
-    if (i < 0 || j < 0)
-      throw WrongDim("VirtualMatrix::VirtualMatrix(int, int)",
-                     "Unable to define a matrix with size "
-                     + to_str(i) + " by " + to_str(j) + ".");
-#endif
-
     m_ = i;
     n_ = j;
   }
-  
+
 
   //! Returns the number of rows.
   /*!
@@ -159,7 +152,7 @@ namespace Seldon
     return m_ * n_;
   }
 
-  
+
 #ifdef SELDON_WITH_VIRTUAL
   //! Destructor.
   template <class T>
@@ -285,7 +278,7 @@ namespace Seldon
   {
     return reinterpret_cast<const void*>(data_);
   }
-  
+
 } // namespace Seldon.
 
 #define SELDON_FILE_MATRIX_BASE_INLINE_CXX
