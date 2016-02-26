@@ -172,7 +172,7 @@ namespace Seldon
 				 Vector<size_t, VectFull, Allocator2>& IndCol_,
 				 Vector<T, VectFull, Allocator3>& Val,
 				 Matrix<T, Prop, RowSparse, Allocator3>& A,
-				 int index = 0);
+				 size_t index = 0);
 
 
 #ifndef SWIG
