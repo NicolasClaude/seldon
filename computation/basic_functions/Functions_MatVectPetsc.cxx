@@ -161,41 +161,40 @@ namespace Seldon
   }
 
 
-  template <class T0,
-            class T1, class Prop1, class Allocator1,
-            class T2, class Allocator2,
-            class T3,
-            class T4, class Allocator4>
-  void MltAddVector(const T0 alpha,
-              const Matrix<T1, Prop1, PETScMPIAIJ, Allocator1>& M,
-              const Vector<T2, PETScPar, Allocator2>& X,
-              const T3 beta, Vector<T4, PETScPar, Allocator4>& Y)
+  template <class T,
+            class Prop1, class Allocator1,
+            class Allocator2,
+            class Allocator4>
+  void MltAddVector(const T alpha,
+              const Matrix<T, Prop1, PETScMPIAIJ, Allocator1>& M,
+              const Vector<T, PETScPar, Allocator2>& X,
+              const T beta, Vector<T, PETScPar, Allocator4>& Y)
   {
 #ifdef SELDON_CHECK_DIMENSIONS
     CheckDim(M, X, Y, "MltAdd(alpha, M, X, beta, Y)");
 #endif
-    if (beta == T3(0))
-      if (alpha == T0(0))
+    if (beta == T(0))
+      if (alpha == T(0))
         {
-          Y.Fill(T4(0));
+          Y.Fill(T(0));
           return;
         }
       else
         {
           MatMult(M.GetPetscMatrix(), X.GetPetscVector(), Y.GetPetscVector());
-          if (alpha != T0(1))
+          if (alpha != T(1))
             VecScale(Y.GetPetscVector(), alpha);
           return;
         }
-    if (alpha == T0(1))
+    if (alpha == T(1))
       {
-        if (beta != T3(1))
+        if (beta != T(1))
           VecScale(Y.GetPetscVector(), beta);
         MatMultAdd(M.GetPetscMatrix(), X.GetPetscVector(),
                    Y.GetPetscVector(),Y.GetPetscVector());
         return;
       }
-    Vector<T2, PETScPar, Allocator2> tmp;
+    Vector<T, PETScPar, Allocator2> tmp;
     tmp.Copy(Y);
     MatMult(M.GetPetscMatrix(), X.GetPetscVector(), tmp.GetPetscVector());
     VecAXPBY(Y.GetPetscVector(), alpha, beta, tmp.GetPetscVector());

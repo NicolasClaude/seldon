@@ -47,14 +47,13 @@ namespace Seldon
               const T3 beta, Vector<T4, PETScPar, Allocator4>& Y);
 
   template <class T0,
-            class T1, class Prop1, class Allocator1,
-            class T2, class Allocator2,
-            class T3,
-            class T4, class Allocator4>
-  void MltAddVector(const T0 alpha,
-              const Matrix<T1, Prop1, PETScMPIAIJ, Allocator1>& M,
-              const Vector<T2, PETScPar, Allocator2>& X,
-              const T3 beta, Vector<T4, PETScPar, Allocator4>& Y);
+            class Prop1, class Allocator1,
+            class Allocator2,
+            class Allocator4>
+  void MltAddVector(const T alpha,
+              const Matrix<T, Prop1, PETScMPIAIJ, Allocator1>& M,
+              const Vector<T, PETScPar, Allocator2>& X,
+              const T beta, Vector<T, PETScPar, Allocator4>& Y);
 
   template <class T0,
             class T1, class Prop1, class Allocator1,
