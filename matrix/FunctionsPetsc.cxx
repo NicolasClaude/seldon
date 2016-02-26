@@ -36,7 +36,7 @@ namespace Seldon
         const T * vals ;
 
         MatGetRow(M.GetPetscMatrix(), i, &ncols, &cols,  &vals);
-        int input;
+
         for (int j = 0; j < ncols ; j++ )
           X.SetBuffer(cols[j], vals[j]);
 
@@ -76,7 +76,7 @@ namespace Seldon
         const T * vals ;
 
         MatGetRow(M.GetPetscMatrix(), i, &ncols, &cols,  &vals);
-        int input;
+
         for (int j = 0; j < ncols ; j++ )
           X.SetBuffer(cols[j], vals[j]);
 
@@ -127,9 +127,7 @@ namespace Seldon
   void GetCol(const Matrix<T0, Prop0, PETScSeqDense, Allocator0>& M,
               size_t j, Vector<T1, PETScSeq, Allocator1>& X)
   {
-    int a, b;
-    M.GetProcessorRowRange(a, b);
-    for (int i = a; i < b; i++)
+    for (int i = 0; i < M.GetM(); i++)
       X.SetBuffer(i, M(i, j));
     X.Flush();
   }
