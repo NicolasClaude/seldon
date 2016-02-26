@@ -160,7 +160,7 @@ namespace Seldon
     CheckDim(A, B, C, "MltAdd(alpha, A, B, beta, C)");
 #endif
 
-    Matrix<T> tmp;
+    Matrix<T, General, PETScMPIAIJ> tmp;
     Copy(B, tmp);
     MltAdd(alpha, A, tmp, beta, C);
   }
