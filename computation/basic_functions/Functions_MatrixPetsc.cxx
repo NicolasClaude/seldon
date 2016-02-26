@@ -280,6 +280,7 @@ namespace Seldon
           C.SetBuffer(i + low, j, alpha * value, ADD_VALUES);
         }
     C.Flush();
+    delete[] dataA;
   }
 
 
@@ -352,7 +353,9 @@ namespace Seldon
               }
           }
         C.Flush();
+        delete[] dataA;
       }
+
   }
 
 
