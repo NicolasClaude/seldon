@@ -88,15 +88,15 @@ namespace Seldon
   template class Matrix<complex<double>, Symmetric, ColSymComplexSparse, MallocAlloc<complex<double > > >;
 
   template void ConvertMatrix_to_Coordinates(const Matrix<double, General, RowSparse, MallocAlloc<double> >& A,
-                                             Vector<int>& IndRow, Vector<int>& IndCol,
+                                             Vector<size_t>& IndRow, Vector<size_t>& IndCol,
                                              Vector<double, VectFull>& Val,
-                                             int index = 0, bool sym = false);
+                                             size_t index = 0, bool sym = false);
 
 #ifndef SWIG
-  template void ConvertMatrix_from_Coordinates(Vector<int>& IndRow, Vector<int>& IndCol,
+  template void ConvertMatrix_from_Coordinates(Vector<size_t>& IndRow, Vector<size_t>& IndCol,
                                                Vector<double, VectFull>& Val,
                                                Matrix<double, General, RowSparse, MallocAlloc<double> >& A,
-                                               int index = 0);
+                                               size_t index = 0);
 #endif
 
   INSTANCE_BEGIN_LOOP(ColSymComplexSparse)

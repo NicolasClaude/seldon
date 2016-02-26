@@ -137,7 +137,7 @@ namespace Seldon
 	try
 	  {
 #endif
-            
+
 	    data_ =
 	      reinterpret_cast<pointer>(Allocator::reallocate(data_,
 							      i*j*k, this));
@@ -187,12 +187,12 @@ namespace Seldon
     \note This method should only be used by advanced users.
   */
   template <class T, class Allocator>
-  void Array3D<T, Allocator>::SetData(int i, int j, int k, 
+  void Array3D<T, Allocator>::SetData(int i, int j, int k,
 				      typename Array3D<T, Allocator>
 					     ::pointer data)
   {
     Clear();
-    
+
     length1_ = i;
     length2_ = j;
     length3_ = k;
@@ -404,12 +404,12 @@ namespace Seldon
 
     if (with_size)
       {
-	FileStream.write(reinterpret_cast<char*>(const_cast<int*>(&length1_)),
-			 sizeof(int));
-	FileStream.write(reinterpret_cast<char*>(const_cast<int*>(&length2_)),
-			 sizeof(int));
-	FileStream.write(reinterpret_cast<char*>(const_cast<int*>(&length3_)),
-			 sizeof(int));
+	FileStream.write(reinterpret_cast<char*>
+                         (const_cast<size_t*>(&length1_)), sizeof(size_t));
+	FileStream.write(reinterpret_cast<char*>
+			 (const_cast<size_t*>(&length2_)), sizeof(size_t));
+	FileStream.write(reinterpret_cast<char*>
+			 (const_cast<size_t*>(&length3_)), sizeof(size_t));
       }
 
     FileStream.write(reinterpret_cast<char*>(data_),
@@ -537,7 +537,7 @@ namespace Seldon
     for (int i = 0; i < A.GetDataSize(); i++)
       data[i] *= alpha;
   }
-  
+
 } // namespace Seldon.
 
 #define SELDON_FILE_ARRAY3D_CXX

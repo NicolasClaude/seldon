@@ -494,7 +494,7 @@ namespace Seldon
 				 Vector<size_t, VectFull, Allocator2>& IndCol_,
 				 Vector<T, VectFull, Allocator3>& Val,
 				 Matrix<T, Prop, RowSparse, Allocator3>& A,
-				 int index)
+				 size_t index)
   {
     size_t Nelement = IndRow_.GetLength();
 
@@ -3670,7 +3670,7 @@ namespace Seldon
 
   }
 
-
+  /*
   template<class T, class Prop1, class Prop2, class Alloc1, class Alloc2>
   void CopyMatrix(const Matrix<T, Prop1, PETScMPIDense, Alloc1>& A,
 		  Matrix<T, Prop2, RowMajor, Alloc2>& B)
@@ -3704,7 +3704,7 @@ namespace Seldon
     local_D.Nullify();
     MatRestoreArray(B.GetPetscMatrix(), &local_data);
   }
-
+  */
 
   /*****************************************************
    * Conversion from dense matrices to sparse matrices *
