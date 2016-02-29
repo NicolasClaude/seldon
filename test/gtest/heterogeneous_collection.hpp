@@ -32,15 +32,15 @@
 	{
 	protected:
 	  int Nloop_;
-	  int Nvector_;
-	  int Nsub_vector_max_;
-	  int m_;
+	  size_t Nvector_;
+	  size_t Nsub_vector_max_;
+	  size_t m_;
 	public:
 		void mlt()
 	  {	
 	    srand(time(NULL));
 
-	    int length;
+	    size_t length;
 
 	    Vector<FloatDouble, DenseSparseCollection, NewAlloc<float> > mlt;
 	    Vector<FloatDouble, DenseSparseCollection, NewAlloc<float> > A;
@@ -52,7 +52,7 @@
 
 		typedef Vector<float, VectFull, NewAlloc<float> > vector_float_dense;
 		vector_float_dense X0, Y0;
-		for (int k = 0; k < Nvector_; k++)
+		for (size_t k = 0; k < Nvector_; k++)
 		  {
 		    length = rand() % Nsub_vector_max_ + 1;
 
@@ -75,12 +75,12 @@
 		typedef Vector<float, VectSparse, NewAlloc<float> >
 		  vector_float_sparse;
 		vector_float_sparse X1, Y1;
-		for (int k = 0; k < Nvector_; k++)
+		for (size_t k = 0; k < Nvector_; k++)
 		  {
 		    length = rand() % Nsub_vector_max_ + 1;
 
 		    X1.Reallocate(length);
-		    for (int l = 0; l < length; l++)
+		    for (size_t l = 0; l < length; l++)
 		      {
 			X1.Index(l) = rand() % length;
 			X1.Value(l) = rand();
@@ -102,7 +102,7 @@
 
 		typedef Vector<double, VectFull, NewAlloc<double> > vector_double_dense;
 		vector_double_dense X2, Y2;
-		for (int k = 0; k < Nvector_; k++)
+		for (size_t k = 0; k < Nvector_; k++)
 		  {
 		    length = rand() % Nsub_vector_max_ + 1;
 
@@ -125,12 +125,12 @@
 		typedef Vector<double, VectSparse, NewAlloc<double> >
 		  vector_double_sparse;
 		vector_double_sparse X3, Y3;
-		for (int k = 0; k < Nvector_; k++)
+		for (size_t k = 0; k < Nvector_; k++)
 		  {
 		    length = rand() % Nsub_vector_max_ + 1;
 
 		    X3.Reallocate(length);
-		    for (int l = 0; l < length; l++)
+		    for (size_t l = 0; l < length; l++)
 		      {
 			X3.Index(l) = rand() % length;
 			X3.Value(l) = rand();
@@ -152,18 +152,18 @@
 
 		Mlt(alpha, A);
 
-		for (int j = 0; j < A.GetFloatDense().GetNvector(); j++)
-		  for (int l = 0; l < A.GetFloatDense().GetVectorLength()(j); l++)
+		for (size_t j = 0; j < A.GetFloatDense().GetNvector(); j++)
+		  for (size_t l = 0; l < A.GetFloatDense().GetVectorLength()(j); l++)
 		    ASSERT_TRUE(A.GetFloatDense().GetVector(j)(l) ==
 				   mlt.GetFloatDense().GetVector(j)(l));
 
-		for (int j = 0; j < A.GetDoubleDense().GetNvector(); j++)
-		  for (int l = 0; l < A.GetDoubleDense().GetVectorLength()(j); l++)
+		for (size_t j = 0; j < A.GetDoubleDense().GetNvector(); j++)
+		  for (size_t l = 0; l < A.GetDoubleDense().GetVectorLength()(j); l++)
 		    ASSERT_TRUE(A.GetDoubleDense().GetVector(j)(l) ==
 				   mlt.GetDoubleDense().GetVector(j)(l));
 
-		for (int j = 0; j < A.GetFloatSparse().GetNvector(); j++)
-		  for (int l = 0; l < A.GetFloatSparse().GetVectorLength()(j); l++)
+		for (size_t j = 0; j < A.GetFloatSparse().GetNvector(); j++)
+		  for (size_t l = 0; l < A.GetFloatSparse().GetVectorLength()(j); l++)
 		      {
 			ASSERT_TRUE(A.GetFloatSparse().GetVector(j).Index(l) ==
 				       mlt.GetFloatSparse().GetVector(j).Index(l));
@@ -171,8 +171,8 @@
 				       mlt.GetFloatSparse().GetVector(j).Value(l));
 		      }
 
-		for (int j = 0; j < A.GetDoubleSparse().GetNvector(); j++)
-		  for (int l = 0; l < A.GetDoubleSparse().GetVectorLength()(j); l++)
+		for (size_t j = 0; j < A.GetDoubleSparse().GetNvector(); j++)
+		  for (size_t l = 0; l < A.GetDoubleSparse().GetVectorLength()(j); l++)
 		    {
 		      ASSERT_TRUE(A.GetDoubleSparse().GetVector(j).Index(l) ==
 				     mlt.GetDoubleSparse().GetVector(j).Index(l));
@@ -191,7 +191,7 @@
 
 	    srand(time(NULL));
 
-	    int length;
+	    size_t length;
 
 	    Vector<FloatDouble, DenseSparseCollection, NewAlloc<float> > sum;
 	    Vector<FloatDouble, DenseSparseCollection, NewAlloc<float> > A, B;
@@ -203,7 +203,7 @@
 		{
 		  typedef Vector<float, VectFull, NewAlloc<float> > vector_float_dense;
 		  vector_float_dense X0, Y0, V0, W0;
-		  for (int k = 0; k < Nvector_; k++)
+		  for (size_t k = 0; k < Nvector_; k++)
 		    {
 		      length = rand() % Nsub_vector_max_ + 1;
 
@@ -232,12 +232,12 @@
 
 		  typedef Vector<float, VectSparse, NewAlloc<float> > vector_float_sparse;
 		  vector_float_sparse X1, Y1, V1, W1;
-		  for (int k = 0; k < Nvector_; k++)
+		  for (size_t k = 0; k < Nvector_; k++)
 		    {
 		      length = rand() % Nsub_vector_max_ + 1;
 
 		      X1.Reallocate(length);
-		      for (int l = 0; l < length; l++)
+		      for (size_t l = 0; l < length; l++)
 		      {
 			X1.Index(l) = rand() % length;
 			X1.Value(l) = rand();
@@ -249,7 +249,7 @@
 		      Y1.Copy(X1);
 
 		      V1.Reallocate(length);
-		      for (int l = 0; l < length; l++)
+		      for (size_t l = 0; l < length; l++)
 			{
 			  V1.Index(l) = rand() % length;
 			  V1.Value(l) = rand();
@@ -271,7 +271,7 @@
 
 		  typedef Vector<double, VectFull, NewAlloc<double> > vector_double_dense;
 		  vector_double_dense X2, Y2, V2, W2;
-		  for (int k = 0; k < Nvector_; k++)
+		  for (size_t k = 0; k < Nvector_; k++)
 		    {
 		      length = rand() % Nsub_vector_max_ + 1;
 
@@ -300,12 +300,12 @@
 
 		  typedef Vector<double, VectSparse, NewAlloc<double> > vector_double_sparse;
 		  vector_double_sparse X3, Y3, V3, W3;
-		  for (int k = 0; k < Nvector_; k++)
+		  for (size_t k = 0; k < Nvector_; k++)
 		    {
 		      length = rand() % Nsub_vector_max_ + 1;
 
 		      X3.Reallocate(length);
-		      for (int l = 0; l < length; l++)
+		      for (size_t l = 0; l < length; l++)
 			{
 			  X3.Index(l) = rand() % length;
 			  X3.Value(l) = rand();
@@ -317,7 +317,7 @@
 		      Y3.Copy(X3);
 
 		      V3.Reallocate(length);
-		      for (int l = 0; l < length; l++)
+		      for (size_t l = 0; l < length; l++)
 			{
 			  V3.Index(l) = rand() % length;
 			  V3.Value(l) = rand();
@@ -339,18 +339,18 @@
 
 		  Add(1.0f, B, A);
 
-		  for (int j = 0; j < A.GetFloatDense().GetNvector(); j++)
-		    for (int l = 0; l < A.GetFloatDense().GetVectorLength()(j); l++)
+		  for (size_t j = 0; j < A.GetFloatDense().GetNvector(); j++)
+		    for (size_t l = 0; l < A.GetFloatDense().GetVectorLength()(j); l++)
 		      ASSERT_TRUE(A.GetFloatDense().GetVector(j)(l) ==
 				     sum.GetFloatDense().GetVector(j)(l));
 
-		  for (int j = 0; j < A.GetDoubleDense().GetNvector(); j++)
-		    for (int l = 0; l < A.GetDoubleDense().GetVectorLength()(j); l++)
+		  for (size_t j = 0; j < A.GetDoubleDense().GetNvector(); j++)
+		    for (size_t l = 0; l < A.GetDoubleDense().GetVectorLength()(j); l++)
 		      ASSERT_TRUE(A.GetDoubleDense().GetVector(j)(l) ==
 				     sum.GetDoubleDense().GetVector(j)(l));
 
-		  for (int j = 0; j < A.GetFloatSparse().GetNvector(); j++)
-		    for (int l = 0; l < A.GetFloatSparse().GetVectorLength()(j); l++)
+		  for (size_t j = 0; j < A.GetFloatSparse().GetNvector(); j++)
+		    for (size_t l = 0; l < A.GetFloatSparse().GetVectorLength()(j); l++)
 		      {
 			ASSERT_TRUE(A.GetFloatSparse().GetVector(j).Index(l) ==
 				       sum.GetFloatSparse().GetVector(j).Index(l));
@@ -358,8 +358,8 @@
 				       sum.GetFloatSparse().GetVector(j).Value(l));
 		      }
 
-		  for (int j = 0; j < A.GetDoubleSparse().GetNvector(); j++)
-		    for (int l = 0; l < A.GetDoubleSparse().GetVectorLength()(j); l++)
+		  for (size_t j = 0; j < A.GetDoubleSparse().GetNvector(); j++)
+		    for (size_t l = 0; l < A.GetDoubleSparse().GetVectorLength()(j); l++)
 		      {
 			ASSERT_TRUE(A.GetDoubleSparse().GetVector(j).Index(l) ==
 				       sum.GetDoubleSparse().GetVector(j).Index(l));
@@ -376,7 +376,7 @@
 		{
 		  typedef Vector<float, VectFull, NewAlloc<float> > vector_float_dense;
 		  vector_float_dense X0, Y0, V0, W0;
-		  for (int k = 0; k < Nvector_; k++)
+		  for (size_t k = 0; k < Nvector_; k++)
 		    {
 		      length = rand() % Nsub_vector_max_ + 1;
 
@@ -422,7 +422,7 @@
 	  {
 	    srand(time(NULL));
 
-	    int length;
+	    size_t length;
 
 	    Vector<FloatDouble, DenseSparseCollection, NewAlloc<float> > A, B;
 
@@ -431,7 +431,7 @@
 
 		typedef Vector<float, VectFull, NewAlloc<float> > vector_float_dense;
 		vector_float_dense X0;
-		for (int k = 0; k < Nvector_; k++)
+		for (size_t k = 0; k < Nvector_; k++)
 		  {
 		    length = rand() % Nsub_vector_max_ + 1;
 		    X0.Reallocate(length);
@@ -443,11 +443,11 @@
 		typedef Vector<float, VectSparse, NewAlloc<float> >
 		  vector_float_sparse;
 		vector_float_sparse X1, Y1;
-		for (int k = 0; k < Nvector_; k++)
+		for (size_t k = 0; k < Nvector_; k++)
 		  {
 		    length = rand() % Nsub_vector_max_ + 1;
 		    X1.Reallocate(length);
-		    for (int l = 0; l < length; l++)
+		    for (size_t l = 0; l < length; l++)
 		      {
 			X1.Index(l) = rand() % length;
 			X1.Value(l) = rand();
@@ -459,7 +459,7 @@
 
 		typedef Vector<double, VectFull, NewAlloc<double> > vector_double_dense;
 		vector_double_dense X2;
-		for (int k = 0; k < Nvector_; k++)
+		for (size_t k = 0; k < Nvector_; k++)
 		  {
 		    length = rand() % Nsub_vector_max_ + 1;
 		    X2.Reallocate(length);
@@ -471,11 +471,11 @@
 		typedef Vector<double, VectSparse, NewAlloc<double> >
 		  vector_double_sparse;
 		vector_double_sparse X3;
-		for (int k = 0; k < Nvector_; k++)
+		for (size_t k = 0; k < Nvector_; k++)
 		  {
 		    length = rand() % Nsub_vector_max_ + 1;
 		    X3.Reallocate(length);
-		    for (int l = 0; l < length; l++)
+		    for (size_t l = 0; l < length; l++)
 		      {
 			X3.Index(l) = rand() % length;
 			X3.Value(l) = rand();
@@ -487,18 +487,18 @@
 
 		Copy(A, B);
 
-		for (int j = 0; j < A.GetFloatDense().GetNvector(); j++)
-		  for (int l = 0; l < A.GetFloatDense().GetVectorLength()(j); l++)
+		for (size_t j = 0; j < A.GetFloatDense().GetNvector(); j++)
+		  for (size_t l = 0; l < A.GetFloatDense().GetVectorLength()(j); l++)
 		    ASSERT_TRUE(A.GetFloatDense().GetVector(j)(l) ==
 				   B.GetFloatDense().GetVector(j)(l));
 
-		for (int j = 0; j < A.GetDoubleDense().GetNvector(); j++)
-		  for (int l = 0; l < A.GetDoubleDense().GetVectorLength()(j); l++)
+		for (size_t j = 0; j < A.GetDoubleDense().GetNvector(); j++)
+		  for (size_t l = 0; l < A.GetDoubleDense().GetVectorLength()(j); l++)
 		    ASSERT_TRUE(A.GetDoubleDense().GetVector(j)(l) ==
 				   B.GetDoubleDense().GetVector(j)(l));
 
-		for (int j = 0; j < A.GetFloatSparse().GetNvector(); j++)
-		  for (int l = 0; l < A.GetFloatSparse().GetVectorLength()(j); l++)
+		for (size_t j = 0; j < A.GetFloatSparse().GetNvector(); j++)
+		  for (size_t l = 0; l < A.GetFloatSparse().GetVectorLength()(j); l++)
 		      {
 			ASSERT_TRUE(A.GetFloatSparse().GetVector(j).Index(l) ==
 				       B.GetFloatSparse().GetVector(j).Index(l));
@@ -506,8 +506,8 @@
 				       B.GetFloatSparse().GetVector(j).Value(l));
 		      }
 
-		for (int j = 0; j < A.GetDoubleSparse().GetNvector(); j++)
-		  for (int l = 0; l < A.GetDoubleSparse().GetVectorLength()(j); l++)
+		for (size_t j = 0; j < A.GetDoubleSparse().GetNvector(); j++)
+		  for (size_t l = 0; l < A.GetDoubleSparse().GetVectorLength()(j); l++)
 		    {
 		      ASSERT_TRUE(A.GetDoubleSparse().GetVector(j).Index(l) ==
 				     B.GetDoubleSparse().GetVector(j).Index(l));
@@ -515,7 +515,7 @@
 				     B.GetDoubleSparse().GetVector(j).Value(l));
 		    }
 
-		for (int j = 0; j < A.GetNvector(); j++)
+		for (size_t j = 0; j < A.GetNvector(); j++)
 		  ASSERT_TRUE(A.GetVectorLength()(j) ==
 				 A.GetVectorLength()(j));
 
@@ -529,7 +529,7 @@
 	  {
 	    srand(time(NULL));
 
-	    int length;
+	    size_t length;
 
 	    Vector<FloatDouble, DenseSparseCollection, NewAlloc<float> > A, B;
 
@@ -539,7 +539,7 @@
 
 		typedef Vector<double, VectFull, NewAlloc<double> > vector_double_dense;
 		vector_double_dense X2, V2;
-		for (int k = 0; k < Nvector_; k++)
+		for (size_t k = 0; k < Nvector_; k++)
 		  {
 		    length = rand() % Nsub_vector_max_ + 1;
 
@@ -559,12 +559,12 @@
 
 		typedef Vector<double, VectSparse, NewAlloc<double> > vector_double_sparse;
 		vector_double_sparse X3, V3;
-		for (int k = 0; k < Nvector_; k++)
+		for (size_t k = 0; k < Nvector_; k++)
 		  {
 		    length = rand() % Nsub_vector_max_ + 1;
 
 		    X3.Reallocate(length);
-		    for (int l = 0; l < length; l++)
+		    for (size_t l = 0; l < length; l++)
 		      {
 			X3.Index(l) = rand() % length;
 			X3.Value(l) = rand();
@@ -573,7 +573,7 @@
 		    A.AddVector(X3);
 
 		    V3.Reallocate(length);
-		    for (int l = 0; l < length; l++)
+		    for (size_t l = 0; l < length; l++)
 		      {
 			V3.Index(l) = rand() % length;
 			V3.Value(l) = rand();
@@ -602,7 +602,7 @@
 	  {
 	    srand(time(NULL));
 
-	    int length;
+	    size_t length;
 	    typedef double real;
 
 	    for (int N = 0; N < Nloop_; N++)
@@ -618,7 +618,7 @@
 
 		  Vector<FloatDouble, DenseSparseCollection, NewAlloc<float> > A;
 		  vector_real_dense A_dense, U, W;
-		  for (int k = 0; k < Nvector_; k++)
+		  for (size_t k = 0; k < Nvector_; k++)
 		    {
 		      length = rand() % Nsub_vector_max_ + 1;
 
@@ -634,7 +634,7 @@
 		    }
 
 		  vector_float_dense u;
-		  for (int k = 0; k < Nvector_; k++)
+		  for (size_t k = 0; k < Nvector_; k++)
 		    {
 		      length = rand() % Nsub_vector_max_ + 1;
 
@@ -643,7 +643,7 @@
 		      A.AddVector(u);
 
 		      W.Reallocate(length);
-		      for (int i = 0; i < length; i++)
+		      for (size_t i = 0; i < length; i++)
 			W(i) = static_cast<double>(u(i));
 		      A_dense.PushBack(W);
 
@@ -662,7 +662,7 @@
 
 		  MltAdd(alpha, M, A_dense, beta, Y2);
 
-		  for (int l = 0; l < m_; l++)
+		  for (size_t l = 0; l < m_; l++)
 		    ASSERT_NEAR(Y1(l), Y2(l),
 						 1.e-6 * Y2(l));
 
@@ -676,14 +676,14 @@
 	  {
 	     srand(time(NULL));
 
-	    int length;
+	    size_t length;
 
 	    Vector<FloatDouble, DenseSparseCollection, NewAlloc<float> > A, B;
 	    for (int N = 0; N < Nloop_; N++)
 	      {
 		typedef Vector<float, VectFull, NewAlloc<float> > vector_float_dense;
 		vector_float_dense X0;
-		for (int k = 0; k < Nvector_; k++)
+		for (size_t k = 0; k < Nvector_; k++)
 		  {
 		    length = rand() % Nsub_vector_max_ + 1;
 		    X0.Reallocate(length);
@@ -695,11 +695,11 @@
 		typedef Vector<float, VectSparse, NewAlloc<float> >
 		  vector_float_sparse;
 		vector_float_sparse X1, Y1;
-		for (int k = 0; k < Nvector_; k++)
+		for (size_t k = 0; k < Nvector_; k++)
 		  {
 		    length = rand() % Nsub_vector_max_ + 1;
 		    X1.Reallocate(length);
-		    for (int l = 0; l < length; l++)
+		    for (size_t l = 0; l < length; l++)
 		      {
 			X1.Index(l) = rand() % length;
 			X1.Value(l) = rand();
@@ -711,7 +711,7 @@
 
 		typedef Vector<double, VectFull, NewAlloc<double> > vector_double_dense;
 		vector_double_dense X2;
-		for (int k = 0; k < Nvector_; k++)
+		for (size_t k = 0; k < Nvector_; k++)
 		  {
 		    length = rand() % Nsub_vector_max_ + 1;
 		    X2.Reallocate(length);
@@ -723,11 +723,11 @@
 		typedef Vector<double, VectSparse, NewAlloc<double> >
 		  vector_double_sparse;
 		vector_double_sparse X3;
-		for (int k = 0; k < Nvector_; k++)
+		for (size_t k = 0; k < Nvector_; k++)
 		  {
 		    length = rand() % Nsub_vector_max_ + 1;
 		    X3.Reallocate(length);
-		    for (int l = 0; l < length; l++)
+		    for (size_t l = 0; l < length; l++)
 		      {
 			X3.Index(l) = rand() % length;
 			X3.Value(l) = rand();
@@ -740,18 +740,18 @@
 
 		B.Read("test.bin");
 
-		for (int j = 0; j < A.GetFloatDense().GetNvector(); j++)
-		  for (int l = 0; l < A.GetFloatDense().GetVectorLength()(j); l++)
+		for (size_t j = 0; j < A.GetFloatDense().GetNvector(); j++)
+		  for (size_t l = 0; l < A.GetFloatDense().GetVectorLength()(j); l++)
 		    ASSERT_TRUE(A.GetFloatDense().GetVector(j)(l) ==
 				   B.GetFloatDense().GetVector(j)(l));
 
-		for (int j = 0; j < A.GetDoubleDense().GetNvector(); j++)
-		  for (int l = 0; l < A.GetDoubleDense().GetVectorLength()(j); l++)
+		for (size_t j = 0; j < A.GetDoubleDense().GetNvector(); j++)
+		  for (size_t l = 0; l < A.GetDoubleDense().GetVectorLength()(j); l++)
 		    ASSERT_TRUE(A.GetDoubleDense().GetVector(j)(l) ==
 				   B.GetDoubleDense().GetVector(j)(l));
 
-		for (int j = 0; j < A.GetFloatSparse().GetNvector(); j++)
-		  for (int l = 0; l < A.GetFloatSparse().GetVectorLength()(j); l++)
+		for (size_t j = 0; j < A.GetFloatSparse().GetNvector(); j++)
+		  for (size_t l = 0; l < A.GetFloatSparse().GetVectorLength()(j); l++)
 		    {
 		      ASSERT_TRUE(A.GetFloatSparse().GetVector(j).Index(l) ==
 				       B.GetFloatSparse().GetVector(j).Index(l));
@@ -759,8 +759,8 @@
 				     B.GetFloatSparse().GetVector(j).Value(l));
 		    }
 
-		for (int j = 0; j < A.GetDoubleSparse().GetNvector(); j++)
-		  for (int l = 0; l < A.GetDoubleSparse().GetVectorLength()(j); l++)
+		for (size_t j = 0; j < A.GetDoubleSparse().GetNvector(); j++)
+		  for (size_t l = 0; l < A.GetDoubleSparse().GetVectorLength()(j); l++)
 		    {
 		      ASSERT_TRUE(A.GetDoubleSparse().GetVector(j).Index(l) ==
 				     B.GetDoubleSparse().GetVector(j).Index(l));
@@ -768,7 +768,7 @@
 				     B.GetDoubleSparse().GetVector(j).Value(l));
 		    }
 
-		for (int j = 0; j < A.GetNvector(); j++)
+		for (size_t j = 0; j < A.GetNvector(); j++)
 		  ASSERT_TRUE(A.GetVectorLength()(j) ==
 				 A.GetVectorLength()(j));
 
@@ -782,7 +782,7 @@
 	  {
 	    srand(time(NULL));
 
-	    int length;
+	    size_t length;
 
 	    Vector<FloatDouble, DenseSparseCollection, NewAlloc<float> > A;
 
@@ -798,7 +798,7 @@
 	    vector_float_sparse X1, Y1;
 	    length = rand() % Nsub_vector_max_ + 1;
 	    X1.Reallocate(length);
-	    for (int l = 0; l < length; l++)
+	    for (size_t l = 0; l < length; l++)
 	      {
 		X1.Index(l) = rand() % length;
 		X1.Value(l) = rand();
@@ -817,7 +817,7 @@
 	      vector_double_sparse;
 	    vector_double_sparse X3, Y3;
 	    X3.Reallocate(length);
-	    for (int l = 0; l < length; l++)
+	    for (size_t l = 0; l < length; l++)
 	      {
 		X3.Index(l) = rand() % length;
 		X3.Value(l) = rand();
@@ -955,7 +955,6 @@
 	    mlt_add();
 	  }
 
-/*
 	  TEST_F(HeterogeneousCollectionTest, TestReadWrite)
 	  {
 	    Nloop_ = 1;
@@ -963,7 +962,7 @@
 	    Nsub_vector_max_ = 10;
 	    m_ = 50;
 	    write_read();
-	  }*/
+	  }
 
 
 	  TEST_F(HeterogeneousCollectionTest, TestLabel)

@@ -16,13 +16,14 @@
 
 
 #include "gtest/gtest.h"
-
+#include "Seldon.hxx"
 #include "matrix.hpp"
 #include "array3d.hpp"
 #include "lapack.hpp"
 #include "sparse_matrix.hpp"
 #include "sparse_linear_algebra.hpp"
 #include "submatrix.hpp"
+#include "vector_collection.hpp"
 #include "heterogeneous_collection.hpp"
 
 
@@ -30,5 +31,5 @@
 int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+   return RUN_ALL_TESTS();
 }
