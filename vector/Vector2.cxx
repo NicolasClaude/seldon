@@ -152,10 +152,10 @@ namespace Seldon
     int64_t total = sizeof(*this) + sizeof(pointer)*GetLength();
     for (size_t i = 0; i < GetLength(); i++)
       total += data_(i).GetMemorySize();
-    
+
     return total;
   }
-  
+
 
   //! Returns the size of the inner vector #\a i.
   /*!
@@ -199,7 +199,7 @@ namespace Seldon
                           "The lower bound of the range of inner vectors, ["
                           + to_str(beg) + ", " + to_str(end)
                           + "[, is strictly greater than its upper bound.");
-    if (beg < 0 || end > GetLength())
+    if (end > GetLength())
       throw WrongArgument("Vector2::GetNelement(int beg, int end)",
         		  "The inner-vector indexes should be in [0,"
         		  + to_str(GetLength()) + "] but [" + to_str(beg)
@@ -360,7 +360,7 @@ namespace Seldon
                           "The lower bound of the range of inner vectors, ["
                           + to_str(beg) + ", " + to_str(end)
                           + "[, is strictly greater than its upper bound.");
-    if (beg < 0 || end > GetLength())
+    if (end > GetLength())
       throw WrongArgument("Vector2::Flatten(size_t beg, size_t end, Vector& data)",
         		  "The inner-vector indexes should be in [0,"
         		  + to_str(GetLength()) + "] but [" + to_str(beg)
