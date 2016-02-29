@@ -27,8 +27,8 @@ namespace Seldon
   /***************
    * Matrix_Band *
    ***************/
-  
-  
+
+
   //! default constructor
   template <class T, class Prop, class Storage, class Allocator>
   Matrix_Band<T, Prop, Storage, Allocator>::Matrix_Band()
@@ -36,10 +36,10 @@ namespace Seldon
     kl_ = 0;
     ku_ = 0;
     this->m_ = 0;
-    this->n_ = 0;    
+    this->n_ = 0;
   }
-  
-  
+
+
   //! clears the matrix
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Band<T, Prop, Storage, Allocator>::Clear()
@@ -50,28 +50,28 @@ namespace Seldon
     this->n_ = 0;
     data_.Clear();
   }
-  
-  
+
+
   //! changes the size of the matrix, previous entries are lost
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Band<T, Prop, Storage, Allocator>
-  ::Reallocate(int m, int n, int kl, int ku)
+  ::Reallocate(size_t m, size_t n, size_t kl, size_t ku)
   {
     this->m_ = m;
     this->n_ = n;
     kl_ = kl;
     ku_ = ku;
-    data_.Reallocate(2*kl_+ku_+1, this->n_);
+    data_.Reallocate(kl_+ku_+1, this->n_);
     data_.Fill(0);
-  }
-  
+   }
+
 
   //! sets A(i, j) = A(i, j) + val
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Band<T, Prop, Storage, Allocator>
-  ::AddInteraction(int i, int j, const T& val)
+  ::AddInteraction(size_t i, size_t j, const T& val)
   {
-    int k = kl_ + ku_ + i - j;
+    size_t k = kl_ + ku_ + i - j;
     if ((k >= kl_) && (k <= 2*kl_+ku_))
       data_(k, j) += val;
     else
@@ -80,9 +80,9 @@ namespace Seldon
 	abort();
       }
   }
-  
-  
-  //! adds severals values on a single row of the matrix  
+
+
+  //! adds severals values on a single row of the matrix
   /*!
     \param[in] i row on which values are added
     \param[in] n number of values to add
@@ -91,48 +91,51 @@ namespace Seldon
    */
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Band<T, Prop, Storage, Allocator>::
-  AddInteractionRow(int i, int n, const IVect& num, const Vector<T>& val)
+  AddInteractionRow(size_t i, size_t n, const IVect& num, const Vector<T>& val)
   {
-    for (int j = 0; j < n; j++)
+    for (size_t j = 0; j < n; j++)
       AddInteraction(i, num(j), val(j));
   }
-  
-  
+
+
   //! clears row i, fills it with 0
   /*!
     \param[in] i row to clear
    */
   template <class T, class Prop, class Storage, class Allocator>
-  void Matrix_Band<T, Prop, Storage, Allocator>::ClearRow(int i)
+  void Matrix_Band<T, Prop, Storage, Allocator>::ClearRow(size_t i)
   {
     T zero; SetComplexZero(zero);
-    for (int k = max(-i, -this->kl_); k <= min(this->ku_, this->n_-1-i); k++)
+    for (size_t j = 0; j < this->n_; j++)
       {
-        int j = i+k;
-        this->Get(i, j) = zero;
+        size_t k = kl_ + ku_ + i - j;
+        if  ((k >= kl_) && (k <= 2*kl_+ku_))
+          this->Get(i, j) = zero;
       }
   }
-  
-  
+
+
   //! returns entry (i, j) of the matrix
   template <class T, class Prop, class Storage, class Allocator>
   const T Matrix_Band<T, Prop, Storage, Allocator>
-  ::operator()(int i, int j) const
+  ::operator()(size_t i, size_t j) const
   {
     T zero; SetComplexZero(zero);
-    int k = kl_ + ku_ + i - j;
+
+
+    size_t k = kl_ + ku_ + i - j;
     if ((k >= kl_) && (k <= 2*kl_+ku_))
-      return data_(k, j);
-    
+        return data_(k, j);
+
     return zero;
-  }  
-  
-  
-  //! returns a reference to A(i, j) 
+  }
+
+
+  //! returns a reference to A(i, j)
   template <class T, class Prop, class Storage, class Allocator>
-  T& Matrix_Band<T, Prop, Storage, Allocator>::Get(int i, int j)
+  T& Matrix_Band<T, Prop, Storage, Allocator>::Get(size_t i, size_t j)
   {
-    int k = kl_ + ku_ + i - j;
+    size_t k = kl_ + ku_ + i - j ;
     if ((k >= kl_) && (k <= 2*kl_+ku_))
       return data_(k, j);
     else
@@ -141,13 +144,13 @@ namespace Seldon
 	abort();
       }
   }
-  
-  
-  //! returns a reference to A(i, j) 
+
+
+  //! returns a reference to A(i, j)
   template <class T, class Prop, class Storage, class Allocator>
-  const T& Matrix_Band<T, Prop, Storage, Allocator>::Get(int i, int j) const
+  const T& Matrix_Band<T, Prop, Storage, Allocator>::Get(size_t i, size_t j) const
   {
-    int k = kl_ + ku_ + i - j;
+    size_t k = kl_ + ku_ + i - j;
     if ((k >= kl_) && (k <= 2*kl_+ku_))
       return data_(k, j);
     else
@@ -164,27 +167,26 @@ namespace Seldon
   {
     T zero, one; SetComplexZero(zero);
     SetComplexOne(one);
-    
+
     data_.Fill(zero);
-    for (int i = 0; i < this->n_; i++)
+    for (size_t i = 0; i < this->n_; i++)
       data_(kl_+ku_, i) = one;
   }
-  
-  
+
+
   //! sets all non-zero entries to a same value
   template <class T, class Prop, class Storage, class Allocator>
   template<class T0>
   void Matrix_Band<T, Prop, Storage, Allocator>::Fill(const T0& x)
   {
     data_.Fill(x);
-
-    T zero; SetComplexZero(zero);
-    for (int i = 0; i < this->n_; i++)
-      for (int j = 0; j < kl_; j++)
-	data_(j, i) = zero;
+    /*    T zero; SetComplexZero(zero);
+    for (size_t i = 0; i < this->n_; i++)
+      for (size_t j = 0; j < kl_; j++)
+      data_(j, i) = zero;*/
   }
-  
-  
+
+
   //! sets all non-zero entries to random values
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Band<T, Prop, Storage, Allocator>::FillRand()
@@ -192,12 +194,12 @@ namespace Seldon
     data_.FillRand();
 
     T zero; SetComplexZero(zero);
-    for (int i = 0; i < this->n_; i++)
-      for (int j = 0; j < kl_; j++)
+    for (size_t i = 0; i < this->n_; i++)
+      for (size_t j = 0; j < kl_; j++)
 	data_(j, i) = zero;
   }
-  
-  
+
+
   //! conversion from a CSR matrix
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Band<T, Prop, Storage, Allocator>
@@ -206,51 +208,51 @@ namespace Seldon
     Clear();
 
     // finding kl and ku
-    int kl = 0, ku = 0;
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = 0; j < A.GetRowSize(i); j++)
+    size_t kl = 0, ku = 0;
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = 0; j < A.GetRowSize(i); j++)
         {
-          int col = A.Index(i, j);
+          size_t col = A.Index(i, j);
           if (col < i)
             kl = max(kl, i-col);
           else if (col > i)
             ku = max(ku, col-i);
         }
-    
+
     Reallocate(A.GetM(), A.GetN(), kl, ku);
     T zero; SetComplexZero(zero);
     Fill(zero);
-    
+
     // filling the matrix with values of A
-    for (int i = 0; i < A.GetM(); i++)
-      for (int j = 0; j < A.GetRowSize(i); j++)
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t j = 0; j < A.GetRowSize(i); j++)
         AddInteraction(i, A.Index(i, j), A.Value(i, j));
-    
+
   }
-    
-  
+
+
   //! performs LU factorisation without pivoting
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Band<T, Prop, Storage, Allocator>::Factorize()
   {
     // position of the main diagonal
-    int d = kl_ + ku_;
+    size_t d = kl_ + ku_;
     T pivot, one;
     SetComplexOne(one);
-    for (int j = 0; j < this->n_; j++)
+    for (size_t j = 0; j < this->n_; j++)
       {
         // replacing diagonal element by its inverse
         data_(d, j) = one/data_(d, j);
-        for (int p = 1; p <= min(this->m_ - 1 - j, kl_); p++)
+        for (size_t p = 1; p <= min(this->m_ - 1 - j, kl_); p++)
           {
             pivot = data_(d+p, j)*data_(d, j);
             data_(d+p, j) = pivot;
-            for (int k = 1; k <= min(this->n_ - 1 - j, ku_); k++)
+            for (size_t k = 1; k <= min(this->n_ - 1 - j, ku_); k++)
               data_(d+p-k, j+k) -= pivot*data_(d-k, j+k);
           }
       }
   }
-  
+
 
   //! performs LU factorisation with pivoting
   template <class T, class Prop, class Storage, class Allocator>
@@ -258,68 +260,68 @@ namespace Seldon
   {
     ipivot.Reallocate(this->m_);
     // position of the main diagonal
-    int d = kl_ + ku_;
+    size_t d = kl_ + ku_;
     T pivot, one, tmp;
     typename ClassComplexType<T>::Treal amax;
     SetComplexOne(one);
-    for (int j = 0; j < this->n_; j++)
+    for (size_t j = 0; j < this->n_; j++)
       {
 	// searching pivot
-	int pmin = min(this->m_ - 1 - j, kl_);
+	size_t pmin = min(this->m_ - 1 - j, kl_);
 	amax = abs(data_(d, j));
-	int p0 = 0;
-	for (int p = 1; p <= pmin; p++)
+	size_t p0 = 0;
+	for (size_t p = 1; p <= pmin; p++)
 	  if (abs(data_(d+p, j)) > amax)
 	    {
 	      p0 = p;
 	      amax = abs(data_(d+p, j));
 	    }
-	
+
 	ipivot(j) = j+p0;
 	if (p0 > 0)
 	  {
 	    // interchanging row j and j + p0
-	    for (int j2 = j; j2 <= min(this->m_-1, kl_ + ku_ + j); j2++)
+	    for (size_t j2 = j; j2 <= min(this->m_-1, kl_ + ku_ + j); j2++)
 	      {
-		int k = kl_ + ku_ + j - j2;
+		size_t k = kl_ + ku_ + j - j2;
 		tmp = data_(k, j2);
 		data_(k, j2) = data_(k+p0, j2);
 		data_(k+p0, j2) = tmp;
-	      }	    
+	      }
 	  }
-	
+
 	// replacing diagonal element by its inverse
         data_(d, j) = one/data_(d, j);
-	
+
 	// performing Gauss elimination on column j
-	for (int p = 1; p <= pmin; p++)
+	for (size_t p = 1; p <= pmin; p++)
 	  {
 	    pivot = data_(d+p, j)*data_(d, j);
             data_(d+p, j) = pivot;
-	    
-            for (int k = 1; k <= min(this->n_ - 1 - j, kl_ + ku_); k++)
+
+            for (size_t k = 1; k <= min(this->n_ - 1 - j, kl_ + ku_); k++)
 	      data_(d+p-k, j+k) -= pivot*data_(d-k, j+k);
 	  }
       }
   }
-  
-  
+
+
   //! performs the operation *this = *this + alpha A
   template <class T, class Prop, class Storage, class Allocator>
   template<class T0> void Matrix_Band<T, Prop, Storage, Allocator>
   ::Add_(const T0& alpha, const Matrix<T, General, BandedCol, Allocator>& A)
   {
-    int kl = A.GetKL();
-    int ku = A.GetKU();
-    for (int i = 0; i < A.GetM(); i++)
-      for (int k = max(-i, -kl); k <= min(ku, this->n_-1-i); k++)
+    size_t kl = A.GetKL();
+    size_t ku = A.GetKU();
+    for (size_t i = 0; i < A.GetM(); i++)
+      for (size_t k = max(-i, -kl); k <= min(ku, this->n_-1-i); k++)
         {
-          int j = i + k;
+          size_t j = i + k;
           AddInteraction(i, j, alpha*A(i, j));
         }
   }
-  
-  
+
+
   //! performs matrix-vector product y = y + alpha A x
   template <class T, class Prop, class Storage, class Allocator>
   template<class T0, class T1>
@@ -327,15 +329,15 @@ namespace Seldon
   ::MltAdd(const T0& alpha, const SeldonTranspose& trans,
 	   const Vector<T1>& x, Vector<T1>& y) const
   {
-    int d = kl_ + ku_; T1 val;
+    size_t d = kl_ + ku_; T1 val;
     if (trans.NoTrans())
       {
-        for (int j = 0; j < GetN(); j++)
+        for (size_t j = 0; j < GetN(); j++)
           {
-            int kmin = max(kl_, d - j), row;
-            int kmax = min(kl_ + d, this->m_ -1 + d - j);
+            size_t kmin = max(kl_, d - j), row;
+            size_t kmax = min(kl_ + d, this->m_ -1 + d - j);
             val = alpha*x(j);
-            for (int k = kmin; k <= kmax; k++)
+            for (size_t k = kmin; k <= kmax; k++)
               {
                 row = j + k - d;
                 y(row) = y(row) + data_(k, j)*val;
@@ -344,55 +346,56 @@ namespace Seldon
       }
     else if (trans.Trans())
       {
-        for (int j = 0; j < GetN(); j++)
+        for (size_t j = 0; j < GetN(); j++)
           {
-            int kmin = max(kl_, d - j), row;
-            int kmax = min(kl_ + d, this->m_ -1 + d - j);
+            size_t kmin = max(kl_, d - j), row;
+            size_t kmax = min(kl_ + d, this->m_ -1 + d - j);
             val = T1(0);
-            for (int k = kmin; k <= kmax; k++)
+            for (size_t k = kmin; k <= kmax; k++)
               {
                 row = j + k - d;
                 val += data_(k, j)*x(row);
               }
-            
+
             y(j) += alpha*val;
           }
       }
     else
       {
-        for (int j = 0; j < GetN(); j++)
+        for (size_t j = 0; j < GetN(); j++)
           {
-            int kmin = max(kl_, d - j), row;
-            int kmax = min(kl_ + d, this->m_ -1 + d - j);
+            size_t kmin = max(kl_, d - j);
+            size_t row;
+            size_t kmax = min(kl_ + d, this->m_ -1 + d - j);
             val = T1(0);
-            for (int k = kmin; k <= kmax; k++)
+            for (size_t k = kmin; k <= kmax; k++)
               {
                 row = j + k - d;
                 val += conjugate(data_(k, j))*x(row);
               }
-            
+
             y(j) += alpha*val;
           }
       }
   }
-  
-  
+
+
   //! solves A x = b, assuming that Factorize has been previously called
   template <class T, class Prop, class Storage, class Allocator>
   template<class T1>
   void Matrix_Band<T, Prop, Storage, Allocator>::Solve(Vector<T1>& x) const
   {
-    int d = kl_ + ku_;
+    size_t d = kl_ + ku_;
     // resolution of L y = x
-    for (int j = 0; j < this->n_; j++)
-      for (int p = 1; p <= min(this->m_ - 1 - j, kl_); p++)
+    for (size_t j = 0; j < this->n_; j++)
+      for (size_t p = 1; p <= min(this->m_ - 1 - j, kl_); p++)
         x(j+p) -= data_(d+p, j)*x(j);
-    
+
     // resolution of U x = y
-    for (int j = this->n_-1; j >= 0; j--)
-      {        
+    for (size_t j = this->n_-1; j >= 0; j--)
+      {
         x(j) *= data_(d, j);
-        for (int p = 1; p <= min(j, ku_); p++)
+        for (size_t p = 1; p <= min(j, ku_); p++)
           x(j-p) -= data_(d-p, j)*x(j);
       }
   }
@@ -402,12 +405,12 @@ namespace Seldon
   //! (with pivoting)
   template <class T, class Prop, class Storage, class Allocator>
   template<class T1> void Matrix_Band<T, Prop, Storage, Allocator>
-  ::Solve(const Vector<int>& ipivot, Vector<T1>& x) const
+  ::Solve(const IVect& ipivot, Vector<T1>& x) const
   {
-    int d = kl_ + ku_;
+    size_t d = kl_ + ku_;
     T1 tmp;
     // resolution of L y = x
-    for (int j = 0; j < this->n_; j++)
+    for (size_t j = 0; j < this->n_; j++)
       {
 	// applying row interchange if needed
 	if (ipivot(j) != j)
@@ -416,21 +419,21 @@ namespace Seldon
 	    x(j) = x(ipivot(j));
 	    x(ipivot(j)) = tmp;
 	  }
-	
-	for (int p = 1; p <= min(this->m_ - 1 - j, kl_); p++)
+
+	for (size_t p = 1; p <= min(this->m_ - 1 - j, kl_); p++)
 	  x(j+p) -= data_(d+p, j)*x(j);
       }
-    
+
     // resolution of U x = y
-    for (int j = this->n_-1; j >= 0; j--)
-      {        
+    for (size_t j = this->n_-1; j >= 0; j--)
+      {
         x(j) *= data_(d, j);
-        for (int p = 1; p <= min(j, kl_+ku_); p++)
+        for (size_t p = 1; p <= min(j, kl_+ku_); p++)
           x(j-p) -= data_(d-p, j)*x(j);
-      }    
+      }
   }
-  
-  
+
+
   //! writes the matrix in a file in binary format
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Band<T, Prop, Storage, Allocator>::Write(string FileName) const
@@ -447,28 +450,28 @@ namespace Seldon
 
     this->Write(FileStream);
 
-    FileStream.close();    
+    FileStream.close();
   }
-  
-  
+
+
   //! writes the matrix in binary format
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Band<T, Prop, Storage, Allocator>
   ::Write(ostream& FileStream) const
   {
-    FileStream.write(reinterpret_cast<char*>(const_cast<int*>(&this->m_)),
-		     sizeof(int));
-    FileStream.write(reinterpret_cast<char*>(const_cast<int*>(&this->n_)),
-		     sizeof(int));
-    FileStream.write(reinterpret_cast<char*>(const_cast<int*>(&this->kl_)),
-		     sizeof(int));
-    FileStream.write(reinterpret_cast<char*>(const_cast<int*>(&this->ku_)),
-		     sizeof(int));
-    
+    FileStream.write(reinterpret_cast<char*>(const_cast<size_t*>(&this->m_)),
+		     sizeof(size_t));
+    FileStream.write(reinterpret_cast<char*>(const_cast<size_t*>(&this->n_)),
+		     sizeof(size_t));
+    FileStream.write(reinterpret_cast<char*>(const_cast<size_t*>(&this->kl_)),
+		     sizeof(size_t));
+    FileStream.write(reinterpret_cast<char*>(const_cast<size_t*>(&this->ku_)),
+		     sizeof(size_t));
+
     data_.Write(FileStream, false);
   }
-  
-  
+
+
   //! writes the matrix in a file in text format
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Band<T, Prop, Storage, Allocator>
@@ -490,46 +493,46 @@ namespace Seldon
 
     FileStream.close();
   }
-  
-  
+
+
   //! writes the matrix in text format
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Band<T, Prop, Storage, Allocator>
   ::WriteText(ostream& FileStream) const
   {
-    int d = kl_ + ku_;
-    for (int j = 0; j < GetN(); j++)
+    size_t d = kl_ + ku_;
+    for (size_t j = 0; j < GetN(); j++)
       {
-        int kmin = max(kl_, d - j);
-	//int kmin = max(0, d-j);
-        int kmax = min(kl_ + d, this->m_ -1 + d - j);
-        for (int k = kmin; k <= kmax; k++)
+        size_t kmin = (d < j)? kl_ : max(kl_, d - j);
+	//size_t kmin = max(0, d-j);
+        size_t kmax = min(kl_ + d, this->m_ -1 + d - j);
+        for (size_t k = kmin; k <= kmax; k++)
           {
-            int row = j + k - d;
+            size_t row = j + k - d;
             FileStream
 	      << row + 1 << " " << j+1 << " " << data_(k, j) << '\n';
           }
-      }            
+      }
   }
-  
-  
+
+
   /****************
    * Matrix_Arrow *
    ****************/
-  
+
 
   //! clears the matrix
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Arrow<T, Prop, Storage, Allocator>::Clear()
   {
     Matrix_Band<T, Prop, Storage, Allocator>::Clear();
-    
+
     last_rows_.Clear();
     last_columns_.Clear();
     last_block_.Clear();
   }
-  
-  
+
+
   //! sets all non-zero entries to 0
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Arrow<T, Prop, Storage, Allocator>::Zero()
@@ -539,8 +542,8 @@ namespace Seldon
     last_columns_.Zero();
     last_block_.Zero();
   }
-  
-  
+
+
   //! changes the size of the matrix
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Arrow<T, Prop, Storage, Allocator>::
@@ -549,7 +552,7 @@ namespace Seldon
   {
     Matrix_Band<T, Prop, Storage, Allocator>::
       Reallocate(m-nb_last_row, n-nb_last_col, kl, ku);
-    
+
     last_rows_.Reallocate(nb_last_row, n-nb_last_col);
     last_columns_.Reallocate(m-nb_last_row, nb_last_col);
     last_block_.Reallocate(nb_last_row, nb_last_col);
@@ -577,9 +580,9 @@ namespace Seldon
 	    AddInteraction(i, j, val);
       }
   }
-  
-  
-  //! adds severals values on a single row of the matrix  
+
+
+  //! adds severals values on a single row of the matrix
   /*!
     \param[in] i row on which values are added
     \param[in] n number of values to add
@@ -593,8 +596,8 @@ namespace Seldon
     for (int j = 0; j < n; j++)
       AddInteraction(i, num(j), val(j));
   }
-  
-  
+
+
   //! clears row i, fills it with 0
   /*!
     \param[in] i row to clear
@@ -611,18 +614,18 @@ namespace Seldon
             int j = i+k;
             this->Get(i, j) = zero;
           }
-        
+
         for (int j = 0; j < last_columns_.GetN(); j++)
-          this->Get(i, this->n_+j) = zero;        
+          this->Get(i, this->n_+j) = zero;
       }
     else
       {
         for (int j = 0; j < this->n_+this->last_columns_.GetN(); j++)
-          this->Get(i, j) = zero;        
+          this->Get(i, j) = zero;
       }
   }
-  
-  
+
+
   //! returns entry (i, j) of the matrix
   template <class T, class Prop, class Storage, class Allocator>
   const T Matrix_Arrow<T, Prop, Storage, Allocator>
@@ -632,21 +635,21 @@ namespace Seldon
       {
         if (j >= this->n_)
           return last_block_(i-this->m_, j-this->n_);
-        
+
         return last_rows_(i-this->m_, j);
       }
 
     if (j >= this->n_)
       return last_columns_(i, j-this->n_);
-    
+
     return static_cast<const Matrix_Band<T, Prop, Storage, Allocator>& >
       (*this)(i, j);
   }
-  
-  
+
+
   //! multiplication by a scalar
   template <class T, class Prop, class Storage, class Allocator>
-  Matrix<T, Prop, Storage, Allocator>& 
+  Matrix<T, Prop, Storage, Allocator>&
   Matrix_Arrow<T, Prop, Storage, Allocator>::operator *=(const T& alpha)
   {
     this->data_ *= alpha;
@@ -656,8 +659,8 @@ namespace Seldon
     return static_cast<Matrix<T, Prop, Storage, Allocator>& >(*this);
   }
 
-  
-  //! returns a reference to A(i, j) 
+
+  //! returns a reference to A(i, j)
   template <class T, class Prop, class Storage, class Allocator>
   T& Matrix_Arrow<T, Prop, Storage, Allocator>::Get(int i, int j)
   {
@@ -665,18 +668,18 @@ namespace Seldon
       {
         if (j >= this->n_)
           return last_block_(i-this->m_, j-this->n_);
-        
+
         return last_rows_(i-this->m_, j);
       }
 
     if (j >= this->n_)
       return last_columns_(i, j-this->n_);
-    
+
     return Matrix_Band<T, Prop, Storage, Allocator>::Get(i, j);
   }
-  
-  
-  //! returns a reference to A(i, j) 
+
+
+  //! returns a reference to A(i, j)
   template <class T, class Prop, class Storage, class Allocator>
   const T& Matrix_Arrow<T, Prop, Storage, Allocator>::Get(int i, int j) const
   {
@@ -684,13 +687,13 @@ namespace Seldon
       {
         if (j >= this->n_)
           return last_block_(i-this->m_, j-this->n_);
-        
+
         return last_rows_(i-this->m_, j);
       }
 
     if (j >= this->n_)
       return last_columns_(i, j-this->n_);
-    
+
     return Matrix_Band<T, Prop, Storage, Allocator>::Get(i, j);
   }
 
@@ -700,7 +703,7 @@ namespace Seldon
   void Matrix_Arrow<T, Prop, Storage, Allocator>::SetIdentity()
   {
     Matrix_Band<T, Prop, Storage, Allocator>::SetIdentity();
-    
+
     T one, zero;
     SetComplexZero(zero);
     SetComplexOne(one);
@@ -710,8 +713,8 @@ namespace Seldon
     for (int i = min(this->m_, this->n_); i < this->GetM(); i++)
       this->Get(i, i) = one;
   }
-    
-  
+
+
   //! sets all non-zero entries to a same value
   template <class T, class Prop, class Storage, class Allocator>
   template<class T0>
@@ -724,8 +727,8 @@ namespace Seldon
     last_columns_.Fill(x_);
     last_block_.Fill(x_);
   }
-    
-  
+
+
   //! sets all non-zero entries to random values
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Arrow<T, Prop, Storage, Allocator>::FillRand()
@@ -735,15 +738,15 @@ namespace Seldon
     last_columns_.FillRand();
     last_block_.FillRand();
   }
-  
-  
+
+
   //! performs LU factorisation without pivoting
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Arrow<T, Prop, Storage, Allocator>::Factorize()
   {
     // position of the main diagonal
     int d = this->kl_ + this->ku_;
-    
+
     // treating first columns
     T pivot, diag;
     int nb_last_row = last_rows_.GetM();
@@ -762,7 +765,7 @@ namespace Seldon
 	    this->data_(d, j) = one / this->data_(d, j);
 	    diag = this->data_(d, j);
 	  }
-	
+
 	// Gaussian elimination of rows below row j (part in the band)
         for (int p = 1; p <= min(this->m_ - 1 - j, this->kl_); p++)
           {
@@ -771,7 +774,7 @@ namespace Seldon
             // band
             for (int k = 1; k <= min(this->n_ - 1 - j, this->ku_); k++)
               this->data_(d+p-k, j+k) -= pivot*this->data_(d-k, j+k);
-            
+
             // treating coefficients of the last columns
             for (int k = 0; k < nb_last_col; k++)
               last_columns_(j+p, k) -= pivot*last_columns_(j, k);
@@ -795,14 +798,14 @@ namespace Seldon
 	      {
 		for (int k = 1; k <= min(this->n_ - 1 - j, this->ku_); k++)
 		  last_rows_(p, j+k) -= pivot*this->data_(d-k, j+k);
-		
+
 		// treating coefficients of the last block
 		for (int k = 0; k < nb_last_col; k++)
 		  last_block_(p, k) -= pivot*last_columns_(j, k);
 	      }
           }
       }
-    
+
     // treating last columns
     for (int j = this->n_; j < this->GetM(); j++)
       {
@@ -815,18 +818,18 @@ namespace Seldon
 	  {
 	    diag = one / last_columns_(j, j-this->n_);
 	    last_columns_(j, j-this->n_) = diag;
-	    
+
 	    // elimination in rows below but still located in last_columns
 	    for (int i = j+1; i < this->m_; i++)
 	      {
 		pivot = last_columns_(i, j-this->n_)*diag;
 		last_columns_(i, j-this->n_) = pivot;
 		for (int k = j+1; k < this->GetM(); k++)
-		  last_columns_(i, k-this->n_) 
+		  last_columns_(i, k-this->n_)
 		    -= pivot*last_columns_(j, k-this->n_);
 	      }
 	  }
-	
+
 	// now elimination of rows in last_block
         for (int i = max(j+1,this->m_); i < this->GetM(); i++)
           {
@@ -834,17 +837,17 @@ namespace Seldon
             last_block_(i-this->m_, j-this->n_) = pivot;
             if (j >= this->m_)
 	      for (int k = j+1; k < this->GetM(); k++)
-		last_block_(i-this->m_, k-this->n_) 
+		last_block_(i-this->m_, k-this->n_)
 		  -= pivot*last_block_(j-this->m_, k-this->n_);
 	    else
 	      for (int k = j+1; k < this->GetM(); k++)
-		last_block_(i-this->m_, k-this->n_) 
+		last_block_(i-this->m_, k-this->n_)
 		  -= pivot*last_columns_(j, k-this->n_);
           }
-      }    
+      }
   }
-    
-  
+
+
   //! performs the operation *this = *this + alpha A
   template <class T, class Prop, class Storage, class Allocator>
   template<class T0>
@@ -862,20 +865,20 @@ namespace Seldon
           int j = i + k;
           AddInteraction(i, j, alpha*A(i, j));
         }
-    
+
     // then last rows
     for (int i = 0; i < A.GetNbLastRow(); i++)
       for (int j = 0; j < A.GetN(); j++)
         AddInteraction(m+i, j, alpha*A(m+i, j));
-    
+
     // and last columns
     for (int j = 0; j < A.GetNbLastCol(); j++)
       for (int i = 0; i < m; i++)
         AddInteraction(i, n+j, alpha*A(i, n+j));
   }
-  
 
-  //! performs matrix-vector product y = y + alpha A x  
+
+  //! performs matrix-vector product y = y + alpha A x
   template <class T, class Prop, class Storage, class Allocator>
   template<class T0, class T1>
   void Matrix_Arrow<T, Prop, Storage, Allocator>::
@@ -884,7 +887,7 @@ namespace Seldon
   {
     // banded part
     Matrix_Band<T, Prop, Storage, Allocator>::MltAdd(alpha, trans, x, y);
-    
+
     T1 val, zero; SetComplexZero(zero);
     if (trans.NoTrans())
       {
@@ -897,7 +900,7 @@ namespace Seldon
 
             y(this->m_ + i) += alpha*val;
           }
-        
+
         // last columns
         for (int j = 0; j < last_columns_.GetN(); j++)
           {
@@ -905,14 +908,14 @@ namespace Seldon
             for (int i = 0; i < this->m_; i++)
               y(i) += last_columns_(i, j)*val;
           }
-        
+
         // last block
         for (int i = 0; i < last_block_.GetM(); i++)
           {
             val = zero;
             for (int j = 0; j < last_block_.GetN(); j++)
               val += last_block_(i, j)*x(this->n_+j);
-            
+
             y(this->m_+i) += alpha*val;
           }
       }
@@ -925,17 +928,17 @@ namespace Seldon
             for (int j = 0; j < this->n_; j++)
               y(j) += last_rows_(i, j)*val;
           }
-        
+
         // last columns
         for (int j = 0; j < last_columns_.GetN(); j++)
           {
             val = zero;
             for (int i = 0; i < this->m_; i++)
               val += last_columns_(i, j)*x(i);
-        
+
             y(this->n_+j) += alpha*val;
           }
-        
+
         // last block
         for (int i = 0; i < last_block_.GetM(); i++)
           {
@@ -953,17 +956,17 @@ namespace Seldon
             for (int j = 0; j < this->n_; j++)
               y(j) += conjugate(last_rows_(i, j))*val;
           }
-        
+
         // last columns
         for (int j = 0; j < last_columns_.GetN(); j++)
           {
             val = zero;
             for (int i = 0; i < this->m_; i++)
               val += conjugate(last_columns_(i, j))*x(i);
-        
+
             y(this->n_+j) += alpha*val;
           }
-        
+
         // last block
         for (int i = 0; i < last_block_.GetM(); i++)
           {
@@ -973,8 +976,8 @@ namespace Seldon
           }
       }
   }
-  
-  
+
+
   //! solves A x = b, assuming that Factorize has been previously called
   template <class T, class Prop, class Storage, class Allocator>
   template<class T1>
@@ -982,12 +985,12 @@ namespace Seldon
   {
     int d = this->kl_ + this->ku_;
     // resolution of L y = x
-    
+
     // part due to band
     for (int j = 0; j < min(this->m_, this->n_); j++)
       for (int p = 1; p <= min(this->m_ - 1 - j, this->kl_); p++)
         x(j+p) -= this->data_(d+p, j)*x(j);
-    
+
     // part between the band and the last block
     if (this->m_ > this->n_)
       for (int j = this->n_; j < this->m_; j++)
@@ -997,19 +1000,19 @@ namespace Seldon
       for (int j = this->m_; j < this->n_; j++)
 	for (int k = 0; k < j; k++)
 	  x(j) -= last_rows_(j-this->m_, k)*x(k);
-    
+
     // part due to the last block
     for (int i = max(this->m_, this->n_); i < this->GetM(); i++)
       {
         for (int j = 0; j < this->n_; j++)
           x(i) -= last_rows_(i-this->m_, j)*x(j);
-        
+
         for (int j = this->n_; j < i; j++)
           x(i) -= last_block_(i-this->m_, j-this->n_)*x(j);
       }
-    
+
     // resolution of U x = y
-    
+
     // part due to the last block
     int N = this->GetM();
     for (int i = N-1; i >= max(this->m_, this->n_); i--)
@@ -1017,11 +1020,11 @@ namespace Seldon
 	x(i) *= last_block_(i-this->m_, i-this->n_);
         for (int j = this->m_; j < i; j++)
           x(j) -= last_block_(j-this->m_, i-this->n_)*x(i);
-	
+
 	for (int j = 0; j < this->m_; j++)
 	  x(j) -= last_columns_(j, i-this->n_)*x(i);
       }
-    
+
     // part between band and the last block
     if (this->m_ > this->n_)
       for (int i = this->m_-1; i >= this->n_; i--)
@@ -1035,24 +1038,24 @@ namespace Seldon
 	{
 	  for (int j = i+1; j < this->n_; j++)
 	    x(i) -= last_rows_(i-this->m_, j)*x(j);
-	  
+
 	  x(i) *= last_rows_(i-this->m_, i);
 	}
-      
+
     // part due to the band
     for (int j = this->n_-1; j >= 0; j--)
-      {        
+      {
         if (j < min(this->m_, this->n_))
 	  x(j) *= this->data_(d, j);
-	
+
         for (int p = 1; p <= min(j, this->ku_); p++)
           if (j-p < this->m_)
 	    x(j-p) -= this->data_(d-p, j)*x(j);
       }
   }
-    
 
-  //! writes the matrix in a file in binary format  
+
+  //! writes the matrix in a file in binary format
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Arrow<T, Prop, Storage, Allocator>
   ::Write(string FileName) const
@@ -1069,23 +1072,23 @@ namespace Seldon
 
     this->Write(FileStream);
 
-    FileStream.close();    
+    FileStream.close();
   }
-  
-  
+
+
   //! writes the matrix in binary format
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Arrow<T, Prop, Storage, Allocator>
   ::Write(ostream& FileStream) const
   {
     Matrix_Band<T, Prop, Storage, Allocator>::Write(FileStream);
-    
+
     last_rows_.Write(FileStream);
     last_columns_.Write(FileStream);
     last_block_.Write(FileStream);
   }
-  
-  
+
+
   //! writes the matrix in a file in text format
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Arrow<T, Prop, Storage, Allocator>
@@ -1107,8 +1110,8 @@ namespace Seldon
 
     FileStream.close();
   }
-  
-  
+
+
   //! writes the matrix in text format
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Arrow<T, Prop, Storage, Allocator>
@@ -1125,21 +1128,21 @@ namespace Seldon
             FileStream
 	      << row + 1 << " " << j+1 << " " << this->data_(k, j) << '\n';
           }
-        
+
         for (int k = 0; k < last_rows_.GetM(); k++)
           {
             int row = this->m_ + k;
             FileStream
 	      << row + 1 << " " << j+1 << " " << last_rows_(k, j) << '\n';
           }
-      }    
-    
+      }
+
     for (int j = 0; j < last_columns_.GetN(); j++)
       {
         for (int i = 0; i < this->m_; i++)
           FileStream << i+1 << " " << this->n_+j+1 << " "
 		     << last_columns_(i, j) << '\n';
-        
+
         for (int i = 0; i < last_block_.GetM(); i++)
           FileStream << this->m_+i+1 << " " << this->n_+j+1
 		     << " " << last_block_(i, j) << '\n';
@@ -1158,10 +1161,10 @@ namespace Seldon
       y.Fill(zero);
     else
       Mlt(beta, y);
-    
+
     this->MltAdd(alpha, SeldonNoTrans, x, y);
   }
-    
+
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Arrow<T, Prop, Storage, Allocator>
   ::MltAddVector(const T& alpha, const SeldonTranspose&,
@@ -1172,10 +1175,10 @@ namespace Seldon
       y.Fill(zero);
     else
       Mlt(beta, y);
-    
+
     this->MltAdd(alpha, SeldonTrans, x, y);
   }
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Arrow<T, Prop, Storage, Allocator>
   ::MltVector(const Vector<T>& x, Vector<T>& y) const
@@ -1185,7 +1188,7 @@ namespace Seldon
     y.Fill(zero);
     this->MltAdd(one, SeldonNoTrans, x, y);
   }
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   void Matrix_Arrow<T, Prop, Storage, Allocator>
   ::MltVector(const SeldonTranspose&,
@@ -1198,7 +1201,7 @@ namespace Seldon
   }
 #endif
 
-  
+
   /*************
    * Functions *
    *************/
@@ -1213,19 +1216,19 @@ namespace Seldon
     mat_lu = A;
     if (!keep_matrix)
       A.Clear();
-    
+
     mat_lu.Factorize();
   }
 
-  
+
   //! LU factorisation
   template<class T, class Allocator>
   void GetLU(Matrix<T, General, BandedCol, Allocator>& A)
   {
     A.Factorize();
   }
-  
-  
+
+
 #ifdef SELDON_WITH_LAPACK
   //! LU factorisation with row interchanges
   template<class Allocator>
@@ -1238,7 +1241,7 @@ namespace Seldon
     if ((m <= 0)||(n <= 0))
       throw WrongDim("GetLU", "Provide a non-empty matrix");
 #endif
-    
+
     ipivot.Reallocate(m);
     int kl = A.GetKL();
     int ku = A.GetKU();
@@ -1253,8 +1256,8 @@ namespace Seldon
 #endif
 
   }
-  
-  
+
+
   //! resolution of A x = b, assuming that GetLU has been called
   template<class Allocator>
   void SolveLU(const Matrix<double, General, BandedCol, Allocator>& A,
@@ -1271,9 +1274,9 @@ namespace Seldon
     dgbtrs_(&trans, &n, &kl, &ku, &nrhs, A.GetData(), &lda,
             ipivot.GetData(), b.GetData(), &ldb, &info.GetInfoRef());
 
-  }  
-  
-  
+  }
+
+
   //! resolution of A x = b, assuming that GetLU has been called
   template<class Allocator>
   void SolveLU(const Matrix<double, General, BandedCol, Allocator>& A,
@@ -1294,13 +1297,13 @@ namespace Seldon
         brhs(i, 0) = real(b(i));
         brhs(i, 1) = imag(b(i));
       }
-    
+
     dgbtrs_(&trans, &n, &kl, &ku, &nrhs, A.GetData(), &lda,
             ipivot.GetData(), brhs.GetData(), &ldb, &info.GetInfoRef());
-    
+
     for (int i = 0; i < n; i++)
       b(i) = complex<double>(brhs(i, 0), brhs(i, 1));
-  }  
+  }
 
 
   //! LU factorisation with row interchanges
@@ -1315,7 +1318,7 @@ namespace Seldon
       throw WrongDim("GetLU", "Provide a non-empty matrix");
 #endif
 
-    ipivot.Reallocate(m);    
+    ipivot.Reallocate(m);
     int kl = A.GetKL();
     int ku = A.GetKU();
     int lda = 2*kl + ku + 1;
@@ -1329,8 +1332,8 @@ namespace Seldon
 #endif
 
   }
-  
-  
+
+
   //! resolution of A x = b, assuming that GetLU has been called
   template<class Allocator>
   void SolveLU(const Matrix<complex<double>,
@@ -1347,10 +1350,10 @@ namespace Seldon
     char trans('N');
     zgbtrs_(&trans, &n, &kl, &ku, &nrhs, A.GetData(), &lda,
             ipivot.GetData(), b.GetDataVoid(), &ldb, &info.GetInfoRef());
-  }  
+  }
 #else
-  
-  
+
+
   //! factorizes matrix with pivoting
   template<class T, class Allocator>
   void GetLU(Matrix<T, General, BandedCol, Allocator>& A,
@@ -1377,9 +1380,9 @@ namespace Seldon
     int kl = A.GetKL(), ku = A.GetKU(), n = A.GetM();
     for (int i = 0; i < A.GetM(); i++)
       for (int j = max(0, i-kl); j < min(n, i+ku+1); j++)
-        A.Get(i, j) *= Drow(i)*Dcol(j);    
+        A.Get(i, j) *= Drow(i)*Dcol(j);
   }
-  
+
 }
 
 #define SELDON_FILE_BAND_MATRIX_CXX

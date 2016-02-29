@@ -19,7 +19,6 @@
 
 #ifndef SELDON_FILE_BAND_MATRIX_INLINE_CXX
 
-#include "BandMatrix.hxx"
 
 namespace Seldon
 {
@@ -27,11 +26,11 @@ namespace Seldon
   /***************
    * Matrix_Band *
    ***************/
-  
-  
+
+
   //! returns the number of rows
   template <class T, class Prop, class Storage, class Allocator>
-  inline int Matrix_Band<T, Prop, Storage, Allocator>::GetM() const
+  inline size_t Matrix_Band<T, Prop, Storage, Allocator>::GetM() const
   {
     return this->m_;
   }
@@ -39,7 +38,7 @@ namespace Seldon
 
   //! returns the number of extra-diagonals in lower part of the matrix
   template <class T, class Prop, class Storage, class Allocator>
-  inline int Matrix_Band<T, Prop, Storage, Allocator>::GetKL() const
+  inline size_t Matrix_Band<T, Prop, Storage, Allocator>::GetKL() const
   {
     return kl_;
   }
@@ -47,103 +46,103 @@ namespace Seldon
 
   //! returns the number of extra-diagonals in upper part of the matrix
   template <class T, class Prop, class Storage, class Allocator>
-  inline int Matrix_Band<T, Prop, Storage, Allocator>::GetKU() const
+  inline size_t Matrix_Band<T, Prop, Storage, Allocator>::GetKU() const
   {
     return ku_;
   }
 
-  
+
   //! returns the number of rows
   template <class T, class Prop, class Storage, class Allocator>
-  inline int Matrix_Band<T, Prop, Storage, Allocator>::GetN() const
+  inline size_t Matrix_Band<T, Prop, Storage, Allocator>::GetN() const
   {
     return this->n_;
   }
-  
+
 
   //! returns the number of elements stored in the matrix
   template <class T, class Prop, class Storage, class Allocator>
-  inline int Matrix_Band<T, Prop, Storage, Allocator>::GetDataSize() const
+  inline size_t Matrix_Band<T, Prop, Storage, Allocator>::GetDataSize() const
   {
     return data_.GetDataSize();
   }
-  
-  
+
+
   //! returns the memory used by the object in bytes
   template <class T, class Prop, class Storage, class Allocator>
   inline int64_t Matrix_Band<T, Prop, Storage, Allocator>::GetMemorySize() const
   {
     return sizeof(*this) + data_.GetMemorySize() - sizeof(data_);
   }
-  
-  
+
+
   //! fills non-zero entries with 0
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Band<T, Prop, Storage, Allocator>::Zero()
   {
     data_.Zero();
   }
-  
-  
+
+
   //! present for compatibility
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Band<T, Prop, Storage, Allocator>::HideMessages()
   {
   }
-  
-  
+
+
   //! changes the size of the matrix, previous entries are lost
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Band<T, Prop, Storage, Allocator>
-  ::Reallocate(int m, int n)
+  ::Reallocate(size_t m, size_t n)
   {
     Reallocate(m, n, 0, 0);
   }
 
-  
+
   //! returns a pointer to the array containing values
   template <class T, class Prop, class Storage, class Allocator>
   inline T* Matrix_Band<T, Prop, Storage, Allocator>::GetData() const
   {
     return data_.GetData();
   }
-  
-  
+
+
   //! multiplication by a scalar
   template <class T, class Prop, class Storage, class Allocator>
-  inline Matrix<T, Prop, Storage, Allocator>& 
+  inline Matrix<T, Prop, Storage, Allocator>&
   Matrix_Band<T, Prop, Storage, Allocator>::operator *=(const T& alpha)
   {
     data_ *= alpha;
     return static_cast<Matrix<T, Prop, Storage, Allocator>& >(*this);
   }
-  
-  
-  //! returns a reference to A(i, j) 
+
+
+  //! returns a reference to A(i, j)
   template <class T, class Prop, class Storage, class Allocator>
-  inline T& Matrix_Band<T, Prop, Storage, Allocator>::Val(int i, int j)
+  inline T& Matrix_Band<T, Prop, Storage, Allocator>::Val(size_t i, size_t j)
   {
     return Get(i, j);
   }
-  
-  
-  //! returns a reference to A(i, j) 
+
+
+  //! returns a reference to A(i, j)
   template <class T, class Prop, class Storage, class Allocator>
-  inline const T& Matrix_Band<T, Prop, Storage, Allocator>::Val(int i, int j) const
+  inline const T& Matrix_Band<T, Prop, Storage, Allocator>::Val(size_t i, size_t j) const
   {
     return Get(i, j);
   }
-  
-  
-  //! sets A(i, j)   
+
+
+  //! sets A(i, j)
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Band<T, Prop, Storage, Allocator>
-  ::Set(int i, int j, const T& val)
+  ::Set(size_t i, size_t j, const T& val)
   {
     Get(i, j) = val;
   }
 
-    
+
 #ifdef SELDON_WITH_VIRTUAL
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Band<T, Prop, Storage, Allocator>
@@ -154,7 +153,7 @@ namespace Seldon
     SOR(static_cast<const Matrix<T, Prop, Storage, Allocator>& >(*this),
 	x, r, omega, nb_iter, stage_ssor);
   }
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Band<T, Prop, Storage, Allocator>
   ::ApplySor(const class_SeldonTrans& trans, Vector<T>& x, const Vector<T>& r,
@@ -165,7 +164,7 @@ namespace Seldon
 	static_cast<const Matrix<T, Prop, Storage, Allocator>& >(*this),
 	x, r, omega, nb_iter, stage_ssor);
   }
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Band<T, Prop, Storage, Allocator>
   ::MltAddVector(const Treal& alpha, const Vector<Treal>& x,
@@ -211,7 +210,7 @@ namespace Seldon
 	     static_cast<const Matrix<T, Prop, Storage, Allocator>& >(*this),
 	     x, beta, y);
   }
-  
+
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Band<T, Prop, Storage, Allocator>
   ::MltVector(const Vector<Treal>& x, Vector<Treal>& y) const
@@ -227,7 +226,7 @@ namespace Seldon
   }
 
   template <class T, class Prop, class Storage, class Allocator>
-  inline void Matrix_Band<T, Prop, Storage, Allocator>  
+  inline void Matrix_Band<T, Prop, Storage, Allocator>
   ::MltVector(const SeldonTranspose& trans,
 	      const Vector<Treal>& x, Vector<Treal>& y) const
   {
@@ -236,7 +235,7 @@ namespace Seldon
   }
 
   template <class T, class Prop, class Storage, class Allocator>
-  inline void Matrix_Band<T, Prop, Storage, Allocator>  
+  inline void Matrix_Band<T, Prop, Storage, Allocator>
   ::MltVector(const SeldonTranspose& trans,
 	      const Vector<Tcplx>& x, Vector<Tcplx>& y) const
   {
@@ -245,7 +244,7 @@ namespace Seldon
   }
 
   template <class T, class Prop, class Storage, class Allocator>
-  inline bool Matrix_Band<T, Prop, Storage, Allocator>  
+  inline bool Matrix_Band<T, Prop, Storage, Allocator>
   ::IsSymmetric() const
   {
     return false;
@@ -256,7 +255,7 @@ namespace Seldon
   /****************
    * Matrix_Arrow *
    ****************/
-  
+
 
   //! default constructor
   template <class T, class Prop, class Storage, class Allocator>
@@ -264,16 +263,16 @@ namespace Seldon
     : Matrix_Band<T, Prop, Storage, Allocator>()
   {
   }
-  
-  
+
+
   //! returns the number of rows
   template <class T, class Prop, class Storage, class Allocator>
   inline int Matrix_Arrow<T, Prop, Storage, Allocator>::GetM() const
   {
     return this->m_ + last_rows_.GetM();
   }
-  
-  
+
+
   //! returns the number of columns
   template <class T, class Prop, class Storage, class Allocator>
   inline int Matrix_Arrow<T, Prop, Storage, Allocator>::GetN() const
@@ -281,28 +280,28 @@ namespace Seldon
     return this->n_ + last_columns_.GetN();
   }
 
-  
+
   //! returns the number of dense rows placed at the end of the matrix
   template <class T, class Prop, class Storage, class Allocator>
   inline int Matrix_Arrow<T, Prop, Storage, Allocator>::GetNbLastRow() const
   {
     return last_rows_.GetM();
   }
-  
-  
+
+
   //! returns the number of dense columns placed at the end of the matrix
   template <class T, class Prop, class Storage, class Allocator>
   inline int Matrix_Arrow<T, Prop, Storage, Allocator>::GetNbLastCol() const
   {
     return last_columns_.GetN();
   }
-  
+
 
   //! returns the number of non-zero entries
   template <class T, class Prop, class Storage, class Allocator>
   inline int Matrix_Arrow<T, Prop, Storage, Allocator>::GetDataSize() const
   {
-    return this->data_.GetDataSize() + this->last_rows_.GetDataSize() 
+    return this->data_.GetDataSize() + this->last_rows_.GetDataSize()
       + this->last_columns_.GetDataSize() + this->last_block_.GetDataSize();
   }
 
@@ -315,40 +314,40 @@ namespace Seldon
       + last_rows_.GetMemorySize() + last_columns_.GetMemorySize()
       + last_block_.GetMemorySize();
   }
-  
-  
+
+
   //! present for compatibility
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Arrow<T, Prop, Storage, Allocator>::HideMessages()
   {
   }
-  
-  
+
+
   //! changes the size of the matrix
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Arrow<T, Prop, Storage, Allocator>::Reallocate(int m, int n)
   {
     Reallocate(m, n, 0, 0);
   }
-  
-  
-  //! returns a reference to A(i, j)   
+
+
+  //! returns a reference to A(i, j)
   template <class T, class Prop, class Storage, class Allocator>
   inline T& Matrix_Arrow<T, Prop, Storage, Allocator>::Val(int i, int j)
   {
     return Get(i, j);
   }
-  
-  
-  //! returns a reference to A(i, j) 
+
+
+  //! returns a reference to A(i, j)
   template <class T, class Prop, class Storage, class Allocator>
   inline const T& Matrix_Arrow<T, Prop, Storage, Allocator>::Val(int i, int j) const
   {
     return Get(i, j);
   }
-    
 
-  //! sets A(i, j)     
+
+  //! sets A(i, j)
   template <class T, class Prop, class Storage, class Allocator>
   inline void Matrix_Arrow<T, Prop, Storage, Allocator>
   ::Set(int i, int j, const T& val)
@@ -356,7 +355,7 @@ namespace Seldon
     Get(i, j) = val;
   }
 
-  
+
   /**************
    * Functions *
    *************/
@@ -367,12 +366,12 @@ namespace Seldon
 	   class T2, class Prop2, class Allocator2>
   inline void AddMatrix(const T0& alpha,
 			const Matrix<T1, Prop1, BandedCol, Allocator1>& A,
-			Matrix<T2, Prop2, BandedCol, Allocator2>& B)           
+			Matrix<T2, Prop2, BandedCol, Allocator2>& B)
   {
     B.Add_(alpha, A);
   }
 
-  
+
   //! conversion from ArrayRowSparse to band matrix
   template<class T, class Allocator>
   inline void Copy(const Matrix<T, General, ArrayRowSparse, Allocator>& A,
@@ -380,8 +379,8 @@ namespace Seldon
   {
     B.Copy(A);
   }
-  
-  
+
+
   //! resolution of A x = b, once GetLU has been called
   template<class T, class Allocator>
   inline void SolveLU(const Matrix<T, General, BandedCol, Allocator>& mat_lu,
@@ -398,7 +397,7 @@ namespace Seldon
   {
     mat_lu.Solve(x);
   }
-  
+
 
 #ifndef SELDON_WITH_LAPACK
   template<class T, class Allocator>
@@ -409,17 +408,17 @@ namespace Seldon
   }
  #endif
 
-  
+
   //! B = B + alpha*A
   template<class T0, class T1, class Allocator>
   inline void AddVector(const T0& alpha,
 			const Matrix<T1, General, BandedCol, Allocator>& A,
-			Matrix<T1, General, BandedCol, Allocator>& B)           
+			Matrix<T1, General, BandedCol, Allocator>& B)
   {
     B.Add_(alpha, A);
   }
-  
-  
+
+
   //! y = beta*y + alpha*A*x
   template<class T0, class T1, class T, class T2, class Allocator>
   inline void MltAddVector(const T0& alpha,
@@ -466,7 +465,7 @@ namespace Seldon
     A.MltAdd(one, trans, x, y);
   }
 
-  
+
   //! A = alpha*A
   template<class T0, class T1, class Allocator>
   inline void MltScalar(const T0& alpha,
@@ -474,8 +473,8 @@ namespace Seldon
   {
     A *= alpha;
   }
-  
-  
+
+
   //! displays matrix
   template<class T, class Allocator>
   inline ostream& operator<<(ostream& out,
@@ -495,19 +494,19 @@ namespace Seldon
     mat_lu = A;
     if (!keep_matrix)
       A.Clear();
-    
+
     mat_lu.Factorize();
   }
-  
+
 
   //! LU factorisation
   template<class T, class Allocator>
   inline void GetLU(Matrix<T, General, ArrowCol, Allocator>& A)
   {
     A.Factorize();
-  }  
-  
-  
+  }
+
+
   //! resolution of A x = b, once GetLU has been called
   template<class T, class Allocator>
   inline void SolveLU(const Matrix<T, General, ArrowCol, Allocator>& mat_lu,
@@ -524,19 +523,19 @@ namespace Seldon
   {
     mat_lu.Solve(x);
   }
-  
+
 
   //! B = B + alpha*A
   template<class T0, class T1, class Prop1, class Allocator1,
 	   class T2, class Prop2, class Allocator2>
   inline void AddMatrix(const T0& alpha,
 			const Matrix<T1, Prop1, ArrowCol, Allocator1>& A,
-			Matrix<T2, Prop2, ArrowCol, Allocator2>& B)           
+			Matrix<T2, Prop2, ArrowCol, Allocator2>& B)
   {
     B.Add_(alpha, A);
   }
-  
-  
+
+
   //! y = beta*y + alpha*A*x
   template<class T0, class T1, class T, class T2, class Allocator>
   inline void MltAddVector(const T0& alpha,
@@ -591,8 +590,8 @@ namespace Seldon
   {
     A *= alpha;
   }
-  
-  
+
+
   //! displays matrix
   template<class T, class Allocator>
   inline ostream& operator<<(ostream& out,
@@ -601,7 +600,7 @@ namespace Seldon
     A.WriteText(out);
     return out;
   }
-  
+
 }
 
 #define SELDON_FILE_BAND_MATRIX_INLINE_CXX
