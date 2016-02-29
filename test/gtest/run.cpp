@@ -24,6 +24,7 @@
 #include "sparse_linear_algebra.hpp"
 #include "submatrix.hpp"
 #include "vector_collection.hpp"
+#include "band_matrix.hpp"
 #include "heterogeneous_collection.hpp"
 
 
