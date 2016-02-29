@@ -17,9 +17,6 @@
 // along with Seldon. If not, see http://www.gnu.org/licenses/.
 
 
-
-
-#include "../../Seldon.hxx"
 using namespace Seldon;
 
 
@@ -72,4 +69,3 @@ public:
     ASSERT_TRUE(A.GetLength2() == 0);
     ASSERT_TRUE(A.GetLength3() == 0);
   }
-
